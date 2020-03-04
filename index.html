@@ -162,6 +162,146 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/04/Vagrant%E7%9F%A5%E8%AF%86%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="复制粘贴工程师">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/04/Vagrant%E7%9F%A5%E8%AF%86%E7%82%B9/" class="post-title-link" itemprop="url">Vagrant知识点</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-04 14:16:46 / 修改时间：14:19:25" itemprop="dateCreated datePublished" datetime="2020-03-04T14:16:46+08:00">2020-03-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Oracle-VM-VirtualBox-vagrant/" itemprop="url" rel="index"><span itemprop="name">Oracle VM VirtualBox + vagrant</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/04/Vagrant%E7%9F%A5%E8%AF%86%E7%82%B9/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/04/Vagrant%E7%9F%A5%E8%AF%86%E7%82%B9/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1-什么是vagrant"><a href="#1-什么是vagrant" class="headerlink" title="1.什么是vagrant"></a><strong>1.什么是vagrant</strong></h2><p>  vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机</p>
+<h2 id="2-为什么要使用vagrant"><a href="#2-为什么要使用vagrant" class="headerlink" title="2.为什么要使用vagrant"></a>2.<strong>为什么要使用vagrant</strong></h2><p> vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时是用命令行来管理虚拟机非常简单</p>
+<h2 id="3-必须要有virtualbox才能正常安装vagrant"><a href="#3-必须要有virtualbox才能正常安装vagrant" class="headerlink" title="3.必须要有virtualbox才能正常安装vagrant"></a>3.<strong>必须要有virtualbox才能正常安装vagrant</strong></h2><h2 id="4-vagrant常用命令"><a href="#4-vagrant常用命令" class="headerlink" title="4.vagrant常用命令"></a>4.<strong>vagrant常用命令</strong></h2><ul>
+<li><p>初始化vagrant工程</p>
+<p>vagrant init ubuntu/trusty64：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">该命令会在当前目录下创建vagrantfile,并且指定所使用的<span class="built_in">box</span>为ubuntu/trusty64，该<span class="built_in">box</span>由Hashicorp官网提供。此时，vagrant发现<span class="built_in">box</span>的名字的格式为<span class="string">"用户名/box名"</span>,则会使用<span class="string">"https://atlas.hashicorp.com/用户名/box名"</span>来下载该<span class="built_in">box</span>.</span><br><span class="line">对于非官网提供的<span class="built_in">box</span>，可以通过以下命令创建：</span><br><span class="line">vagrant init my-<span class="built_in">box</span> https://boxes.company.com/my.<span class="built_in">box</span>(其中，my-<span class="built_in">box</span>为该<span class="built_in">box</span>的名字，后面的URL为该<span class="built_in">box</span>的下载地址。)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动虚拟机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant up</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭虚拟机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant halt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启虚拟机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant reload</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>登录虚拟机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant ssh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂起虚拟机(非常实用，节省内存)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant suspend</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>唤醒虚拟机</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vagrant resume</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看虚拟机状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant status</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除虚拟机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vagrant destroy</span><br><span class="line"></span><br><span class="line">注：vagrant destroy只会删除虚拟机本身，也即你在Virtualbox将看不到该虚拟机，但是不会删除该虚拟机所使用的box。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列出本地所有的box</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box list</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除某个box</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box remove boxname</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="4-provision"><a href="#4-provision" class="headerlink" title="4.provision"></a>4.provision</h2><p>Provisioner 是 Vagrant 中的一个概念，表示用户在 Vagrantfile 中所提供的自动或手动执行的虚拟机任务。任务的类型也有很多种，比如执行 Shell 脚本，文件拷贝等等。</p>
+<p>vagrant 执行特定任务的通用语法如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant provision --provision-with &lt;provisioner&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/03/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -320,14 +460,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -372,7 +518,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">0k</span>
+    <span title="站点总字数">1k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
