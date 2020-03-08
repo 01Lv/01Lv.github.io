@@ -20,17 +20,26 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="放弃不难，但坚持一定很酷">
-<meta property="og:type" content="website">
-<meta property="og:title" content="追风的少年">
-<meta property="og:url" content="https://01lv.github.io/tags/%E6%97%A5%E5%B8%B8/index.html">
+  <meta name="description" content="概述 大多应用中，可通过消息服务中间件来提升系统异步通信，扩展解耦能力  消息服务中两个重要概念： ​    消息代理(message broker) 和 目的地(destination),当消息发送者发送消息以后，将有消息代理接管，消息代理保证消息传递到指定目的地  消息队列主要有两种形式的目的地  队列(queue): 点对点消息通信 主题(topic): 发布(publish)&#x2F;订阅(sub">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消息中间件RabbitMQ">
+<meta property="og:url" content="https://01lv.github.io/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="放弃不难，但坚持一定很酷">
+<meta property="og:description" content="概述 大多应用中，可通过消息服务中间件来提升系统异步通信，扩展解耦能力  消息服务中两个重要概念： ​    消息代理(message broker) 和 目的地(destination),当消息发送者发送消息以后，将有消息代理接管，消息代理保证消息传递到指定目的地  消息队列主要有两种形式的目的地  队列(queue): 点对点消息通信 主题(topic): 发布(publish)&#x2F;订阅(sub">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5Cimage-20200308142224462.png">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5Cimage-20200308143457233.png">
+<meta property="og:image" content="d:%5Ctypora%5Cnotes%5Casset%5Cimage-20200308173327585.png">
+<meta property="og:image" content="d:%5Ctypora%5Cnotes%5Casset%5Cimage-20200308173539250.png">
+<meta property="article:published_time" content="2020-03-08T05:59:05.000Z">
+<meta property="article:modified_time" content="2020-03-08T10:40:34.683Z">
 <meta property="article:author" content="mikelv">
+<meta property="article:tag" content="消息中间件">
+<meta property="article:tag" content="rabbitmq">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5Cimage-20200308142224462.png">
 
-<link rel="canonical" href="https://01lv.github.io/tags/%E6%97%A5%E5%B8%B8/">
+<link rel="canonical" href="https://01lv.github.io/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/">
 
 
 <script id="page-configurations">
@@ -38,11 +47,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false
+    isPost : true
   };
 </script>
 
-  <title>标签: 日常 | 追风的少年</title>
+  <title>消息中间件RabbitMQ | 追风的少年</title>
   
 
 
@@ -158,54 +167,183 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">日常
-          <small>标签</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          消息中间件RabbitMQ
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-08 13:59:05 / 修改时间：18:40:34" itemprop="dateCreated datePublished" datetime="2020-03-08T13:59:05+08:00">2020-03-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>520</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2020</h1>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ol>
+<li><p>大多应用中，可通过消息服务中间件来提升系统异步通信，扩展解耦能力</p>
+</li>
+<li><p>消息服务中两个重要概念：</p>
+<p>​    <strong>消息代理(message broker) 和 目的地(destination)</strong>,当消息发送者发送消息以后，将有消息代理接管，消息代理保证消息传递到指定目的地</p>
+</li>
+<li><p>消息队列主要有两种形式的目的地</p>
+<ol>
+<li>队列(queue): 点对点消息通信</li>
+<li>主题(topic): 发布(publish)/订阅(subscribe) 消息通信</li>
+</ol>
+</li>
+</ol>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5Cimage-20200308142224462.png" alt="image-20200308142224462"></p>
+<a id="more"></a>
+
+<h2 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h2><p>RabbitMQ 是一个由 erlang 开发的 AMQP(Advanced Message Queue Protocol) 的开源实现</p>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><blockquote>
+<h4 id="Message"><a href="#Message" class="headerlink" title="Message"></a>Message</h4></blockquote>
+<p>消息，消息是不具名的，它由消息头和消息体组成。消息体是不透明的，而消息头则由一系列的可选属性组成，这些属性包括 routing-key(路由键) , priority，delivery-mode</p>
+<blockquote>
+<h4 id="Publisher"><a href="#Publisher" class="headerlink" title="Publisher"></a>Publisher</h4></blockquote>
+<p>消息的生产者，也是一个向交换器发布消息的客户端应用程序。</p>
+<blockquote>
+<h4 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h4></blockquote>
+<p>交换器，用来接收生产者发送的消息并将这些消息路由给服务器中的队列</p>
+<p>Exchange 有4种类型：</p>
+<ul>
+<li>direct(默认)</li>
+<li>fanout</li>
+<li>topic</li>
+<li>headers</li>
+</ul>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5Cimage-20200308143457233.png" alt="image-20200308143457233"></p>
+<ul>
+<li>Direct 模型</li>
+</ul>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200308173327585.png" alt="image-20200308173327585"></p>
+<ul>
+<li>fanout模型(广播模型)</li>
+<li>topic(模式匹配模式)</li>
+</ul>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200308173539250.png" alt="image-20200308173539250"></p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
+        
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-03T22:17:12+08:00"
-              content="2020-03-03">
-          03-03
-        </time>
-      </div>
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2020/03/08/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6RabbitMQ/" title="消息中间件RabbitMQ">https://01lv.github.io/2020/03/08/消息中间件RabbitMQ/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
 
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/03/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/" itemprop="url">
-            <span itemprop="name">第一篇博客</span>
-          </a>
-      </h2>
 
-    </header>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag"># 消息中间件</a>
+              <a href="/tags/rabbitmq/" rel="tag"># rabbitmq</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/07/SpringBoot%E6%95%B4%E5%90%88Swagger/" rel="prev" title="SpringBoot整合Swagger">
+      <i class="fa fa-chevron-left"></i> SpringBoot整合Swagger
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
+  
+  
+  
 
-    </div>
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
           
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -252,6 +390,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">2.</span> <span class="nav-text">RabbitMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核心概念"><span class="nav-number">2.1.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Message"><span class="nav-number">2.1.1.</span> <span class="nav-text">Message</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Publisher"><span class="nav-number">2.1.2.</span> <span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exchange"><span class="nav-number">2.1.3.</span> <span class="nav-text">Exchange</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
