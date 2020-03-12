@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="ElasticSearch参考：elasticsearch基础  Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。  文档主要还是参考 es 的官方文档，已经解释说明的非常详尽。https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;cn&#x2F;elasticsearch&#x2F;guide&#x2F;current&#x2F;_talking_to_elas">
+  <meta name="description" content="ElasticSearch知识点参考：elasticsearch基础  Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。  文档主要还是参考 es 的官方文档，已经解释说明的非常详尽。https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;cn&#x2F;elasticsearch&#x2F;guide&#x2F;current&#x2F;_talking_to_e">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搜索引擎ElasticSearch">
 <meta property="og:url" content="https://01lv.github.io/2020/03/09/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8EElasticSearch/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="ElasticSearch参考：elasticsearch基础  Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。  文档主要还是参考 es 的官方文档，已经解释说明的非常详尽。https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;cn&#x2F;elasticsearch&#x2F;guide&#x2F;current&#x2F;_talking_to_elas">
+<meta property="og:description" content="ElasticSearch知识点参考：elasticsearch基础  Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。  文档主要还是参考 es 的官方文档，已经解释说明的非常详尽。https:&#x2F;&#x2F;www.elastic.co&#x2F;guide&#x2F;cn&#x2F;elasticsearch&#x2F;guide&#x2F;current&#x2F;_talking_to_e">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/wvkocF2MXjXcNvIDv32BMwkVKqicrC8Tk3iciaUjfVTJtYAM9x1CSH2mwBEtlGPmh1L1icpOCbO46RTSqDj4Owjmzw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="http://www.macrozheng.com/images/arch_screen_31.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/874963/201808/874963-20180808170444229-5723261.png">
 <meta property="og:image" content="d:%5Ctypora%5Cnotes%5Casset%5Cimage-20200309215925095.png">
 <meta property="article:published_time" content="2020-03-09T08:25:24.000Z">
-<meta property="article:modified_time" content="2020-03-10T16:50:26.762Z">
+<meta property="article:modified_time" content="2020-03-11T16:18:57.431Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="ElasticSearch">
 <meta name="twitter:card" content="summary">
@@ -202,7 +202,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-11 00:50:26" itemprop="dateModified" datetime="2020-03-11T00:50:26+08:00">2020-03-11</time>
+                <time title="修改时间：2020-03-12 00:18:57" itemprop="dateModified" datetime="2020-03-12T00:18:57+08:00">2020-03-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,14 +234,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.8k</span>
+              <span>7.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -253,7 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h1><p>参考：<a href="https://mp.weixin.qq.com/s/stC_xMP1n3aQ-0ZNAc3eQA" target="_blank" rel="noopener">elasticsearch基础</a></p>
+        <h1 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h1><h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>参考：<a href="https://mp.weixin.qq.com/s/stC_xMP1n3aQ-0ZNAc3eQA" target="_blank" rel="noopener">elasticsearch基础</a></p>
 <blockquote>
 <p>Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。</p>
 </blockquote>
@@ -312,6 +312,21 @@
 
 <p>语法：GET /index/type/id</p>
 <p>其实还有许多更复杂的搜索，例如：轻量搜索，高亮搜索，全文搜索等等。</p>
+<h3 id="bulk增删改操作"><a href="#bulk增删改操作" class="headerlink" title="bulk增删改操作"></a>bulk增删改操作</h3><blockquote>
+<p>bulk api 对 json 的语法，有严格的要求，每个 json 串不能换行，只能放一行，同时一个 json 串和一个 json 串之间，必须有一个换行</p>
+</blockquote>
+<p>语法如下：</p>
+<p>bulk每一个操作要两个json串(delete语法除外)</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"action"</span>:<span class="string">"&#123;metadata&#125;"</span>&#125;</span><br><span class="line">&#123;<span class="attr">"data"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"index"</span>:&#123;<span class="attr">"_index"</span>:<span class="string">"jluzh"</span>,<span class="attr">"_type"</span>:<span class="string">"person"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"张三"</span>,<span class="attr">"age"</span>:<span class="number">20</span>,<span class="attr">"mail"</span>:<span class="string">"111@qq.com"</span>,<span class="attr">"hobby"</span>:<span class="string">"羽毛球，兵乓球，足球"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合查询"><a href="#组合查询" class="headerlink" title="组合查询"></a>组合查询</h3><p>如果查询的结果中有 should 字段，则得分会更加高，也就是相似度更高。</p>
+<blockquote>
+<p>bool 查询会为每个文档计算相关度评分 _score, 再将所有匹配的 must 和 should 语句的分数 _score 求和，最后除以 must 和 should 语句的总数</p>
+<p>must_not 语句不会影响评分；它的作用只是将不相关的文档排除</p>
+</blockquote>
 <h2 id="入门示例"><a href="#入门示例" class="headerlink" title="入门示例"></a>入门示例</h2><p>参考：<a href="http://www.macrozheng.com/#/architect/mall_arch_07?id=mall整合elasticsearch实现商品搜索" target="_blank" rel="noopener">mall整合Elasticsearch实现商品搜索</a></p>
 <p>示例出自上面这位大神</p>
 <h3 id="知识点铺垫"><a href="#知识点铺垫" class="headerlink" title="知识点铺垫"></a>知识点铺垫</h3><p>由于SpringBoot 与 elasticsearch 需进行整合，所以不得不提到 Spring Data Elasticsearch</p>
@@ -485,7 +500,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#入门示例"><span class="nav-number">1.1.</span> <span class="nav-text">入门示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点铺垫"><span class="nav-number">1.1.1.</span> <span class="nav-text">知识点铺垫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始"><span class="nav-number">1.1.2.</span> <span class="nav-text">开始</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Logstash"><span class="nav-number">2.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kibana-认知"><span class="nav-number">3.</span> <span class="nav-text">Kibana 认知</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beats-轻量型数据采集器"><span class="nav-number">4.</span> <span class="nav-text">Beats(轻量型数据采集器)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FileBeat"><span class="nav-number">4.1.</span> <span class="nav-text">FileBeat</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点"><span class="nav-number">1.1.</span> <span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bulk增删改操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">bulk增删改操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合查询"><span class="nav-number">1.1.2.</span> <span class="nav-text">组合查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入门示例"><span class="nav-number">1.2.</span> <span class="nav-text">入门示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点铺垫"><span class="nav-number">1.2.1.</span> <span class="nav-text">知识点铺垫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始"><span class="nav-number">1.2.2.</span> <span class="nav-text">开始</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Logstash"><span class="nav-number">2.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kibana-认知"><span class="nav-number">3.</span> <span class="nav-text">Kibana 认知</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Beats-轻量型数据采集器"><span class="nav-number">4.</span> <span class="nav-text">Beats(轻量型数据采集器)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FileBeat"><span class="nav-number">4.1.</span> <span class="nav-text">FileBeat</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -501,7 +516,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -559,12 +574,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">134k</span>
+    <span title="站点总字数">135k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:02</span>
+    <span title="站点阅读时长">2:03</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
