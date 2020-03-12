@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.如果一条sql执行时间过长，如何优化…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题汇总">
+<meta property="og:url" content="https://01lv.github.io/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="追风的少年">
+<meta property="og:description" content="1.如果一条sql执行时间过长，如何优化…">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/20200312230201.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/20200312232201.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/20200312232501.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/20200312232701.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/1.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/2.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/3.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/4.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/5.png">
+<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/6.png">
+<meta property="article:published_time" content="2020-03-12T14:58:51.000Z">
+<meta property="article:modified_time" content="2020-03-12T15:50:45.028Z">
+<meta property="article:author" content="mikelv">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://q6s1x2hw2.bkt.clouddn.com/20200312230201.png">
+
+<link rel="canonical" href="https://01lv.github.io/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>面试题汇总 | 追风的少年</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">追风的少年</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">just have a little faith</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          面试题汇总
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-12 22:58:51 / 修改时间：23:50:45" itemprop="dateCreated datePublished" datetime="2020-03-12T22:58:51+08:00">2020-03-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%97%A5%E5%B8%B8/" itemprop="url" rel="index"><span itemprop="name">日常</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="1-如果一条sql执行时间过长，如何优化…"><a href="#1-如果一条sql执行时间过长，如何优化…" class="headerlink" title="1.如果一条sql执行时间过长，如何优化…"></a>1.如果一条sql执行时间过长，如何优化…</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312230201.png" alt="img"></p>
+<a id="more"></a>
+
+<p>1、查看sql是否涉及多表的联表或者子查询，如果有，看是否能进行业务拆分，相关字段冗余或者合并成临时表（业务和算法的优化）</p>
+<p>2、涉及链表的查询，是否能进行分表查询，单表查询之后的结果进行字段整合</p>
+<p>3、如果以上两种都不能操作，非要链表查询，那么考虑对相对应的查询条件做索引。加快查询速度</p>
+<p>4、针对数量大的表进行历史表分离（如交易流水表）</p>
+<p>5、数据库主从分离，读写分离，降低读写针对同一表同时的压力，至于主从同步，mysql有自带的binlog实现 主从同步</p>
+<p>6、explain分析sql语句，查看执行计划，分析索引是否用上，分析扫描行数等等</p>
+<p>7、查看mysql执行日志，看看是否有其他方面的问题</p>
+<h1 id="2-前端通过http请求后端的详细过程"><a href="#2-前端通过http请求后端的详细过程" class="headerlink" title="2.前端通过http请求后端的详细过程"></a>2.前端通过http请求后端的详细过程</h1><p>参考：</p>
+<p><a href="https://juejin.im/post/5c3b21e4e51d455231347349#heading-6" target="_blank" rel="noopener">浅析一次HTTP请求</a></p>
+<p><a href="https://www.jianshu.com/p/c1d6a294d3c0" target="_blank" rel="noopener">一次完整的HTTP请求与响应涉及了哪些知识？真的讲得好很细</a></p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312232201.png" alt="img"></p>
+<ul>
+<li>Http 请求是依托于 TCP/IP 连接的，第一次连接的时候会进行 TCP 的三次握手</li>
+<li>HTTP 通过 Keep-Alive 来进行持久连接，通过定时发送一个心跳包，来告诉服务端自己还活跃</li>
+<li>HTTP 连接的断开也会导致TCP的四次挥手，但是如果服务器判断满足条件，会合并 ACK 和 FIN 信号，进而转化为三次挥手。</li>
+</ul>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312232501.png" alt="img"></p>
+<p>当应用程序用TCP传送数据时，数据被送入协议栈中，然后逐个通过每一层直到被当作一串比特流送入网络。其中每一层对收到的数据都要增加一些首部信息（有时还要增加尾部信息）</p>
+<p>当目的主机收到一个以太网数据帧时，数据就开始从协议栈中由底向上升，同时去掉各层协议加上的报文首部。每层协议盒都要去检查报文首部中的协议标识，以确定接收数据的上层协议。这个过程称作分用（Demultiplexing）。协议是通过目的端口号、源I P地址和源端口号进行解包的。</p>
+<p>通过以上步骤我们从TCP/IP模型的角度来理解了一次HTTP请求与响应的过程。</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312232701.png" alt="img"></p>
+<h2 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h2><h3 id="Http是什么？"><a href="#Http是什么？" class="headerlink" title="Http是什么？"></a>Http是什么？</h3><p>通俗来讲，他就是计算机通过网络进行通信的规则，是一个基于请求与响应，无状态的，应用层的协议，常基于TCP/IP协议传输数据。目前任何终端（手机，笔记本电脑。。）之间进行任何一种通信都必须按照Http协议进行，否则无法连接。</p>
+<p><strong>四个基于：</strong></p>
+<p><strong>请求与响应：</strong>客户端发送请求，服务器端响应数据</p>
+<p><strong>无状态的：</strong>协议对于事务处理没有记忆能力，客户端第一次与服务器建立连接发送请求时需要进行一系列的安全认证匹配等，因此增加页面等待时间，当客户端向服务器端发送请求，服务器端响应完毕后，两者断开连接，也不保存连接状态，一刀两断！恩断义绝！从此路人！下一次客户端向同样的服务器发送请求时，由于他们之前已经遗忘了彼此，所以需要重新建立连接。</p>
+<p><strong>应用层：</strong>Http是属于应用层的协议，配合TCP/IP使用。</p>
+<p><strong>TCP/IP：</strong>Http使用TCP作为它的支撑运输协议。HTTP客户机发起一个与服务器的TCP连接，一旦连接建立，浏览器（客户机）和服务器进程就可以通过套接字接口访问TCP。</p>
+<p><strong>针对无状态的一些解决策略：</strong></p>
+<p>有时需要对用户之前的HTTP通信状态进行保存，比如执行一次登陆操作，在30分钟内所有的请求都不需要再次登陆。于是引入了Cookie技术。</p>
+<p>HTTP/1.1想出了持久连接（HTTP keep-alive）方法。其特点是，只要任意一端没有明确提出断开连接，则保持TCP连接状态，在请求首部字段中的Connection: keep-alive即为表明使用了持久连接。<br> 等等还有很多。。。。。。</p>
+<p>下面开始讲解重头戏：HTTP请求报文，响应报文，对应于上述步骤的2，3，4，5，6。</p>
+<p>HTTP报文是面向文本的，报文中的每一个字段都是一些ASCII码串，各个字段的长度是不确定的。HTTP有两类报文：请求报文和响应报文。</p>
+<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><p>一个HTTP请求报文由请求行（request line）、请求头部（header）、空行和请求数据4个部分组成，下图给出了请求报文的一般格式。</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/1.png" alt="img"></p>
+<h3 id="1-请求行"><a href="#1-请求行" class="headerlink" title="1.请求行"></a>1.请求行</h3><p>请求行分为三个部分：请求方法、请求地址和协议版本</p>
+<p><strong>请求方法</strong></p>
+<p>HTTP/1.1 定义的请求方法有8种：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS、TRACE。</p>
+<p>最常的两种GET和POST，如果是RESTful接口的话一般会用到GET、POST、DELETE、PUT。</p>
+<p><strong>请求地址</strong></p>
+<p>URL:统一资源定位符，是一种自愿位置的抽象唯一识别方法。</p>
+<p>组成：&lt;协议&gt;：//&lt;主机&gt;：&lt;端口&gt;/&lt;路径&gt;</p>
+<p><strong>端口和路径有时可以省略（HTTP默认端口号是80）</strong></p>
+<p>如下例：</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/2.png" alt="img"></p>
+<p>有时会带参数，GET请求</p>
+<p><strong>协议版本</strong></p>
+<p>协议版本的格式为：HTTP/主版本号.次版本号，常用的有HTTP/1.0和HTTP/1.1</p>
+<h3 id="2-请求头部"><a href="#2-请求头部" class="headerlink" title="2.请求头部"></a>2.请求头部</h3><p>请求头部为请求报文添加了一些附加信息，由“名/值”对组成，每行一对，名和值之间使用冒号分隔。</p>
+<p>常见请求头如下：</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/3.png" alt="img"></p>
+<p>请求头部的最后会有一个空行，表示请求头部结束，接下来为请求数据，这一行非常重要，必不可少。</p>
+<h3 id="3-请求数据"><a href="#3-请求数据" class="headerlink" title="3.请求数据"></a>3.请求数据</h3><p>可选部分，比如GET请求就没有请求数据。</p>
+<p>下面是一个POST方法的请求报文：</p>
+<blockquote>
+<p>POST 　/index.php　HTTP/1.1                                                                　　 请求行<br> Host: localhost<br> User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2　　请求头<br> Accept: text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8<br> Accept-Language: zh-cn,zh;q=0.5<br> Accept-Encoding: gzip, deflate<br> Connection: keep-alive<br> Referer: <a href="https://link.jianshu.com?t=http://localhost/" target="_blank" rel="noopener">http://localhost/</a><br> Content-Length：25<br> Content-Type：application/x-www-form-urlencoded<br> 　空行<br> username=aa&amp;password=1234　　请求数据</p>
+</blockquote>
+<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><p><img src="http://q6s1x2hw2.bkt.clouddn.com/4.png" alt="img"></p>
+<p>HTTP响应报文主要由状态行、响应头部、空行以及响应数据组成。</p>
+<h3 id="1-状态行"><a href="#1-状态行" class="headerlink" title="1.状态行"></a>1.状态行</h3><p>由3部分组成，分别为：协议版本，状态码，状态码描述。</p>
+<p>其中协议版本与请求报文一致，状态码描述是对状态码的简单描述，所以这里就只介绍状态码。</p>
+<p><strong>状态码</strong></p>
+<p>状态代码为3位数字。<br> 1xx：指示信息–表示请求已接收，继续处理。<br> 2xx：成功–表示请求已被成功接收、理解、接受。<br> 3xx：重定向–要完成请求必须进行更进一步的操作。<br> 4xx：客户端错误–请求有语法错误或请求无法实现。<br> 5xx：服务器端错误–服务器未能实现合法的请求。</p>
+<p>下面列举几个常见的：</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/5.png" alt="img"></p>
+<h3 id="2-响应头部"><a href="#2-响应头部" class="headerlink" title="2.响应头部"></a>2.响应头部</h3><p>与请求头部类似，为响应报文添加了一些附加信息</p>
+<p>常见响应头部如下：</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/6.png" alt="img"></p>
+<h3 id="3-响应数据"><a href="#3-响应数据" class="headerlink" title="3.响应数据"></a>3.响应数据</h3><p>用于存放需要返回给客户端的数据信息。</p>
+<p>下面是一个响应报文的实例：</p>
+<blockquote>
+<p>HTTP/1.1 200 OK　　状态行</p>
+</blockquote>
+<p>Date: Sun, 17 Mar 2013 08:12:54 GMT　　响应头部<br> Server: Apache/2.2.8 (Win32) PHP/5.2.5<br> X-Powered-By: PHP/5.2.5<br> Set-Cookie: PHPSESSID=c0huq7pdkmm5gg6osoe3mgjmm3; path=/<br> Expires: Thu, 19 Nov 1981 08:52:00 GMT<br> Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0<br> Pragma: no-cache<br> Content-Length: 4393<br> Keep-Alive: timeout=5, max=100<br> Connection: Keep-Alive<br> Content-Type: text/html; charset=utf-8</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">空行</span><br><span class="line"> <span class="tag">&lt;<span class="name">html</span>&gt;</span>　　响应数据</span><br><span class="line"> <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTTP响应示例<span class="tag">&lt;<span class="name">title</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"> Hello HTTP!</span><br><span class="line"> <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>关于请求头部和响应头部的知识点很多，这里只是简单介绍。</p>
+<p>通过以上步骤，数据已经传递完毕，HTTP/1.1会维持持久连接，但持续一段时间总会有关闭连接的时候，这时候据需要断开TCP连接</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2020/03/12/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B1%87%E6%80%BB/" title="面试题汇总">https://01lv.github.io/2020/03/12/面试题汇总/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/12/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/" rel="prev" title="设计模式之工厂模式">
+      <i class="fa fa-chevron-left"></i> 设计模式之工厂模式
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mikelv"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mikelv</p>
+  <div class="site-description" itemprop="description">放弃不难，但坚持一定很酷</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/01Lv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;01Lv" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yisheng.mikelv@foxmail.com" title="E-Mail → mailto:yisheng.mikelv@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mikelv</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">146k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:12</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'vUOBlgy4bWczaSuWqPWA4Orb-gzGzoHsz',
+      appKey     : 'c6DxvrOXBybBJ2w0DCsMGKeM',
+      placeholder: "皮一下也很开心哦!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
