@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/5.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/6.png">
 <meta property="article:published_time" content="2020-03-12T14:58:51.000Z">
-<meta property="article:modified_time" content="2020-03-12T15:50:45.028Z">
+<meta property="article:modified_time" content="2020-03-13T00:34:16.500Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
@@ -199,10 +199,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-12 22:58:51 / 修改时间：23:50:45" itemprop="dateCreated datePublished" datetime="2020-03-12T22:58:51+08:00">2020-03-12</time>
+              <time title="创建时间：2020-03-12 22:58:51" itemprop="dateCreated datePublished" datetime="2020-03-12T22:58:51+08:00">2020-03-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-13 08:34:16" itemprop="dateModified" datetime="2020-03-13T08:34:16+08:00">2020-03-13</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -233,7 +239,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.4k</span>
+              <span>3.6k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -332,6 +338,8 @@
 
 <p>关于请求头部和响应头部的知识点很多，这里只是简单介绍。</p>
 <p>通过以上步骤，数据已经传递完毕，HTTP/1.1会维持持久连接，但持续一段时间总会有关闭连接的时候，这时候据需要断开TCP连接</p>
+<h1 id="递归算-n-的阶乘"><a href="#递归算-n-的阶乘" class="headerlink" title="递归算 n 的阶乘"></a>递归算 n 的阶乘</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">while</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        Sytem.out.print(rec(m) + <span class="string">" "</span>);</span><br><span class="line">        m--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">rec</span><span class="params">(Integer m)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        m = m * rec( m - <span class="number">1</span> );</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -431,7 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归算-n-的阶乘"><span class="nav-number">3.</span> <span class="nav-text">递归算 n 的阶乘</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -505,12 +513,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">146k</span>
+    <span title="站点总字数">152k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:12</span>
+    <span title="站点阅读时长">2:18</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
