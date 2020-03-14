@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/5.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/6.png">
 <meta property="article:published_time" content="2020-03-12T14:58:51.000Z">
-<meta property="article:modified_time" content="2020-03-13T00:34:16.500Z">
+<meta property="article:modified_time" content="2020-03-14T08:44:00.255Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
@@ -233,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-13 08:34:16" itemprop="dateModified" datetime="2020-03-13T08:34:16+08:00">2020-03-13</time>
+                <time title="修改时间：2020-03-14 16:44:00" itemprop="dateModified" datetime="2020-03-14T16:44:00+08:00">2020-03-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -265,14 +265,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3.6k</span>
+              <span>5.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -364,8 +364,86 @@
 
 <p>关于请求头部和响应头部的知识点很多，这里只是简单介绍。</p>
 <p>通过以上步骤，数据已经传递完毕，HTTP/1.1会维持持久连接，但持续一段时间总会有关闭连接的时候，这时候据需要断开TCP连接</p>
-<h1 id="递归算-n-的阶乘"><a href="#递归算-n-的阶乘" class="headerlink" title="递归算 n 的阶乘"></a>递归算 n 的阶乘</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">while</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        Sytem.out.print(rec(m) + <span class="string">" "</span>);</span><br><span class="line">        m--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">rec</span><span class="params">(Integer m)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        m = m * rec( m - <span class="number">1</span> );</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="3-递归算-n-的阶乘"><a href="#3-递归算-n-的阶乘" class="headerlink" title="3.递归算 n 的阶乘"></a>3.递归算 n 的阶乘</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">while</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        Sytem.out.print(rec(m) + <span class="string">" "</span>);</span><br><span class="line">        m--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">rec</span><span class="params">(Integer m)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        m = m * rec( m - <span class="number">1</span> );</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h1 id="4-List-和-Set-的区别"><a href="#4-List-和-Set-的区别" class="headerlink" title="4.List 和 Set 的区别"></a>4.List 和 Set 的区别</h1><p><strong><em>List</em></strong> 和 <strong><em>Set</em></strong> 都继承自 Collection，用来存放数据项集合</p>
+<p>区别：</p>
+<ol>
+<li>List 和 Set 之间有个很重要的区别就是是否允许重复元素的存在，List 中允许插入重复元素，而 Set 不允许重复元素存在，List 中允许插入重复元素，而 Set 不允许重复元素存在</li>
+<li>与元素先后存放顺序有关，List 是有序集合，保留元素插入顺序；Set 是无序集合</li>
+<li>List 可通过下标访问，而 Set 不能</li>
+</ol>
+<h1 id="5-什么是-RESTful-API"><a href="#5-什么是-RESTful-API" class="headerlink" title="5.什么是 RESTful API"></a>5.什么是 RESTful API</h1><p>参考：</p>
+<p><a href="https://www.jianshu.com/p/84568e364ee8" target="_blank" rel="noopener">深入理解什么是RESTful API ？</a></p>
+<p>REST 全称是 Representational State Transfer (表现层状态转移)</p>
+<blockquote>
+<p>URL 定位资源，用 HTTP 动词 (GET,POST,DELETE,PUT) 描述操作</p>
+</blockquote>
+<ul>
+<li><strong>Resource：</strong>资源，即数据。</li>
+</ul>
+<blockquote>
+<p>REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。</p>
+</blockquote>
+<blockquote>
+<p><strong>所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。</strong>它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源标识符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
+</blockquote>
+<ul>
+<li><strong>Representational：</strong>某种表现形式，比如用 JSON, XML, JPEG 等</li>
+</ul>
+<blockquote>
+<p>资源”是一种信息实体，它可以有多种外在表现形式。<strong>我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。</strong></p>
+</blockquote>
+<blockquote>
+<p>比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。</p>
+</blockquote>
+<blockquote>
+<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
+</blockquote>
+<ul>
+<li><strong>State Transfer：</strong>状态变化。通过 HTTP 动词实现</li>
+</ul>
+<blockquote>
+<p>访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。</p>
+</blockquote>
+<blockquote>
+<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。</strong></p>
+</blockquote>
+<blockquote>
+<p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
+</blockquote>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ul>
+<li>每个 URI 代表一个资源</li>
+<li>客户端和服务段之间，传递这种资源的某种<strong><em>表现层</em></strong></li>
+<li>客户端通过4个HTTP动词，对服务端资源进行操作，实现”表现层状态转化”</li>
+</ul>
+<h2 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h2><blockquote>
+<p><strong>最常见的一种设计错误，就是URI包含动词。</strong>因为”资源”表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。</p>
+</blockquote>
+<blockquote>
+<p><strong>另一个设计误区，就是在URI中加入版本号</strong></p>
+</blockquote>
+<h1 id="6-接口和抽象类的区别"><a href="#6-接口和抽象类的区别" class="headerlink" title="6.接口和抽象类的区别"></a>6.接口和抽象类的区别</h1><p><a href="https://www.cnblogs.com/dolphin0520/p/3811437.html" target="_blank" rel="noopener">深入理解Java的接口和抽象类</a></p>
+<p><a href="https://www.nowcoder.com/questionTerminal/bdb310cc6e384e78b2564dfd3ba4197c" target="_blank" rel="noopener">抽象类</a></p>
+<blockquote>
+<p>从设计层面上来说，</p>
+<p>抽象是对类的抽象，是一种模板设计；</p>
+<p>接口是行为的抽象，是一种行为的规范；</p>
+</blockquote>
+<h2 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h2><p>抽象类和普通类的区别：</p>
+<p>抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public。</p>
+<p>抽象类不能创建对象</p>
+<p>果一个类继承于一个抽象类，则子类必须实现父类的抽象方法。如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类。</p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口可以有 <strong><em>变量</em></strong> 和 <strong><em>方法</em></strong>。</p>
+<p>变量 会被隐式指定为 public static final 并且只能是 public static final，<strong>用 private 修饰会报编译错误</strong></p>
+<p>方法会被隐式地指定为public abstract方法且只能是public abstract方法<strong>，用其他关键字，比如private、protected、static、 final等修饰会报编译错误</strong></p>
+<p>接口中不能含有 <strong>静态代码块和静态方法</strong></p>
+<p><strong>jdk8 以后，接口也可以有方法体 ，</strong>用 <strong><em>default</em></strong> 修饰的方法体</p>
+<h3 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h3><blockquote>
+<p>抽象类是对整个类整体进行抽象，包括属性、行为;</p>
+<p>但是接口却是对类局部（行为）进行抽象。</p>
+</blockquote>
+<p>一个类只能继承一个抽象类，而一个类却可以实现多个接口</p>
 
     </div>
 
@@ -468,7 +546,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#递归算-n-的阶乘"><span class="nav-number">3.</span> <span class="nav-text">递归算 n 的阶乘</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-递归算-n-的阶乘"><span class="nav-number">3.</span> <span class="nav-text">3.递归算 n 的阶乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-List-和-Set-的区别"><span class="nav-number">4.</span> <span class="nav-text">4.List 和 Set 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-什么是-RESTful-API"><span class="nav-number">5.</span> <span class="nav-text">5.什么是 RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">5.1.</span> <span class="nav-text">总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">5.2.</span> <span class="nav-text">误区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-接口和抽象类的区别"><span class="nav-number">6.</span> <span class="nav-text">6.接口和抽象类的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象类"><span class="nav-number">6.1.</span> <span class="nav-text">抽象类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">6.2.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别："><span class="nav-number">6.2.1.</span> <span class="nav-text">区别：</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -542,12 +620,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">168k</span>
+    <span title="站点总字数">170k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:33</span>
+    <span title="站点阅读时长">2:35</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
