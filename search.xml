@@ -86,7 +86,17 @@
 <li>堆内存用来存放由 new 创建的对象和数组以及对象的实例变量(即全局变量)</li>
 </ol>
 <p>方法区中主要存储所有对象数据共享区域，存储静态变量和普通方法、静态方法、常量、字符串常量（严格说存放在常量池，堆和栈都有）等类信息，、说白了就是保存类的模板</p>
-<a id="more"></a>]]></content>
+<a id="more"></a>
+
+<p>其实基本类型的数据并不都是存储在栈上的，例如：类的成员变量如果是基本类型(int,float,double等)，它就存储在堆内存中。</p>
+<p><strong><em>反证</em></strong>：如果类的成员变量(基本数据类型)存储在栈上，众所周知，栈<strong>不是线程共享</strong>的且它的生命周期随着相关方法的结束就结束，可这时只是执行完了一个方法，而整个类的生命周期还未结束，难道这个类的成员变量也就无法调用了？这不就矛盾了吗？</p>
+<p>所以说基本类型的数据并不都是存储在栈上的。而且堆是<strong>线程共享的</strong>，类的成员变量应该是属于这个类的，而不是属于某个方法的，具有共享的性质，所以也应该存储在堆上。</p>
+<p>总结：</p>
+<ol>
+<li>方法内定义的基本数据类型放在栈帧中，栈里面的数据都是线程私有的，不共享。</li>
+<li>方法外定义的类成员变量，存放在 JVM 的堆中</li>
+</ol>
+]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -602,6 +612,13 @@
 <p>但是接口却是对类局部（行为）进行抽象。</p>
 </blockquote>
 <p>一个类只能继承一个抽象类，而一个类却可以实现多个接口</p>
+<h1 id="7-final修饰符的理解"><a href="#7-final修饰符的理解" class="headerlink" title="7.final修饰符的理解"></a>7.final修饰符的理解</h1><p>参考：</p>
+<p><a href="http://www.51gjie.com/java/569.html" target="_blank" rel="noopener">Java final关键字</a></p>
+<h2 id="final修饰类"><a href="#final修饰类" class="headerlink" title="final修饰类"></a>final修饰类</h2><p>final修饰类即表示此类已经是“最后的、最终的”含义。因此，用final修饰的类<strong>不能被继承</strong>，即<strong>不能拥有自己的子类</strong>。如果试图对一个已经用final修饰的类进行继承，在编译期间或发生错误。</p>
+<h2 id="final修饰方法"><a href="#final修饰方法" class="headerlink" title="final修饰方法"></a>final修饰方法</h2><p>final修饰的方法表示此方法已经是“最后的、最终的”含义，亦即<strong>此方法不能被重写</strong>（可以重载多个final修饰的方法）。</p>
+<p>此处需要注意的一点是：因为重写的前提是子类可以从父类中继承此方法，如果父类中final修饰的方法同时访问控制权限为private，将会导致子类中不能直接继承到此方法，因此，此时可以在子类中定义相同的方法名和参数，此时不再产生重写与final的矛盾，而是在子类中重新定义了新的方法。</p>
+<h2 id="final修饰变量"><a href="#final修饰变量" class="headerlink" title="final修饰变量"></a>final修饰变量</h2><p>final修饰的变量表示此变量是“最后的、最终的”含义。一旦定义了final变量并在首次为其显示初始化后，<strong>final修饰的变量值不可被改变</strong>(即不能再赋值)。</p>
+<p>final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。</p>
 ]]></content>
       <categories>
         <category>日常</category>
@@ -1505,7 +1522,7 @@
 
 <a id="more"></a>
 
-<h3 id="添加Swagger-UI的配置"><a href="#添加Swagger-UI的配置" class="headerlink" title="添加Swagger-UI的配置"></a><a href="http://www.macrozheng.com/#/architect/mall_arch_02?id=添加swagger-ui的配置" target="_blank" rel="noopener">添加Swagger-UI的配置</a></h3><blockquote>
+<h1 id="添加Swagger-UI的配置"><a href="#添加Swagger-UI的配置" class="headerlink" title="添加Swagger-UI的配置"></a><a href="http://www.macrozheng.com/#/architect/mall_arch_02?id=添加swagger-ui的配置" target="_blank" rel="noopener">添加Swagger-UI的配置</a></h1><blockquote>
 <p>添加Swagger-UI的Java配置文件</p>
 </blockquote>
 <p>注意：Swagger对生成API文档的范围有三种不同的选择</p>
@@ -1516,9 +1533,13 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Swagger2API文档的配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Swagger2Config</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">createRestApi</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">            .apiInfo(apiInfo())</span><br><span class="line">            .select()</span><br><span class="line">            <span class="comment">//为当前包下controller生成API文档</span></span><br><span class="line">            .apis(RequestHandlerSelectors.basePackage(<span class="string">"org.developer.es.api.controller"</span>))</span><br><span class="line">            <span class="comment">//为有@Api注解的Controller生成API文档</span></span><br><span class="line">            <span class="comment">//                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))</span></span><br><span class="line">            <span class="comment">//为有@ApiOperation注解的方法生成API文档</span></span><br><span class="line">            <span class="comment">//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))</span></span><br><span class="line">            .paths(PathSelectors.any())</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ApiInfo <span class="title">apiInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ApiInfoBuilder()</span><br><span class="line">            .title(<span class="string">"SwaggerUI演示"</span>)</span><br><span class="line">            .description(<span class="string">"es-demo"</span>)</span><br><span class="line">            .contact(<span class="string">"mikelv"</span>)</span><br><span class="line">            .version(<span class="string">"1.0"</span>)</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h1 id="Controller模板"><a href="#Controller模板" class="headerlink" title="Controller模板"></a>Controller模板</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Api</span>(tags = SwaggerApiConfig.GENERATOR_CONTROLLER)</span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GeneratorController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * DDD 模型生成代码, 前端为swagger</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@ApiOperation</span>(value = <span class="string">"DDD模型生成"</span>,produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)</span><br><span class="line">    <span class="meta">@PostMapping</span>(<span class="string">"/ddd/code"</span>)</span><br><span class="line">    <span class="keyword">public</span> ResponseEntity&lt;?&gt; generateByDDD(</span><br><span class="line">            <span class="meta">@ApiParam</span>(value = <span class="string">"表名"</span>,required = <span class="keyword">true</span>,defaultValue = <span class="string">"a,b"</span>)<span class="meta">@RequestParam</span> String[] tables,</span><br><span class="line">            <span class="meta">@ApiParam</span>(value = <span class="string">"表前缀"</span>,required = <span class="keyword">true</span>)<span class="meta">@RequestParam</span> String tablePrefix,</span><br><span class="line">            <span class="meta">@ApiParam</span>(value = <span class="string">"包名"</span>,required = <span class="keyword">true</span>)<span class="meta">@RequestParam</span> String pkg,</span><br><span class="line">            <span class="meta">@ApiParam</span>(value = <span class="string">"作者"</span>,required = <span class="keyword">true</span>)<span class="meta">@RequestParam</span> String author,</span><br><span class="line">            HttpServletResponse response) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Swagger接口配置类"><a href="#Swagger接口配置类" class="headerlink" title="Swagger接口配置类"></a>Swagger接口配置类</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerApiConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String GENERATOR_CONTROLLER = <span class="string">"generator controller"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SwaggerApiConfig</span><span class="params">(Docket docket)</span></span>&#123;</span><br><span class="line">        docket.tags(<span class="keyword">new</span> Tag(GENERATOR_CONTROLLER,<span class="string">"代码自动生成服务"</span>)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
-        <category>SpringBoot</category>
+        <category>Swagger</category>
       </categories>
       <tags>
         <tag>SpringBoot</tag>
