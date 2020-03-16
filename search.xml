@@ -5,9 +5,11 @@
     <url>/2020/03/16/RPC%E6%A1%86%E6%9E%B6Thrift/</url>
     <content><![CDATA[<p><code>Thrift</code>是一个<strong>轻量级</strong>、<strong>跨语言</strong>的<strong>远程服务调用</strong>框架，它通过自身的<code>IDL</code><strong>中间语言</strong>, 并借助<strong>代码生成引擎</strong>生成各种主流语言的<code>RPC</code><strong>服务端</strong>/<strong>客户端</strong>模板代码。</p>
 <p><strong>如何实现多语言之间的通信？</strong></p>
+<a id="more"></a>
+
 <p>数据传输使用 socket(多种语言均支持)，数据再以特定的格式 (String 等) 发送，接收方语言进行解析。</p>
 <p>定义 thrift 的文件，由 thrift 文件(IDL) 生成双方语言的接口，model，在生成的 model 以及接口中会有解码编码的代码</p>
-<p><img src="https://bkimg.cdn.bcebos.com/pic/29381f30e924b8999366ac126c061d950a7bf646?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5" alt="img"></p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9ia2ltZy5jZG4uYmNlYm9zLmNvbS9waWMvMjkzODFmMzBlOTI0Yjg5OTkzNjZhYzEyNmMwNjFkOTUwYTdiZjY0Ng?x-oss-process=image/format,png" alt="img"></p>
 <p><strong>Thrift 传输格式</strong></p>
 <ul>
 <li>TBinaryProtocol: 二进制格式</li>
@@ -46,6 +48,8 @@
     <content><![CDATA[<p>最近看多了别人的个人博客网站弄得挺精致的，居然有<strong>访客数</strong>和<strong>访问量</strong>，不行我也不能落后，所以自己也准备升级下自己简陋的博客网站哈哈。</p>
 <p>由于我的 Hexo 的版本(7.7.2) 在目前来说是最新的，所以通过百度和google查询到的资料不多，所以耗费了好几个小时在搜查相关的资料，终于功夫不负有心人，最终升级成功。</p>
 <p>据<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">官网</a>说, 他们在第三方服务中提供了 <strong>不蒜子统计</strong> 的功能，看来多看看官网还是有好处的哈哈。</p>
+<a id="more"></a>
+
 <p><img src="https://img-blog.csdnimg.cn/20200315223305251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200315222038516"></p>
 <p>1.参照了相关的资料，需要修改将 <strong>主题配置文件</strong> 中的<code>busuanzi_count</code>的配置项。</p>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="comment"># Get more information on http://ibruce.info/2015/04/04/busuanzi</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
@@ -82,7 +86,7 @@
 <li>堆内存用来存放由 new 创建的对象和数组以及对象的实例变量(即全局变量)</li>
 </ol>
 <p>方法区中主要存储所有对象数据共享区域，存储静态变量和普通方法、静态方法、常量、字符串常量（严格说存放在常量池，堆和栈都有）等类信息，、说白了就是保存类的模板</p>
-]]></content>
+<a id="more"></a>]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -99,7 +103,7 @@
 <blockquote>
 <p>协议缓冲区是一种与语言无关，与平台无关的可扩展机制，用于序列化结构化数据。</p>
 </blockquote>
-]]></content>
+<a id="more"></a>]]></content>
       <categories>
         <category>Google</category>
       </categories>

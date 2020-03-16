@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-16 08:59:19 / 修改时间：11:02:50" itemprop="dateCreated datePublished" datetime="2020-03-16T08:59:19+08:00">2020-03-16</time>
+              <time title="创建时间：2020-03-16 08:59:19 / 修改时间：14:35:30" itemprop="dateCreated datePublished" datetime="2020-03-16T08:59:19+08:00">2020-03-16</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,33 +268,14 @@
       
           <p><code>Thrift</code>是一个<strong>轻量级</strong>、<strong>跨语言</strong>的<strong>远程服务调用</strong>框架，它通过自身的<code>IDL</code><strong>中间语言</strong>, 并借助<strong>代码生成引擎</strong>生成各种主流语言的<code>RPC</code><strong>服务端</strong>/<strong>客户端</strong>模板代码。</p>
 <p><strong>如何实现多语言之间的通信？</strong></p>
-<p>数据传输使用 socket(多种语言均支持)，数据再以特定的格式 (String 等) 发送，接收方语言进行解析。</p>
-<p>定义 thrift 的文件，由 thrift 文件(IDL) 生成双方语言的接口，model，在生成的 model 以及接口中会有解码编码的代码</p>
-<p><img src="https://bkimg.cdn.bcebos.com/pic/29381f30e924b8999366ac126c061d950a7bf646?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5" alt="img"></p>
-<p><strong>Thrift 传输格式</strong></p>
-<ul>
-<li>TBinaryProtocol: 二进制格式</li>
-<li>TCompactProtocol: 压缩格式</li>
-<li>TJSONProtocol： JSON格式</li>
-<li>TSimpleJSONProtocol： 提供 JSON 只写协议，生成的文件很容易通过脚本语言解析</li>
-<li>TDebugProtocol：使用易懂的可读的文本格式，以便于debug</li>
-</ul>
-<p><strong>Thrift数据传输方式</strong></p>
-<ul>
-<li>TSocket：阻塞式socket</li>
-<li>TFramedTransport：以frame为单位进行传输，以非阻塞式服务中使用</li>
-<li>TFileTransport：以文件形式进行传输</li>
-<li>TMemoryTransport：将内存用于 I/O, Java 实现内部实际使用了简单的 ByteArrayOutputStream</li>
-<li>TZlibTransport：使用 zlib 进行压缩，与其他传输方式联合使用。当前无 Java 实现</li>
-</ul>
-<p>Thrift支持的服务模型</p>
-<ul>
-<li>TSimpleServer：简单的单线程服务模型，常用于测试</li>
-<li>TThreadPoolServer：多线程服务模型，使用标准的阻塞式 IO</li>
-<li>TNonblockingServer：多线程服务模型，使用非阻塞式 IO(需使用TFramedTransport数据传输方式)</li>
-<li>THsHaServer：THsHa 引入了线程池去处理，其模型把读写任务放到线程池去处理；Half-sync/Half-async 的处理模式，Half-async 是在处理 IO 事件上(accept/read/write io),Half-sync 用于 handler 对 rpc 的同步处理</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/16/RPC%E6%A1%86%E6%9E%B6Thrift/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -336,10 +317,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-15 22:11:43 / 修改时间：22:34:35" itemprop="dateCreated datePublished" datetime="2020-03-15T22:11:43+08:00">2020-03-15</time>
+              <time title="创建时间：2020-03-15 22:11:43" itemprop="dateCreated datePublished" datetime="2020-03-15T22:11:43+08:00">2020-03-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-16 14:35:53" itemprop="dateModified" datetime="2020-03-16T14:35:53+08:00">2020-03-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -392,23 +379,14 @@
           <p>最近看多了别人的个人博客网站弄得挺精致的，居然有<strong>访客数</strong>和<strong>访问量</strong>，不行我也不能落后，所以自己也准备升级下自己简陋的博客网站哈哈。</p>
 <p>由于我的 Hexo 的版本(7.7.2) 在目前来说是最新的，所以通过百度和google查询到的资料不多，所以耗费了好几个小时在搜查相关的资料，终于功夫不负有心人，最终升级成功。</p>
 <p>据<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">官网</a>说, 他们在第三方服务中提供了 <strong>不蒜子统计</strong> 的功能，看来多看看官网还是有好处的哈哈。</p>
-<p><img src="https://img-blog.csdnimg.cn/20200315223305251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200315222038516"></p>
-<p>1.参照了相关的资料，需要修改将 <strong>主题配置文件</strong> 中的<code>busuanzi_count</code>的配置项。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="comment"># Get more information on http://ibruce.info/2015/04/04/busuanzi</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>给 <strong>footer.swig</strong> 添加以下内容，该文件在径<code>&quot;\themes\next\layout\_partials\</code> 下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">&lt;span id&#x3D;&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">	&lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">		&lt;i class&#x3D;&quot;fa fa-eye&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">	&lt;&#x2F;span&gt;</span><br><span class="line">	访问量：&lt;span id&#x3D;&quot;busuanzi_value_site_pv&quot;&gt;&lt;&#x2F;span&gt; 次数</span><br><span class="line">&lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">&lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">	&lt;span id&#x3D;&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">	访客数：&lt;span id&#x3D;&quot;busuanzi_value_site_uv&quot;&gt;&lt;&#x2F;span&gt; 人次</span><br><span class="line">&lt;&#x2F;span&gt;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意: 以上内容放错位置可就显示的不好看哦</p>
-</blockquote>
-<p>把这段内容添加 <code>&lt;div div class=&quot;copyright&quot;&gt;</code> 模块的末尾添加，示例如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;copyright&quot;&gt;</span><br><span class="line">  &#123;% set copyright_year &#x3D; date(null, &#39;YYYY&#39;) %&#125;</span><br><span class="line">  &amp;copy; &#123;% if theme.footer.since and theme.footer.since !&#x3D; copyright_year %&#125;&#123;&#123; theme.footer.since &#125;&#125; – &#123;% endif %&#125;</span><br><span class="line">  &lt;span itemprop&#x3D;&quot;copyrightYear&quot;&gt;&#123;&#123; copyright_year &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span class&#x3D;&quot;with-love&quot;&gt;</span><br><span class="line">    &lt;i class&#x3D;&quot;fa fa-&#123;&#123; theme.footer.icon.name &#125;&#125;&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span class&#x3D;&quot;author&quot; itemprop&#x3D;&quot;copyrightHolder&quot;&gt;&#123;&#123; theme.footer.copyright or author &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">  &#123;%- if config.symbols_count_time.total_symbols %&#125;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-area-chart&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- if theme.symbols_count_time.item_text_total %&#125;</span><br><span class="line">      &lt;span class&#x3D;&quot;post-meta-item-text&quot;&gt;&#123;&#123; __(&#39;symbols_count_time.count_total&#39;) + __(&#39;symbol.colon&#39;) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line">    &lt;span title&#x3D;&quot;&#123;&#123; __(&#39;symbols_count_time.count_total&#39;) &#125;&#125;&quot;&gt;&#123;&#123; symbolsCountTotal(site) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &#123;%- endif %&#125;</span><br><span class="line"></span><br><span class="line">  &#123;%- if config.symbols_count_time.total_time %&#125;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-coffee&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- if theme.symbols_count_time.item_text_total %&#125;</span><br><span class="line">      &lt;span class&#x3D;&quot;post-meta-item-text&quot;&gt;&#123;&#123; __(&#39;symbols_count_time.time_total&#39;) &#125;&#125; &amp;asymp;&lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line">    &lt;span title&#x3D;&quot;&#123;&#123; __(&#39;symbols_count_time.time_total&#39;) &#125;&#125;&quot;&gt;&#123;&#123; symbolsTimeTotal(site, theme.symbols_count_time.awl, theme.symbols_count_time.wpm, __(&#39;symbols_count_time.time_minutes&#39;)) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &#123;%- endif %&#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;添加的位置从这里开始</span><br><span class="line">  &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span id&#x3D;&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-eye&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    访问量：&lt;span id&#x3D;&quot;busuanzi_value_site_pv&quot;&gt;&lt;&#x2F;span&gt; 次数</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">  &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span id&#x3D;&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">    访客数：&lt;span id&#x3D;&quot;busuanzi_value_site_uv&quot;&gt;&lt;&#x2F;span&gt; 人次</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">  &#x2F;&#x2F;这里结束</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
-
-<p>重新部署一下，需要的内容就出来啦！</p>
-<p>效果如下：</p>
-<p><img src="https://img-blog.csdnimg.cn/20200315223249814.png" alt="image-20200315223107231"></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -450,10 +428,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-15 15:53:22 / 修改时间：17:44:58" itemprop="dateCreated datePublished" datetime="2020-03-15T15:53:22+08:00">2020-03-15</time>
+              <time title="创建时间：2020-03-15 15:53:22" itemprop="dateCreated datePublished" datetime="2020-03-15T15:53:22+08:00">2020-03-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-16 14:36:13" itemprop="dateModified" datetime="2020-03-16T14:36:13+08:00">2020-03-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -510,7 +494,14 @@
 <li>堆内存用来存放由 new 创建的对象和数组以及对象的实例变量(即全局变量)</li>
 </ol>
 <p>方法区中主要存储所有对象数据共享区域，存储静态变量和普通方法、静态方法、常量、字符串常量（严格说存放在常量池，堆和栈都有）等类信息，、说白了就是保存类的模板</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -552,10 +543,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-15 14:10:54 / 修改时间：17:45:17" itemprop="dateCreated datePublished" datetime="2020-03-15T14:10:54+08:00">2020-03-15</time>
+              <time title="创建时间：2020-03-15 14:10:54" itemprop="dateCreated datePublished" datetime="2020-03-15T14:10:54+08:00">2020-03-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-16 14:36:28" itemprop="dateModified" datetime="2020-03-16T14:36:28+08:00">2020-03-16</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -611,7 +608,14 @@
 <blockquote>
 <p>协议缓冲区是一种与语言无关，与平台无关的可扩展机制，用于序列化结构化数据。</p>
 </blockquote>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
