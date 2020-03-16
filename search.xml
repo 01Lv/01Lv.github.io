@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>RPC框架Thrift</title>
+    <url>/2020/03/16/RPC%E6%A1%86%E6%9E%B6Thrift/</url>
+    <content><![CDATA[<p><code>Thrift</code>是一个<strong>轻量级</strong>、<strong>跨语言</strong>的<strong>远程服务调用</strong>框架，它通过自身的<code>IDL</code><strong>中间语言</strong>, 并借助<strong>代码生成引擎</strong>生成各种主流语言的<code>RPC</code><strong>服务端</strong>/<strong>客户端</strong>模板代码。</p>
+<p><strong>如何实现多语言之间的通信？</strong></p>
+<p>数据传输使用 socket(多种语言均支持)，数据再以特定的格式 (String 等) 发送，接收方语言进行解析。</p>
+<p>定义 thrift 的文件，由 thrift 文件(IDL) 生成双方语言的接口，model，在生成的 model 以及接口中会有解码编码的代码</p>
+<p><img src="https://bkimg.cdn.bcebos.com/pic/29381f30e924b8999366ac126c061d950a7bf646?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5" alt="img"></p>
+<p><strong>Thrift 传输格式</strong></p>
+<ul>
+<li>TBinaryProtocol: 二进制格式</li>
+<li>TCompactProtocol: 压缩格式</li>
+<li>TJSONProtocol： JSON格式</li>
+<li>TSimpleJSONProtocol： 提供 JSON 只写协议，生成的文件很容易通过脚本语言解析</li>
+<li>TDebugProtocol：使用易懂的可读的文本格式，以便于debug</li>
+</ul>
+<p><strong>Thrift数据传输方式</strong></p>
+<ul>
+<li>TSocket：阻塞式socket</li>
+<li>TFramedTransport：以frame为单位进行传输，以非阻塞式服务中使用</li>
+<li>TFileTransport：以文件形式进行传输</li>
+<li>TMemoryTransport：将内存用于 I/O, Java 实现内部实际使用了简单的 ByteArrayOutputStream</li>
+<li>TZlibTransport：使用 zlib 进行压缩，与其他传输方式联合使用。当前无 Java 实现</li>
+</ul>
+<p>Thrift支持的服务模型</p>
+<ul>
+<li>TSimpleServer：简单的单线程服务模型，常用于测试</li>
+<li>TThreadPoolServer：多线程服务模型，使用标准的阻塞式 IO</li>
+<li>TNonblockingServer：多线程服务模型，使用非阻塞式 IO(需使用TFramedTransport数据传输方式)</li>
+<li>THsHaServer：THsHa 引入了线程池去处理，其模型把读写任务放到线程池去处理；Half-sync/Half-async 的处理模式，Half-async 是在处理 IO 事件上(accept/read/write io),Half-sync 用于 handler 对 rpc 的同步处理</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RPC</category>
+      </categories>
+      <tags>
+        <tag>RPC</tag>
+        <tag>Thrift</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>NexT7.7.x版本添加访问量和访客数</title>
     <url>/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/</url>
     <content><![CDATA[<p>最近看多了别人的个人博客网站弄得挺精致的，居然有<strong>访客数</strong>和<strong>访问量</strong>，不行我也不能落后，所以自己也准备升级下自己简陋的博客网站哈哈。</p>
