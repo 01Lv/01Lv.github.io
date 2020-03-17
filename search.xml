@@ -1,9 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>TCP/IP协议,OSI七层协议</title>
+    <url>/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://blog.csdn.net/yaopeng_2005/article/details/7064869" target="_blank" rel="noopener">OSI七层模型详解</a></p>
+<p><a href="https://juejin.im/post/5a069b6d51882509e5432656" target="_blank" rel="noopener">一篇文章带你熟悉 TCP/IP 协议（网络协议篇二）</a></p>
+<p><a href="https://blog.csdn.net/zhshulin/article/details/62888061" target="_blank" rel="noopener">一张图了解TCP/IP五层网络模型</a></p>
+<a id="more"></a>
+
+<h1 id="OSI七层协议"><a href="#OSI七层协议" class="headerlink" title="OSI七层协议"></a>OSI七层协议</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/21.png" alt="img"></p>
+<h2 id="物理层"><a href="#物理层" class="headerlink" title="物理层"></a>物理层</h2><blockquote>
+<p>利用传输介质为数据链路层提供物理连接，实现比特流的透明传输。</p>
+</blockquote>
+<h2 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h2><blockquote>
+<p>通过各种控制协议，将有差错的物理信道变为无差错的、能可靠传输数据帧的数据链路。</p>
+</blockquote>
+<p>该层通常又被分为介质访问控制（MAC）和逻辑链路控制（LLC）两个子层。</p>
+<h2 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h2><blockquote>
+<p>通过路由选择算法，为报文或分组通过通信子网选择最适当的路径。</p>
+</blockquote>
+<p>该层控制数据链路层与传输层之间的信息转发，建立、维持和终止网络的连接。具体地说，数据链路层的数据在这一层被转换为数据包，然后通过路径选择、分段组合、顺序、进/出路由等控制，将信息从一个网络设备传送到另一个网络设备。</p>
+<p>OSI下3层的主要任务是数据通信，上3层的任务是数据处理。</p>
+<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><blockquote>
+<p>向用户提供可靠的端到端的差错和流量控制，保证报文的正确传输。</p>
+</blockquote>
+<p>传输层的作用是向高层屏蔽下层数据通信的细节，即向用户透明地传送报文。</p>
+<h2 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h2><blockquote>
+<p>向两个实体的表示层提供建立和使用连接的方法。</p>
+</blockquote>
+<h2 id="表示层"><a href="#表示层" class="headerlink" title="表示层"></a><strong>表示层</strong></h2><blockquote>
+<p>处理用户信息的表示问题，如编码、数据格式转换和加密解密</p>
+</blockquote>
+<h2 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h2><blockquote>
+<p>直接向用户提供服务，完成用户希望在网络上完成的各种工作</p>
+</blockquote>
+<p>应用层（Application Layer）是OSI参考模型的最高层，它是计算机用户，以及各种应用程序和网络之间的接口，其功能是直接向用户提供服务，完成用户希望在网络上完成的各种工作。</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/22.png" alt="计算机网络体系结构分层"></p>
+<p><strong>OSI 参考模型注重“通信协议必要的功能是什么”，而 TCP/IP 则更强调“在计算机上实现协议应该开发哪种程序”。</strong></p>
+<h1 id="TCP-IP-五层协议"><a href="#TCP-IP-五层协议" class="headerlink" title="TCP/IP 五层协议"></a>TCP/IP 五层协议</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/24.png" alt="img"></p>
+<h1 id="数据处理流程"><a href="#数据处理流程" class="headerlink" title="数据处理流程"></a>数据处理流程</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/23.png" alt="数据处理流程"></p>
+<p>① 应用程序处理<br>首先应用程序会进行编码处理，这些编码相当于 OSI 的表示层功能；<br>编码转化后，邮件不一定马上被发送出去，这种何时建立通信连接何时发送数据的管理功能，相当于 OSI 的会话层功能。</p>
+<p>② TCP 模块的处理<br>TCP 根据应用的指示，负责建立连接、发送数据以及断开连接。TCP 提供将应用层发来的数据顺利发送至对端的可靠传输。为了实现这一功能，需要在应用层数据的前端附加一个 TCP 首部。</p>
+<p>③ IP 模块的处理<br>IP 将 TCP 传过来的 TCP 首部和 TCP 数据合起来当做自己的数据，并在 TCP 首部的前端加上自己的 IP 首部。IP 包生成后，参考路由控制表决定接受此 IP 包的路由或主机。</p>
+<p>④ 网络接口（以太网驱动）的处理<br>从 IP 传过来的 IP 包对于以太网来说就是数据。给这些数据附加上以太网首部并进行发送处理，生成的以太网数据包将通过物理层传输给接收端。</p>
+<p>⑤ 网络接口（以太网驱动）的处理<br>主机收到以太网包后，首先从以太网包首部找到 MAC 地址判断是否为发送给自己的包，若不是则丢弃数据。<br>如果是发送给自己的包，则从以太网包首部中的类型确定数据类型，再传给相应的模块，如 IP、ARP 等。这里的例子则是 IP 。</p>
+<p>⑥ IP 模块的处理<br>IP 模块接收到 数据后也做类似的处理。从包首部中判断此 IP 地址是否与自己的 IP 地址匹配，如果匹配则根据首部的协议类型将数据发送给对应的模块，如 TCP、UDP。这里的例子则是 TCP。<br>另外吗，对于有路由器的情况，接收端地址往往不是自己的地址，此时，需要借助路由控制表，在调查应该送往的主机或路由器之后再进行转发数据。</p>
+<p>⑦ TCP 模块的处理<br>在 TCP 模块中，首先会计算一下校验和，判断数据是否被破坏。然后检查是否在按照序号接收数据。最后检查端口号，确定具体的应用程序。数据被完整地接收以后，会传给由端口号识别的应用程序。</p>
+<p>⑧ 应用程序的处理<br>接收端应用程序会直接接收发送端发送的数据。通过解析数据，展示相应的内容。</p>
+]]></content>
+      <categories>
+        <category>计算机网络</category>
+      </categories>
+      <tags>
+        <tag>TCP/IP</tag>
+        <tag>计算机网络</tag>
+        <tag>OSI</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java之集合框架</title>
     <url>/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://www.jianshu.com/p/63e76826e852" target="_blank" rel="noopener">Java - 集合框架完全解析</a></p>
+<p><a href="https://juejin.im/post/5da41417f265da5ba532b21c" target="_blank" rel="noopener">详解Java集合框架，让你全面掌握！</a></p>
+<p>在 Java2 之前，Java 是没有完整的集合框架。它只有一些简单的可以自扩展的容器类，比如 Vector，Stack，Hashtable 等。但由于效率的原因遭受诟病，于是不得不进行改革。</p>
+<a id="more"></a>
+
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/25.png" alt="img"></p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/26.png" alt="img"></p>
+<p>从上面的集合框架可以看到，</p>
+<p>Java集合框架主要包括两种类型的容器，一种是集合(Collection)，存储一个元素集合，</p>
+<p>另一种是图(Map)，存储 key/value 映射。</p>
+<p>Collection接口：</p>
+<ul>
+<li>List</li>
+<li>Set</li>
+<li>Queue</li>
+</ul>
+<p><strong><em>List</em></strong> 代表了 <strong>有序</strong>, <strong>可重复</strong> 集合，可直接根据元素的索引来访问；</p>
+<p><strong><em>Set</em></strong> 代表了 <strong>无序</strong>, <strong>不可重复</strong> 集合，只能根据元素本身来访问；</p>
+<p><strong><em>Queue</em></strong> 是队列集合</p>
+<p><strong><em>Map</em></strong> 代表的是 <strong>存储key/value</strong> 的集合，可根据元素的 key 来访问 value。</p>
+<h1 id="Set-集合"><a href="#Set-集合" class="headerlink" title="Set 集合"></a>Set 集合</h1><p>Set集合与Collection的方法相同，由于Set集合不允许存储相同的元素，所以如果把两个相同元素添加到同一个Set集合，则添加操作失败，新元素不会被加入，add()方法返回false。</p>
+<h2 id="1-HashSet"><a href="#1-HashSet" class="headerlink" title="1.HashSet"></a>1.<strong>HashSet</strong></h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Set&lt;String&gt; set=<span class="keyword">new</span> HashSet();</span><br><span class="line">   set.add(<span class="string">"hello world"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   System.out.println(<span class="string">"集合中元素个数："</span></span><br><span class="line">        +set.size());</span><br><span class="line">   System.out.println(<span class="string">"集合中元素为："</span></span><br><span class="line">       +set.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由源码可知 <strong><em>HashSet</em></strong> 的底层是通过 <strong><em>HashMap</em></strong> 实现的</p>
+<p>查看 <strong>add()</strong> 的源码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//调用 HashMap 的 put()</span></span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>put()</strong> 的源码主要是通过 <u>hash值</u> 以及 <u>equals()</u> 方法来避免重复的添加</p>
+<h2 id="2-LinkedHashSet"><a href="#2-LinkedHashSet" class="headerlink" title="2.LinkedHashSet"></a>2.<strong>LinkedHashSet</strong></h2><h2 id="3-TreeSet"><a href="#3-TreeSet" class="headerlink" title="3.TreeSet"></a>3.<strong>TreeSet</strong></h2><h2 id="4-EnumSet"><a href="#4-EnumSet" class="headerlink" title="4.EnumSet"></a>4.<strong>EnumSet</strong></h2><h1 id="List-集合"><a href="#List-集合" class="headerlink" title="List 集合"></a>List 集合</h1><blockquote>
+<p>List集合代表一个有序、可重复集合，集合中每个元素都有其对应的顺序索引。List集合默认按照元素的添加顺序设置元素的索引，可以通过索引（类似数组的下标）来访问指定位置的集合元素。</p>
+</blockquote>
+<h2 id="1-ArrayList"><a href="#1-ArrayList" class="headerlink" title="1.ArrayList"></a>1.ArrayList</h2><h2 id="2-LinkedList"><a href="#2-LinkedList" class="headerlink" title="2.LinkedList"></a>2.<strong>LinkedList</strong></h2><h2 id="3-Vector"><a href="#3-Vector" class="headerlink" title="3.Vector"></a>3.<strong>Vector</strong></h2><h2 id="4-Stack"><a href="#4-Stack" class="headerlink" title="4.Stack"></a>4.<strong>Stack</strong></h2><h2 id="5-Iterator接口和ListIterator接口"><a href="#5-Iterator接口和ListIterator接口" class="headerlink" title="5.Iterator接口和ListIterator接口"></a>5.<strong>Iterator接口和ListIterator接口</strong></h2><h1 id="Map-集合"><a href="#Map-集合" class="headerlink" title="Map 集合"></a>Map 集合</h1><h2 id="1-HashMap与Hashtable"><a href="#1-HashMap与Hashtable" class="headerlink" title="1.HashMap与Hashtable"></a>1.<strong>HashMap与Hashtable</strong></h2><h2 id="2-LinkedHashMap"><a href="#2-LinkedHashMap" class="headerlink" title="2.LinkedHashMap"></a>2.<strong>LinkedHashMap</strong></h2><h2 id="3-Properties"><a href="#3-Properties" class="headerlink" title="3.Properties"></a>3.<strong>Properties</strong></h2><h2 id="4-TreeMap"><a href="#4-TreeMap" class="headerlink" title="4.TreeMap"></a>4.<strong>TreeMap</strong></h2><p>未完待续……</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>集合</tag>
+      </tags>
   </entry>
   <entry>
     <title>Java之equals理解</title>
@@ -39,7 +137,82 @@
     <url>/2020/03/17/Java%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%A7%A3%E6%9E%90/</url>
     <content><![CDATA[<p>参考：</p>
 <p><a href="https://juejin.im/post/5d1882b1f265da1ba84aa676" target="_blank" rel="noopener">面试必备：Java线程池解析</a></p>
-<a id="more"></a>]]></content>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>简单理解，它就是一个管理线程的池子</p>
+<ul>
+<li><p><strong>它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗</strong>。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。</p>
+</li>
+<li><p><strong>提高响应速度。</strong> 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。</p>
+</li>
+<li><p><strong>重复利用。</strong> 线程用完，再放回池子，可以达到重复利用的效果，节省资源。</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><p>线程池可以通过 ThreadPoolExecutor 来创建</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize,<span class="keyword">long</span> keepAliveTime,TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>几个核心参数的作用：</p>
+<ul>
+<li><p><strong>corePoolSize：</strong> 线程池核心线程数最大值</p>
+</li>
+<li><p><strong>maximumPoolSize：</strong> 线程池最大线程数大小</p>
+</li>
+<li><p><strong>keepAliveTime：</strong> 线程池中非核心线程空闲的存活时间大小</p>
+</li>
+<li><p><strong>unit：</strong> 线程空闲存活时间单位</p>
+</li>
+<li><p><strong>workQueue：</strong> 存放任务的阻塞队列</p>
+</li>
+<li><p><strong>threadFactory：</strong> 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题。</p>
+</li>
+<li><p><strong>handler：</strong>  线城池的饱和策略事件，主要有四种类型。</p>
+</li>
+</ul>
+<h1 id="任务执行"><a href="#任务执行" class="headerlink" title="任务执行"></a>任务执行</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/27.png" alt="img"></p>
+<ul>
+<li><p>提交一个任务，线程池里存活的核心线程数小于线程数corePoolSize时，线程池会创建一个核心线程去处理提交的任务。</p>
+</li>
+<li><p>如果线程池核心线程数已满，即线程数已经等于corePoolSize，一个新提交的任务，会被放进任务队列workQueue排队等待执行。</p>
+</li>
+<li><p>当线程池里面存活的线程数已经等于corePoolSize了,并且任务队列workQueue也满，判断线程数是否达到maximumPoolSize，即最大线程数是否已满，如果没到达，创建一个非核心线程执行提交的任务。</p>
+</li>
+<li><p>如果当前的线程数达到了maximumPoolSize，还有新的任务过来的话，直接采用拒绝策略处理。</p>
+</li>
+</ul>
+<h2 id="四种拒绝策略"><a href="#四种拒绝策略" class="headerlink" title="四种拒绝策略"></a>四种拒绝策略</h2><ul>
+<li><p>AbortPolicy(抛出一个异常，默认的)</p>
+</li>
+<li><p>DiscardPolicy(直接丢弃任务)</p>
+</li>
+<li><p>DiscardOldestPolicy（丢弃队列里最老的任务，将当前这个任务继续提交给线程池）</p>
+</li>
+<li><p>CallerRunsPolicy（交给线程池调用所在的线程进行处理)</p>
+</li>
+</ul>
+<p><strong>为了形象描述线程池执行，我打个比喻：</strong></p>
+<ul>
+<li><p>核心线程比作公司正式员工</p>
+</li>
+<li><p>非核心线程比作外包员工</p>
+</li>
+<li><p>阻塞队列比作需求池</p>
+</li>
+<li><p>提交任务比作提需求</p>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/28.png" alt="img"></p>
+</li>
+<li><p>当产品提个需求，正式员工（核心线程）先接需求（执行任务）</p>
+</li>
+<li><p>如果正式员工都有需求在做，即核心线程数已满），产品就把需求先放需求池（阻塞队列）。</p>
+</li>
+<li><p>如果需求池(阻塞队列)也满了，但是这时候产品继续提需求,怎么办呢？那就请外包（非核心线程）来做。</p>
+</li>
+<li><p>如果所有员工（最大线程数也满了）都有需求在做了，那就执行拒绝策略。</p>
+</li>
+<li><p>如果外包员工把需求做完了，它经过一段（keepAliveTime）空闲时间，就离开公司了。</p>
+</li>
+</ul>
+<p>好的，到这里。<strong>面试问题1-&gt;Java的线程池说一下，各个参数的作用，如何进行的?</strong> 是否已经迎刃而解啦， 我觉得这个问题，回答：<strong>线程池构造函数的corePoolSize,maximumPoolSize等参数，并且能描述清楚线程池的执行流程</strong> 就差不多啦。</p>
+]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -805,6 +978,13 @@
 <p>此处需要注意的一点是：因为重写的前提是子类可以从父类中继承此方法，如果父类中final修饰的方法同时访问控制权限为private，将会导致子类中不能直接继承到此方法，因此，此时可以在子类中定义相同的方法名和参数，此时不再产生重写与final的矛盾，而是在子类中重新定义了新的方法。</p>
 <h2 id="final修饰变量"><a href="#final修饰变量" class="headerlink" title="final修饰变量"></a>final修饰变量</h2><p>final修饰的变量表示此变量是“最后的、最终的”含义。一旦定义了final变量并在首次为其显示初始化后，<strong>final修饰的变量值不可被改变</strong>(即不能再赋值)。</p>
 <p>final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。</p>
+<h1 id="8-Java创建对象的方式"><a href="#8-Java创建对象的方式" class="headerlink" title="8.Java创建对象的方式"></a>8.Java创建对象的方式</h1><ol>
+<li><strong>使用 new 关键字</strong></li>
+<li><strong>使用反射的 Class 类的 newInstance() 方法</strong>：ObjectName obj = ObjectName.class.newInstance(); </li>
+<li><strong>使用反射的 Constructor 类的 newInstance() 方法</strong>：ObjectName obj = ObjectName.class.getConstructor.newInstance();</li>
+<li><strong>使用对象的克隆 clone() 方法</strong>：ObjectName obj = obj.clone();</li>
+<li><strong>使用反序列化（ObjectInputStream）的readObject()方法</strong>： try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) { ObjectName obj = ois.readObject(); }</li>
+</ol>
 ]]></content>
       <categories>
         <category>日常</category>
