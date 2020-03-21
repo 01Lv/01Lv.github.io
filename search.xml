@@ -1,6 +1,594 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>JVM知识点集合</title>
+    <url>/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/</url>
+    <content><![CDATA[<h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><p>JVM 内存可简单分为三个区：</p>
+<ol>
+<li><strong>堆区(heap)</strong>: 用于存放所有对象，是线程共享的</li>
+<li><strong>栈区(stack)</strong>: 用于存放基本数据类型的数据和对象的引用，是线程私有的(分为：虚拟机栈和本地方法栈)</li>
+<li><strong>方法区(method):</strong> 用于存放类信息，常量，静态变量，编译后的字节码等，是线程共享的(也被称为非堆，即None-Heap)</li>
+</ol>
+<p><strong>Java 的垃圾回收器(GC) 主要针对堆区</strong></p>
+<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p><strong>由于跨平台性的设计，Java的指令都是根据栈来设计</strong>。不同平台CPU架构不同，所以不能设计为基于寄存器的。优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令。</p>
+<h2 id="JVM-生命周期"><a href="#JVM-生命周期" class="headerlink" title="JVM 生命周期"></a>JVM 生命周期</h2><h3 id="虚拟机启动"><a href="#虚拟机启动" class="headerlink" title="虚拟机启动"></a>虚拟机启动</h3><p>Java 虚拟机的启动是通过<strong>引导类加载器</strong>(bootstrap class loader)创建一个初始类(initial class)来完成，这个类是由虚拟机的具体实现指定的</p>
+<h3 id="虚拟机的执行"><a href="#虚拟机的执行" class="headerlink" title="虚拟机的执行"></a>虚拟机的执行</h3><ul>
+<li>一个运行中的Java虚拟机有着一个清晰的任务：执行Java程序</li>
+<li>程序开始执行时他才运行，程序结束时就停止</li>
+<li>执行一个所谓的Java程序的时候，真正在执行的是一个叫做Java虚拟机的进程</li>
+</ul>
+<h3 id="虚拟机退出"><a href="#虚拟机退出" class="headerlink" title="虚拟机退出"></a>虚拟机退出</h3><p>有如下几种情况：</p>
+<ul>
+<li>程序正常执行结束</li>
+<li>程序在执行过程中遇到了异常或错误而异常终止</li>
+<li>由于操作系统出现错误而导致Java虚拟机终止</li>
+<li>某线程调用Runtime类 或 System 类的exit方法，或halt方法</li>
+</ul>
+<h2 id="类加载器及类加载过程"><a href="#类加载器及类加载过程" class="headerlink" title="类加载器及类加载过程"></a>类加载器及类加载过程</h2><p><img src="https://img-blog.csdnimg.cn/20200321102825441.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200208133950667"></p>
+<ul>
+<li>类加载器子系统负责从文件系统或者网络中加载class文件，class文件在文件开头有特定的文件标识</li>
+<li>ClassLoader只负责class文件的加载，至于它是否可以运行，则由 <strong>Execution Engine决定</strong> </li>
+<li>加载的类信息存放于一块称为 <strong>方法区的内存空间。</strong>除了类的信息外，方法区还会存放运行时<strong>常量池信息</strong>，可能还包括字符串字面量和数字常量(这部分常量信息是Class文件中常量池部分的内存映射)</li>
+</ul>
+<h3 id="类加载器ClassLoader角色"><a href="#类加载器ClassLoader角色" class="headerlink" title="类加载器ClassLoader角色"></a>类加载器ClassLoader角色</h3><ol>
+<li>class file 存在于本地硬盘上，可以理解为设计师画在纸上的模板，而最终这个模板在执行的时候要加载到 JVM 当中来根据这个文件实例化出 n 个一模一样的实例</li>
+<li>class file 加载到 JVM 中，被称为 DNA 元数据模板，放在方法区</li>
+<li>在 .class 文件 -&gt; JVM -&gt; 最终成为元数据模板，此过程就要一个 <strong>运输工具(类加载器 Class Loader)</strong> , 扮演一个<strong>快递员</strong>的角色</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/2020032110285062.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200208135633071"></p>
+<h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><p><img src="https://img-blog.csdnimg.cn/20200321102910207.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200208140055491"></p>
+<h4 id="加载："><a href="#加载：" class="headerlink" title="加载："></a>加载：</h4><ol>
+<li>通过一个类的全限定名获取定义此类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li>
+<li>在内存中生成一个代表这个类的 <strong>java.lang.Class对象</strong>，作为方法区这个类的各种数据的放嗯入口</li>
+</ol>
+<h4 id="链接："><a href="#链接：" class="headerlink" title="链接："></a>链接：</h4><p><img src="https://img-blog.csdnimg.cn/20200321102926237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200208140713449"></p>
+<h4 id="初始化："><a href="#初始化：" class="headerlink" title="初始化："></a>初始化：</h4><ul>
+<li>初始化阶段就是执行类构造器方法&lt;clinit&gt;()的过程</li>
+<li>此方法不需定义，是 javac 编译器自动收集类中的所有类变量的赋值动作和静态代码块中的语句合并而来</li>
+<li>构造器方法中指令按语句在源文件中出现的顺序执行</li>
+<li>&lt;clinit&gt;() 不同于类的构造器</li>
+<li>虚拟机必须保证一个类的&lt;clinit&gt;() 方法在多线程下被同步加锁</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200321102941718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211212324816"></p>
+<h3 id="类加载器的分类"><a href="#类加载器的分类" class="headerlink" title="类加载器的分类"></a>类加载器的分类</h3><ul>
+<li>JVM 支持两种类加载器，分别为 <strong>引导类加载器(Bootstrap ClassLoader)</strong> 和 <strong>自定义类加载器(User-Defined ClassLoader)</strong></li>
+<li>从概念上讲，自定义类加载器一般指的是程序中由开发人员自定义的一类类加载器，但是Java虚拟机规范没有这么定义，而是 <strong>将所有派生于抽象类ClassLoader的类加载器都划分为自定义类加载器</strong></li>
+</ul>
+<h4 id="关于-Class-Loader"><a href="#关于-Class-Loader" class="headerlink" title="关于 Class Loader"></a>关于 Class Loader</h4><p>ClassLoader 类，它是一个<strong>抽象类</strong>，其后所有的类加载器都继承自ClassLoader(不包括启动类加载器)</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321102957103.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211215059187"></p>
+<p>自定义类加载器源码</p>
+<p>Launcher.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Source code recreated from a .class file by IntelliJ IDEA</span></span><br><span class="line"><span class="comment">// (powered by Fernflower decompiler)</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> sun.misc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.net.MalformedURLException;</span><br><span class="line"><span class="keyword">import</span> java.net.URI;</span><br><span class="line"><span class="keyword">import</span> java.net.URISyntaxException;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.net.URLClassLoader;</span><br><span class="line"><span class="keyword">import</span> java.net.URLStreamHandler;</span><br><span class="line"><span class="keyword">import</span> java.net.URLStreamHandlerFactory;</span><br><span class="line"><span class="keyword">import</span> java.nio.file.Paths;</span><br><span class="line"><span class="keyword">import</span> java.security.AccessControlContext;</span><br><span class="line"><span class="keyword">import</span> java.security.AccessController;</span><br><span class="line"><span class="keyword">import</span> java.security.CodeSource;</span><br><span class="line"><span class="keyword">import</span> java.security.PermissionCollection;</span><br><span class="line"><span class="keyword">import</span> java.security.PrivilegedAction;</span><br><span class="line"><span class="keyword">import</span> java.security.PrivilegedActionException;</span><br><span class="line"><span class="keyword">import</span> java.security.PrivilegedExceptionAction;</span><br><span class="line"><span class="keyword">import</span> java.security.ProtectionDomain;</span><br><span class="line"><span class="keyword">import</span> java.security.cert.Certificate;</span><br><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.StringTokenizer;</span><br><span class="line"><span class="keyword">import</span> java.util.Vector;</span><br><span class="line"><span class="keyword">import</span> sun.net.www.ParseUtil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Launcher</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> URLStreamHandlerFactory factory = <span class="keyword">new</span> Launcher.Factory();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Launcher launcher = <span class="keyword">new</span> Launcher();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String bootClassPath = System.getProperty(<span class="string">"sun.boot.class.path"</span>);</span><br><span class="line">    <span class="keyword">private</span> ClassLoader loader;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> URLStreamHandler fileHandler;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Launcher <span class="title">getLauncher</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> launcher;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Launcher</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Launcher.ExtClassLoader var1;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            var1 = Launcher.ExtClassLoader.getExtClassLoader();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException var10) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(<span class="string">"Could not create extension class loader"</span>, var10);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.loader = Launcher.AppClassLoader.getAppClassLoader(var1);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException var9) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(<span class="string">"Could not create application class loader"</span>, var9);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Thread.currentThread().setContextClassLoader(<span class="keyword">this</span>.loader);</span><br><span class="line">        String var2 = System.getProperty(<span class="string">"java.security.manager"</span>);</span><br><span class="line">        <span class="keyword">if</span> (var2 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            SecurityManager var3 = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="string">""</span>.equals(var2) &amp;&amp; !<span class="string">"default"</span>.equals(var2)) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    var3 = (SecurityManager)<span class="keyword">this</span>.loader.loadClass(var2).newInstance();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IllegalAccessException var5) &#123;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InstantiationException var6) &#123;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (ClassNotFoundException var7) &#123;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (ClassCastException var8) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                var3 = <span class="keyword">new</span> SecurityManager();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (var3 == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(<span class="string">"Could not create SecurityManager: "</span> + var2);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.setSecurityManager(var3);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ClassLoader <span class="title">getClassLoader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.loader;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> URLClassPath <span class="title">getBootstrapClassPath</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Launcher.BootClassPathHolder.bcp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> URL[] pathToURLs(File[] var0) &#123;</span><br><span class="line">        URL[] var1 = <span class="keyword">new</span> URL[var0.length];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> var2 = <span class="number">0</span>; var2 &lt; var0.length; ++var2) &#123;</span><br><span class="line">            var1[var2] = getFileURL(var0[var2]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> var1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> File[] getClassPath(String var0) &#123;</span><br><span class="line">        File[] var1;</span><br><span class="line">        <span class="keyword">if</span> (var0 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> var2 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> var3 = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">boolean</span> var4 = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> var5;</span><br><span class="line">            <span class="keyword">int</span> var7;</span><br><span class="line">            <span class="keyword">for</span>(var5 = <span class="number">0</span>; (var7 = var0.indexOf(File.pathSeparator, var5)) != -<span class="number">1</span>; var5 = var7 + <span class="number">1</span>) &#123;</span><br><span class="line">                ++var3;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            var1 = <span class="keyword">new</span> File[var3];</span><br><span class="line">            var4 = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(var5 = <span class="number">0</span>; (var7 = var0.indexOf(File.pathSeparator, var5)) != -<span class="number">1</span>; var5 = var7 + <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (var7 - var5 &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    var1[var2++] = <span class="keyword">new</span> File(var0.substring(var5, var7));</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    var1[var2++] = <span class="keyword">new</span> File(<span class="string">"."</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (var5 &lt; var0.length()) &#123;</span><br><span class="line">                var1[var2++] = <span class="keyword">new</span> File(var0.substring(var5));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                var1[var2++] = <span class="keyword">new</span> File(<span class="string">"."</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (var2 != var3) &#123;</span><br><span class="line">                File[] var6 = <span class="keyword">new</span> File[var2];</span><br><span class="line">                System.arraycopy(var1, <span class="number">0</span>, var6, <span class="number">0</span>, var2);</span><br><span class="line">                var1 = var6;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            var1 = <span class="keyword">new</span> File[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> var1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> URL <span class="title">getFileURL</span><span class="params">(File var0)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            var0 = var0.getCanonicalFile();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException var3) &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> ParseUtil.fileToEncodedURL(var0);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (MalformedURLException var2) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(var2);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">AppClassLoader</span> <span class="keyword">extends</span> <span class="title">URLClassLoader</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> URLClassPath ucp = SharedSecrets.getJavaNetAccess().getURLClassPath(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ClassLoader <span class="title">getAppClassLoader</span><span class="params">(<span class="keyword">final</span> ClassLoader var0)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">final</span> String var1 = System.getProperty(<span class="string">"java.class.path"</span>);</span><br><span class="line">            <span class="keyword">final</span> File[] var2 = var1 == <span class="keyword">null</span> ? <span class="keyword">new</span> File[<span class="number">0</span>] : Launcher.getClassPath(var1);</span><br><span class="line">            <span class="keyword">return</span> (ClassLoader)AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;Launcher.AppClassLoader&gt;() &#123;</span><br><span class="line">                <span class="keyword">public</span> Launcher.<span class="function">AppClassLoader <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    URL[] var1x = var1 == <span class="keyword">null</span> ? <span class="keyword">new</span> URL[<span class="number">0</span>] : Launcher.pathToURLs(var2);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">new</span> Launcher.AppClassLoader(var1x, var0);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        AppClassLoader(URL[] var1, ClassLoader var2) &#123;</span><br><span class="line">            <span class="keyword">super</span>(var1, var2, Launcher.factory);</span><br><span class="line">            <span class="keyword">this</span>.ucp.initLookupCache(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> Class&lt;?&gt; loadClass(String var1, <span class="keyword">boolean</span> var2) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">            <span class="keyword">int</span> var3 = var1.lastIndexOf(<span class="number">46</span>);</span><br><span class="line">            <span class="keyword">if</span> (var3 != -<span class="number">1</span>) &#123;</span><br><span class="line">                SecurityManager var4 = System.getSecurityManager();</span><br><span class="line">                <span class="keyword">if</span> (var4 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    var4.checkPackageAccess(var1.substring(<span class="number">0</span>, var3));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.ucp.knownToNotExist(var1)) &#123;</span><br><span class="line">                Class var5 = <span class="keyword">this</span>.findLoadedClass(var1);</span><br><span class="line">                <span class="keyword">if</span> (var5 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (var2) &#123;</span><br><span class="line">                        <span class="keyword">this</span>.resolveClass(var5);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">return</span> var5;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> ClassNotFoundException(var1);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">super</span>.loadClass(var1, var2);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> PermissionCollection <span class="title">getPermissions</span><span class="params">(CodeSource var1)</span> </span>&#123;</span><br><span class="line">            PermissionCollection var2 = <span class="keyword">super</span>.getPermissions(var1);</span><br><span class="line">            var2.add(<span class="keyword">new</span> RuntimePermission(<span class="string">"exitVM"</span>));</span><br><span class="line">            <span class="keyword">return</span> var2;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">appendToClassPathForInstrumentation</span><span class="params">(String var1)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">assert</span> Thread.holdsLock(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">super</span>.addURL(Launcher.getFileURL(<span class="keyword">new</span> File(var1)));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> AccessControlContext <span class="title">getContext</span><span class="params">(File[] var0)</span> <span class="keyword">throws</span> MalformedURLException </span>&#123;</span><br><span class="line">            PathPermissions var1 = <span class="keyword">new</span> PathPermissions(var0);</span><br><span class="line">            ProtectionDomain var2 = <span class="keyword">new</span> ProtectionDomain(<span class="keyword">new</span> CodeSource(var1.getCodeBase(), (Certificate[])<span class="keyword">null</span>), var1);</span><br><span class="line">            AccessControlContext var3 = <span class="keyword">new</span> AccessControlContext(<span class="keyword">new</span> ProtectionDomain[]&#123;var2&#125;);</span><br><span class="line">            <span class="keyword">return</span> var3;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            ClassLoader.registerAsParallelCapable();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">BootClassPathHolder</span> </span>&#123;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> URLClassPath bcp;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">BootClassPathHolder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            URL[] var0;</span><br><span class="line">            <span class="keyword">if</span> (Launcher.bootClassPath != <span class="keyword">null</span>) &#123;</span><br><span class="line">                var0 = (URL[])AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedAction&lt;URL[]&gt;() &#123;</span><br><span class="line">                    <span class="keyword">public</span> URL[] run() &#123;</span><br><span class="line">                        File[] var1 = Launcher.getClassPath(Launcher.bootClassPath);</span><br><span class="line">                        <span class="keyword">int</span> var2 = var1.length;</span><br><span class="line">                        HashSet var3 = <span class="keyword">new</span> HashSet();</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span>(<span class="keyword">int</span> var4 = <span class="number">0</span>; var4 &lt; var2; ++var4) &#123;</span><br><span class="line">                            File var5 = var1[var4];</span><br><span class="line">                            <span class="keyword">if</span> (!var5.isDirectory()) &#123;</span><br><span class="line">                                var5 = var5.getParentFile();</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">if</span> (var5 != <span class="keyword">null</span> &amp;&amp; var3.add(var5)) &#123;</span><br><span class="line">                                MetaIndex.registerDirectory(var5);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> Launcher.pathToURLs(var1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                var0 = <span class="keyword">new</span> URL[<span class="number">0</span>];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            bcp = <span class="keyword">new</span> URLClassPath(var0, Launcher.factory, (AccessControlContext)<span class="keyword">null</span>);</span><br><span class="line">            bcp.initLookupCache((ClassLoader)<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ExtClassLoader</span> <span class="keyword">extends</span> <span class="title">URLClassLoader</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Launcher.ExtClassLoader instance;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> Launcher.<span class="function">ExtClassLoader <span class="title">getExtClassLoader</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                Class var0 = Launcher.ExtClassLoader<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">                <span class="keyword">synchronized</span>(Launcher.ExtClassLoader<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        instance = createExtClassLoader();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> instance;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> Launcher.<span class="function">ExtClassLoader <span class="title">createExtClassLoader</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> (Launcher.ExtClassLoader)AccessController.doPrivileged(<span class="keyword">new</span> PrivilegedExceptionAction&lt;Launcher.ExtClassLoader&gt;() &#123;</span><br><span class="line">                    <span class="keyword">public</span> Launcher.<span class="function">ExtClassLoader <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                        File[] var1 = Launcher.ExtClassLoader.getExtDirs();</span><br><span class="line">                        <span class="keyword">int</span> var2 = var1.length;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span>(<span class="keyword">int</span> var3 = <span class="number">0</span>; var3 &lt; var2; ++var3) &#123;</span><br><span class="line">                            MetaIndex.registerDirectory(var1[var3]);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> Launcher.ExtClassLoader(var1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (PrivilegedActionException var1) &#123;</span><br><span class="line">                <span class="keyword">throw</span> (IOException)var1.getException();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">addExtURL</span><span class="params">(URL var1)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>.addURL(var1);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ExtClassLoader</span><span class="params">(File[] var1)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(getExtURLs(var1), (ClassLoader)<span class="keyword">null</span>, Launcher.factory);</span><br><span class="line">            SharedSecrets.getJavaNetAccess().getURLClassPath(<span class="keyword">this</span>).initLookupCache(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> File[] getExtDirs() &#123;</span><br><span class="line">            String var0 = System.getProperty(<span class="string">"java.ext.dirs"</span>);</span><br><span class="line">            File[] var1;</span><br><span class="line">            <span class="keyword">if</span> (var0 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                StringTokenizer var2 = <span class="keyword">new</span> StringTokenizer(var0, File.pathSeparator);</span><br><span class="line">                <span class="keyword">int</span> var3 = var2.countTokens();</span><br><span class="line">                var1 = <span class="keyword">new</span> File[var3];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> var4 = <span class="number">0</span>; var4 &lt; var3; ++var4) &#123;</span><br><span class="line">                    var1[var4] = <span class="keyword">new</span> File(var2.nextToken());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                var1 = <span class="keyword">new</span> File[<span class="number">0</span>];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> var1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> URL[] getExtURLs(File[] var0) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">            Vector var1 = <span class="keyword">new</span> Vector();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> var2 = <span class="number">0</span>; var2 &lt; var0.length; ++var2) &#123;</span><br><span class="line">                String[] var3 = var0[var2].list();</span><br><span class="line">                <span class="keyword">if</span> (var3 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> var4 = <span class="number">0</span>; var4 &lt; var3.length; ++var4) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (!var3[var4].equals(<span class="string">"meta-index"</span>)) &#123;</span><br><span class="line">                            File var5 = <span class="keyword">new</span> File(var0[var2], var3[var4]);</span><br><span class="line">                            var1.add(Launcher.getFileURL(var5));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            URL[] var6 = <span class="keyword">new</span> URL[var1.size()];</span><br><span class="line">            var1.copyInto(var6);</span><br><span class="line">            <span class="keyword">return</span> var6;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">findLibrary</span><span class="params">(String var1)</span> </span>&#123;</span><br><span class="line">            var1 = System.mapLibraryName(var1);</span><br><span class="line">            URL[] var2 = <span class="keyword">super</span>.getURLs();</span><br><span class="line">            File var3 = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> var4 = <span class="number">0</span>; var4 &lt; var2.length; ++var4) &#123;</span><br><span class="line">                URI var5;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    var5 = var2[var4].toURI();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (URISyntaxException var9) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                File var6 = Paths.get(var5).toFile().getParentFile();</span><br><span class="line">                <span class="keyword">if</span> (var6 != <span class="keyword">null</span> &amp;&amp; !var6.equals(var3)) &#123;</span><br><span class="line">                    String var7 = VM.getSavedProperty(<span class="string">"os.arch"</span>);</span><br><span class="line">                    File var8;</span><br><span class="line">                    <span class="keyword">if</span> (var7 != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        var8 = <span class="keyword">new</span> File(<span class="keyword">new</span> File(var6, var7), var1);</span><br><span class="line">                        <span class="keyword">if</span> (var8.exists()) &#123;</span><br><span class="line">                            <span class="keyword">return</span> var8.getAbsolutePath();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    var8 = <span class="keyword">new</span> File(var6, var1);</span><br><span class="line">                    <span class="keyword">if</span> (var8.exists()) &#123;</span><br><span class="line">                        <span class="keyword">return</span> var8.getAbsolutePath();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                var3 = var6;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> AccessControlContext <span class="title">getContext</span><span class="params">(File[] var0)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            PathPermissions var1 = <span class="keyword">new</span> PathPermissions(var0);</span><br><span class="line">            ProtectionDomain var2 = <span class="keyword">new</span> ProtectionDomain(<span class="keyword">new</span> CodeSource(var1.getCodeBase(), (Certificate[])<span class="keyword">null</span>), var1);</span><br><span class="line">            AccessControlContext var3 = <span class="keyword">new</span> AccessControlContext(<span class="keyword">new</span> ProtectionDomain[]&#123;var2&#125;);</span><br><span class="line">            <span class="keyword">return</span> var3;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            ClassLoader.registerAsParallelCapable();</span><br><span class="line">            instance = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Factory</span> <span class="keyword">implements</span> <span class="title">URLStreamHandlerFactory</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> String PREFIX = <span class="string">"sun.net.www.protocol"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">Factory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> URLStreamHandler <span class="title">createURLStreamHandler</span><span class="params">(String var1)</span> </span>&#123;</span><br><span class="line">            String var2 = PREFIX + <span class="string">"."</span> + var1 + <span class="string">".Handler"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Class var3 = Class.forName(var2);</span><br><span class="line">                <span class="keyword">return</span> (URLStreamHandler)var3.newInstance();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ReflectiveOperationException var4) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> InternalError(<span class="string">"could not load "</span> + var1 + <span class="string">"system protocol handler"</span>, var4);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取ClassLoader</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.free.demo.classloader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取系统类加载器</span></span><br><span class="line">        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();</span><br><span class="line">        System.out.println(systemClassLoader);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200321103017468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211215932039"></p>
+<p>获取上层类加载器</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.free.demo.classloader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取系统类加载器</span></span><br><span class="line">        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();</span><br><span class="line">        System.out.println(systemClassLoader);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取上层：扩展类加载器</span></span><br><span class="line">        ClassLoader extClassLoader = systemClassLoader.getParent();</span><br><span class="line">        System.out.println(extClassLoader);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200321103033480.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211220143673"></p>
+<p>Java 核心类库都是使用 <strong>引导类加载器进行加载</strong></p>
+<p>引导类加载器</p>
+<p><img src="https://img-blog.csdnimg.cn/2020032110304999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211220932509"></p>
+<p>扩展类加载器</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103104303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211221222697"></p>
+<p>应用程序类加载器</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103117180.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211221323558"></p>
+<h3 id="为什么需要自定义类加载器"><a href="#为什么需要自定义类加载器" class="headerlink" title="为什么需要自定义类加载器"></a>为什么需要自定义类加载器</h3><p><img src="https://img-blog.csdnimg.cn/20200321103133478.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211221759736"></p>
+<h3 id="自定义类加载器的步骤"><a href="#自定义类加载器的步骤" class="headerlink" title="自定义类加载器的步骤"></a>自定义类加载器的步骤</h3><p><img src="https://img-blog.csdnimg.cn/20200321103200884.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211222041729"></p>
+<h3 id="对类加载器的引用"><a href="#对类加载器的引用" class="headerlink" title="对类加载器的引用"></a>对类加载器的引用</h3><p><img src="https://img-blog.csdnimg.cn/20200321103217829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211225220425"></p>
+<h2 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h2><p><img src="https://img-blog.csdnimg.cn/20200321103233525.png" alt="image-20200211222740092"></p>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><ol>
+<li>如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行</li>
+<li>如果父类加载器还存在父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器；</li>
+<li>如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是<strong>双亲委派机制</strong></li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20200321103250438.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211223930852"></p>
+<h3 id="沙箱安全机制"><a href="#沙箱安全机制" class="headerlink" title="沙箱安全机制"></a>沙箱安全机制</h3><p><img src="https://img-blog.csdnimg.cn/20200321103309486.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211224941769"></p>
+<h2 id="类的主动使用和被动使用"><a href="#类的主动使用和被动使用" class="headerlink" title="类的主动使用和被动使用"></a>类的主动使用和被动使用</h2><p><img src="https://img-blog.csdnimg.cn/20200321103324898.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211225435415"></p>
+<h2 id="运行时数据区内部结构"><a href="#运行时数据区内部结构" class="headerlink" title="运行时数据区内部结构"></a>运行时数据区内部结构</h2><p><img src="https://img-blog.csdnimg.cn/20200321103340570.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211225957157"></p>
+<p>阿里jvm示意图</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103354710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211230736650"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103415806.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200211230839506"></p>
+<p>每个虚拟机有且只对应一个 Runtime实例</p>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><ul>
+<li>线程是一个程序里的运行单元。JVM 允许一个应用由多个线程并行的执行</li>
+<li>在 Hotspot JVM 里，每个线程都与操作系统的本地线程直接映射。当一个 Java 线程准备好执行以后，此时一个操作系统的本地线程也同时创建。Java线程执行终止后，本地线程也会回收</li>
+<li>操作系统负责所有线程的安排调度到任何一个可用的CPU上。一旦本地线程初始化成功，它就会调用Java线程中的run()方法</li>
+</ul>
+<h4 id="JVM-系统线程"><a href="#JVM-系统线程" class="headerlink" title="JVM 系统线程"></a>JVM 系统线程</h4><p><img src="https://img-blog.csdnimg.cn/20200321103435154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212101134300"></p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>JVM 中的 PC寄存器是对物理PC 寄存器的一种抽象模拟</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103451892.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212101756499"></p>
+<h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><p>由于跨平台的设计，Java 的指令都是根据 <strong>栈</strong> 来设计的。不同平台CPU架构不同，所以不能设计为基于寄存器的</p>
+<p><em>优点：跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令</em></p>
+<h4 id="内存中的栈与堆"><a href="#内存中的栈与堆" class="headerlink" title="内存中的栈与堆"></a>内存中的栈与堆</h4><p>栈是 <strong>运行时</strong> 的单位，而堆是 <strong>存储</strong> 的单位</p>
+<p>栈解决程序的运行问题，即 <em>程序如何执行，或者说如何处理数据</em>。堆解决的是数据存储的问题，即 <em>数据怎么放，放在哪儿</em>。</p>
+<h4 id="基本内容"><a href="#基本内容" class="headerlink" title="基本内容"></a>基本内容</h4><p><img src="https://img-blog.csdnimg.cn/20200321103508455.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212110233907"></p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p><img src="https://img-blog.csdnimg.cn/20200321103526751.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212111524501"></p>
+<h4 id="栈可能出现的异常"><a href="#栈可能出现的异常" class="headerlink" title="栈可能出现的异常"></a>栈可能出现的异常</h4><p><img src="https://img-blog.csdnimg.cn/20200321103542451.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212111911949"></p>
+<h4 id="设置栈内存大小"><a href="#设置栈内存大小" class="headerlink" title="设置栈内存大小"></a>设置栈内存大小</h4><p>我们可以使用参数 -Xss 选项来设置线程的最大占空间，栈的大小直接决定了<strong>函数调用的最大可达深度</strong></p>
+<h4 id="栈的存储单位"><a href="#栈的存储单位" class="headerlink" title="栈的存储单位"></a>栈的存储单位</h4><ul>
+<li>每个线程都有自己的栈，栈中的数据都是以 *<em>栈帧(Stack Frame) *</em>的格式存在</li>
+<li>在这个线程上正在执行的每个方法都各自对应一个栈帧</li>
+<li>栈帧是一个内存区块，是一个数据集，维系着方法执行过程中的各种数据信息</li>
+</ul>
+<h4 id="栈运行原理"><a href="#栈运行原理" class="headerlink" title="栈运行原理"></a>栈运行原理</h4><p><img src="https://img-blog.csdnimg.cn/2020032110361174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212125513737"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103632334.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212125536047"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103648481.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image"></p>
+<h4 id="栈帧的内部结构"><a href="#栈帧的内部结构" class="headerlink" title="栈帧的内部结构"></a>栈帧的内部结构</h4><p><img src="https://img-blog.csdnimg.cn/20200321103703486.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212130707269"></p>
+<p>每个栈帧中存储着：</p>
+<ul>
+<li><strong>局部变量表</strong></li>
+<li><strong>操作数栈</strong></li>
+<li>动态链接(指向运行时常量池的方法引用)</li>
+<li>方法返回地址 (方法正常退出或者异常退出的定义)</li>
+<li>一些附加j信息</li>
+</ul>
+<h5 id="局部变量表-重要"><a href="#局部变量表-重要" class="headerlink" title="局部变量表(重要)"></a>局部变量表(重要)</h5><ul>
+<li>局部变量表也被称之为局部变量数组或本地变量表</li>
+<li>定义一个数字数组，主要用于存储 <em>方法参数</em> 和 <em>定义在方法体内的局部变量</em>，这些数据类型包括各类<strong>基本数据类型</strong>，<strong>对象引用</strong>，以及<strong>returnAddress类型</strong></li>
+<li>由于局部变量表是建立在线程的栈上，是线程的私有数据，因此 <em>不存在数据安全问题</em></li>
+<li>局部变量表所需的容量大小是在 <em>编译期</em> 定下来的,并保存在方法的 Code 属性的 maximum local variables 数据项中。在方法运行期间是不会改变局部变量表大小的</li>
+</ul>
+<h6 id="变量槽slot"><a href="#变量槽slot" class="headerlink" title="变量槽slot"></a>变量槽slot</h6><ul>
+<li>参数值的存放总是在局部变量数组的index0开始，到数组长度-1的索引结束</li>
+<li>局部变量表，<em>最基本的存储单元是 *</em>slot(变量槽)***</li>
+<li>局部变量表中存放编译期可知的各种基本数据类型(8种)，引用类型，returnAddress类型的变量</li>
+<li>在局部变量表里，<em>32位以内的类型只占用一个 slot(包括returnAddress类型),64位的类型(long 和 double) 占用两个 slot</em>  <ul>
+<li>byte，short，char 在存储前被转换为 int；boolean 也被转换为 int</li>
+<li>long 和 double 则占据两个 slot</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200321103721620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212135535007"></p>
+<p><em>实例方法对应的栈帧的数组种的第一个元素即为 this</em></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span> arg1,<span class="keyword">long</span> arg2)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> myPrint = <span class="number">1</span>;</span><br><span class="line">    System.out.println(myPrint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反编译的结果</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">long</span>)</span></span>;</span><br><span class="line">    descriptor: (IJ)V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">2</span>, locals=<span class="number">5</span>, args_size=<span class="number">3</span></span><br><span class="line">         <span class="number">0</span>: iconst_1</span><br><span class="line">         <span class="number">1</span>: istore        <span class="number">4</span></span><br><span class="line">         3: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">         <span class="number">6</span>: iload         <span class="number">4</span></span><br><span class="line">         8: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">        <span class="number">11</span>: <span class="keyword">return</span></span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line <span class="number">12</span>: <span class="number">0</span></span><br><span class="line">        line <span class="number">13</span>: <span class="number">3</span></span><br><span class="line">        line <span class="number">14</span>: <span class="number">11</span></span><br><span class="line">      LocalVariableTable:(重点关注这里，发现数组第一个元素即为<span class="keyword">this</span>,其他才是 方法参数 和 局部变量 )</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            <span class="number">0</span>      <span class="number">12</span>     <span class="number">0</span>  <span class="keyword">this</span>   Lorg/free/demo/stack/StackErrorDemo;</span><br><span class="line">            <span class="number">0</span>      <span class="number">12</span>     <span class="number">1</span>  arg1   I</span><br><span class="line">            <span class="number">0</span>      <span class="number">12</span>     <span class="number">2</span>  arg2   J</span><br><span class="line">            <span class="number">3</span>       <span class="number">9</span>     <span class="number">4</span> myPrint   I</span><br><span class="line">    MethodParameters:</span><br><span class="line">      Name                           Flags</span><br><span class="line">      arg1</span><br><span class="line">      arg2</span><br></pre></td></tr></table></figure>
+
+<p><em>静态方法种没有 this 变量</em></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i1 = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> i2 = <span class="number">2</span>;</span><br><span class="line">    System.out.println(<span class="string">"test2"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反编译的结果</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span></span>;</span><br><span class="line">   descriptor: ()V</span><br><span class="line">   flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">   Code:</span><br><span class="line">     stack=<span class="number">2</span>, locals=<span class="number">2</span>, args_size=<span class="number">0</span></span><br><span class="line">        <span class="number">0</span>: iconst_1</span><br><span class="line">        <span class="number">1</span>: istore_0</span><br><span class="line">        <span class="number">2</span>: iconst_2</span><br><span class="line">        <span class="number">3</span>: istore_1</span><br><span class="line">        4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">        7: ldc           #4                  // String test2</span><br><span class="line">        9: invokevirtual #5                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">       <span class="number">12</span>: <span class="keyword">return</span></span><br><span class="line">     LineNumberTable:</span><br><span class="line">       line <span class="number">18</span>: <span class="number">0</span></span><br><span class="line">       line <span class="number">19</span>: <span class="number">2</span></span><br><span class="line">       line <span class="number">20</span>: <span class="number">4</span></span><br><span class="line">       line <span class="number">21</span>: <span class="number">12</span></span><br><span class="line">     LocalVariableTable:(重点故关注这里，发现只有局部变量 i1 和 i2)</span><br><span class="line">       Start  Length  Slot  Name   Signature</span><br><span class="line">           <span class="number">2</span>      <span class="number">11</span>     <span class="number">0</span>    i1   I</span><br><span class="line">           <span class="number">4</span>       <span class="number">9</span>     <span class="number">1</span>    i2   I</span><br></pre></td></tr></table></figure>
+
+<h6 id="slot-的重复利用"><a href="#slot-的重复利用" class="headerlink" title="slot 的重复利用"></a>slot 的重复利用</h6><p><em>栈帧中的局部变量表中的槽位是可以重用的</em>,</p>
+<p><img src="https://img-blog.csdnimg.cn/20200321103739741.png" alt="image-20200212142754211"></p>
+<h5 id="操作数栈-重要"><a href="#操作数栈-重要" class="headerlink" title="操作数栈(重要)"></a>操作数栈(重要)</h5><ul>
+<li>每个独立的栈帧中除了包含局部变量表以外，还包含一个 <em>后进先出</em> 的<strong>操作数栈</strong>，也可称之为<strong>表达式栈</strong></li>
+<li><em>操作数栈，在方法执行过程中，根据字节码指令，往栈中写入数据或提取数据，即入栈(push)/出栈(pop)</em><ul>
+<li>某些字节码指令将值压入操作操作数栈，其余的字节码指令将操作数取出栈。使用它们后再把结果压入栈</li>
+<li>比如：执行赋值，交换，求和等操作</li>
+</ul>
+</li>
+<li><em>Java 虚拟机的解释引擎是基于 *</em>栈** 的执行引擎，其中栈指的是<strong>操作数栈*</strong></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200321103754837.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200212204608787"></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C67.png" alt="image-20200212205037031">·</p>
+<h5 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h5><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C68.png" alt="image-20200212211245377"></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C69.png" alt="image-20200212212148682"></p>
+<h5 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h5><ul>
+<li>存放调用该方法的pc寄存器的值</li>
+<li>一个方法的结束，有两种方式<ul>
+<li>正常执行完成</li>
+<li>出现未处理的异常，非正常退出</li>
+</ul>
+</li>
+<li>无论通过哪种方式退出，在方法退出后都返回该方法被调用的位置。方法正常退出时，<strong>调用者的pc计数器的值作为返回地址，即调用该方法的指令的下一条指令的地址</strong>。而通过异常退出的，返回地址是要通过 <em>异常表</em> 来确定，栈帧中一般不会保存这部分信息。</li>
+</ul>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C70.png" alt="image-20200216103304370"></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C71.png" alt="image-20200216103611394"></p>
+<p>实例：</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C72.png" alt="image-20200216104156334"></p>
+<h4 id="栈顶缓存技术"><a href="#栈顶缓存技术" class="headerlink" title="栈顶缓存技术"></a>栈顶缓存技术</h4><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C73.png" alt="image-20200212210806803"></p>
+<h4 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h4><p>在 JVM 中，将 <em>符号引用</em> 转换为调用方法的 <em>直接引用</em> 与方法的绑定机制有关</p>
+<ul>
+<li><p><strong>静态链接</strong></p>
+<p>当一个字节码文件被装载进 JVM 内部时，如果被调用的<strong>目标方法在编译期可知</strong>，且运行期保持不变时。这种情况下将调用方法的符号引用转换为直接引用的过程称为静态链接</p>
+</li>
+<li><p><strong>动态链接</strong></p>
+<p>如果 <strong>被调用的方法在编译期无法确定下来，</strong>也就是说，只能够在程序运行期将调用方法的符号引用转换为直接引用，由于这种引用转换过程具备动态性，因此也就被称之为动态链接。</p>
+</li>
+</ul>
+<p><em>虚函数</em> 是不能再 编译期 确定该调用哪个版本</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C74.png" alt="image-20200212214040762"></p>
+<p>虚拟机提供了以下几条方法调用指令</p>
+<ul>
+<li>普通调用指令</li>
+</ul>
+<ol>
+<li>invokestatic：调用静态方法</li>
+<li>invokespecial：调用&lt;init&gt;方法，私有及父类方法，解析阶段确定唯一方法版本</li>
+<li>invokevirtual：调用所有虚方法</li>
+<li>invokeinterface：调用接口方法</li>
+</ol>
+<ul>
+<li>动态调用指令</li>
+</ul>
+<ol start="5">
+<li>invokedynamic：动态解析出需要调用的方法，然后执行</li>
+</ol>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C75.png" alt="image-20200213093547736"></p>
+<h3 id="堆区"><a href="#堆区" class="headerlink" title="堆区"></a>堆区</h3><p>转自：</p>
+<p><a href="https://mp.weixin.qq.com/s/7bGtO9NfakQNHHcT26Ia7Q" target="_blank" rel="noopener">看懂这6张图，理解JVM内存布局就没问题了！</a></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C76.png" alt="image-20200217204943499"></p>
+<p>堆时 OOM 故障最主要的区域，它是内存中区域最大的一块区域，<strong>被所有线程共享</strong>。存储着几乎所有的实例对象。<strong>所有的对象实例以及数组都要在堆上分配。</strong>但是随着JIT编译器的发展与<strong>逃逸分析技术</strong>逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化发生，<strong>所有的对象都分配在堆上也渐渐变得不是那么“绝对”了</strong>。</p>
+<p>Java 堆是垃圾收集器管理的主要区域。从内存回收的角度看，由于现在收集器基本都采用 <em>分代收集算法</em>，所以 Java堆还可以细分为：<strong>新生代和老年代</strong>。</p>
+<p>新生代</p>
+<ul>
+<li><strong>Eden空间</strong></li>
+<li><strong>From Survivor空间</strong></li>
+<li><strong>To Survivor空间</strong></li>
+</ul>
+<p>从内存分配的角度来看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区（Thread Local Allocation Buffer,TLAB）。</p>
+<h4 id="堆区调整"><a href="#堆区调整" class="headerlink" title="堆区调整"></a>堆区调整</h4><p>根据Java虚拟机规范的规定，<strong>Java堆可以处于物理上不连续的内存空间中</strong>，只要逻辑上是连续的即可，就像我们的磁盘空间一样。在实现时，既可以实现成固定大小的，也可以在运行时动态地调整</p>
+<p>如何调整呢？</p>
+<p>通过设置如下参数，可以设定堆区的初始值和最大值，比如 <code>-Xms256M -Xmx 1024M</code>，其中 <code>-X</code>这个字母代表它是JVM运行时参数，<code>ms</code>是<code>memory start</code>的简称，中文意思就是内存初始值，<code>mx</code> 是 <code>memory max</code>的简称，意思就是最大内存。</p>
+<p><strong>值得注意的是，在通常情况下，服务器在运行过程中，堆空间不断地扩容与回缩，会形成不必要的系统压力 所以在线上生产环境中 JVM的<code>Xms</code>和 <code>Xmx</code>会设置成同样大小，避免在GC 后调整堆大小时带来的额外压力。</strong></p>
+<h4 id="堆的默认空间分配"><a href="#堆的默认空间分配" class="headerlink" title="堆的默认空间分配"></a>堆的默认空间分配</h4><p>堆空间内存分配的大体情况</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C77.png" alt="img"></p>
+<p>执行如下命令，就可以看到当前 JDK 版本所有默认的 JVM 参数</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -XX:+PrintFlagsFinal -version</span><br></pre></td></tr></table></figure>
+
+<p>对应输出应该有几百行，主要看两个关键参数</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">&gt;java -XX:+PrintFlagsFinal -version</span><br><span class="line">[Global flags]</span><br><span class="line">    <span class="built_in">..</span>.</span><br><span class="line">    uintx InitialSurvivorRatio                      = 8</span><br><span class="line">    uintx NewRatio                                  = 2</span><br><span class="line">    <span class="built_in">..</span>.</span><br><span class="line">java version <span class="string">"1.8.0_131"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_131-b11)</span><br><span class="line">Java HotSpot(TM) 64-Bit<span class="built_in"> Server </span>VM (build 25.131-b11, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<p>参数解释</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-XX:InitialSurvivorRatio</td>
+<td align="left">新生代Eden/Survivor空间的初始比例</td>
+</tr>
+<tr>
+<td align="left">-XX:NewRatio</td>
+<td align="left">Old区/Young区的内存比例</td>
+</tr>
+</tbody></table>
+<p>因为新生代是由Eden + S0 + S1组成的，所以按照上述默认比例，如果eden区内存大小是40M，那么两个survivor区就是5M，整个young区就是50M，然后可以算出Old区内存大小是100M，堆区总大小就是150M。</p>
+<p><code>-XX:+HeapDumpOnOutOfMemoryError</code> 可以让JVM在遇到OOM异常时，输出堆内信息</p>
+<h4 id="创建一个新对象，内存分配流程"><a href="#创建一个新对象，内存分配流程" class="headerlink" title="创建一个新对象，内存分配流程"></a>创建一个新对象，内存分配流程</h4><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C78.png" alt="img"></p>
+<p>绝大部分对象在 Eden 区生成，当 Eden 区装填满的时候，会触发 <strong>Young Garbage Collection</strong>，即 <code>YGC</code>。垃圾回收的时候，在 Eden 区实现清除策略，没有被引用的对象则直接回收。依然存活的对象会被移送到Survivor区。Survivor区分为so和s1两块内存空间。每次<code>YGC</code>的时候，它们将存活的对象复制到未使用的那块空间，然后将当前正在使用的空间完全清除，交换两块空间的使用状态。如果<code>YGC</code>要移送的对象大于Survivor区容量的上限，则直接移交给老年代。一个对象也不可能永远呆在新生代，就像人到了18岁就会成年一样，在JVM中<code>－XX:MaxTenuringThreshold</code>参数就是来配置一个对象从新生代晋升到老年代的阈值。默认值是<strong>15</strong>， 可以在Survivor区交换14次之后，晋升至老年代。</p>
+<h3 id="元空间"><a href="#元空间" class="headerlink" title="元空间"></a>元空间</h3><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C79.png" alt="image-20200217211401315"></p>
+<p>在 HotSpot JVM 中，<strong>永久代（ ≈ 方法区）\</strong>中用于*<em>存放类和方法的元数据以及常量池**,比如 *Class</em> 和 <em>Method</em>。每当一个类被初次加载的时候，它的元数据都会放到永久代。</p>
+<p>永久代是有大小限制的，因此如果加载的类太多，很有可能导致永久代内存溢出，即万恶的 <code>java.lang.OutOfMemoryError: PermGen</code>，为此我们不得不对虚拟机做调优。</p>
+<p>那么，Java 8 中 PermGen 为什么被移出 HotSpot JVM 了？</p>
+<ol>
+<li>由于 PermGen 内存经常会溢出，引发恼人的 <code>java.lang.OutOfMemoryError: PermGen</code>，因此 JVM 的开发者希望这一块内存可以更灵活地被管理，不要再经常出现这样的 OOM</li>
+<li>移除 PermGen 可以促进 HotSpot JVM 与 JRockit VM 的融合，因为 JRockit 没有永久代。</li>
+</ol>
+<p>根据上面的各种原因，PermGen 最终被移除，<strong>方法区移至 Metaspace，字符串常量池移至堆区</strong>。</p>
+<p>准确来说，Perm 区中的<strong>字符串常量池被移到了堆内存</strong>中是在Java7 之后，Java 8 时，PermGen 被元空间代替，<strong>其他内容比如类元信息、字段、静态属性、方法、常量等都移动到元空间区</strong>。比如<code>java/lang/Object</code>类元信息、静态属性<code>System.out</code>、整形常量 <code>100000</code>等。</p>
+<p>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过元空间与永久代之间最大的区别在于：<strong>元空间并不在虚拟机中，而是使用本地内存</strong>。因此，默认情况下，元空间的大小仅受本地内存限制。（和后面提到的直接内存一样，都是使用本地内存）</p>
+<blockquote>
+<p>In JDK 8, classes metadata is now stored in the <strong>native heap</strong> and this space is called <strong>Metaspace</strong>.</p>
+</blockquote>
+<p><strong>对应的JVM调参：</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">-XX:MetaspaceSize</td>
+<td align="left">分配给Metaspace（以字节计）的初始大小</td>
+</tr>
+<tr>
+<td align="left">-XX:MaxMetaspaceSize</td>
+<td align="left">分配给Metaspace 的最大值，超过此值就会触发Full GC，此值默认没有限制，但应取决于系统内存的大小。JVM会动态地改变此值。</td>
+</tr>
+<tr>
+<td align="left">-XX:MinMetaspaceFreeRatio</td>
+<td align="left">在GC之后，最小的Metaspace剩余空间容量的百分比，减少为分配空间所导致的垃圾收集</td>
+</tr>
+<tr>
+<td align="left">-XX:MaxMetaspaceFreeRatio</td>
+<td align="left">在GC之后，最大的Metaspace剩余空间容量的百分比，减少为释放空间所导致的垃圾收集</td>
+</tr>
+</tbody></table>
+<h3 id="本地方法接口"><a href="#本地方法接口" class="headerlink" title="本地方法接口"></a>本地方法接口</h3><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C80.png" alt="image-20200216110618851"></p>
+<h4 id="什么是本地方法"><a href="#什么是本地方法" class="headerlink" title="什么是本地方法"></a>什么是本地方法</h4><p><em>一个 Native Method就是一个 Java 调用非 Java 代码的接口。</em>一个 Native Method 是这样一个 Java 方法：该方法的实现由非 Java 语言实现，比如 C。</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C81.png" alt="image-20200216110925645"></p>
+<p>例如 Object.java 中的 <em>getClass()</em> 方法就是一个 native 方法</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C82.png" alt="image-20200216111105667"></p>
+<h4 id="native-与-abstract-的区别"><a href="#native-与-abstract-的区别" class="headerlink" title="native 与 abstract 的区别"></a>native 与 abstract 的区别</h4><p>native 是有方法体的，只不过是用 C 来实现</p>
+<p>而 abstract 是没有方法体的，具体由子类去实现。</p>
+<p>native 和 abstract 两者不能共用。</p>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p><em>变量的分类：</em></p>
+<p>1.基本数据类型 2.引用数据类型</p>
+<p><em>按照在类中声明的位置分类：</em></p>
+<ol>
+<li><p>成员变量：在使用前，都经历过默认初始化赋值</p>
+<ol>
+<li><strong>类变量</strong>：linking的prepare阶段，给类变量默认赋值 —-》 initial:给类变量显示赋值</li>
+<li><strong>实例变量：</strong>随着对象创建，会在堆空间分配实例变量空间，并进行默认赋值</li>
+</ol>
+</li>
+<li><p>局部变量：在使用前，必须要进行显式赋值！否则，编译不通过</p>
+</li>
+</ol>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C83.png" alt="image-20200212194503832"></p>
+<h3 id="方法调用：关于-invokedynamic-指令"><a href="#方法调用：关于-invokedynamic-指令" class="headerlink" title="方法调用：关于 invokedynamic 指令"></a>方法调用：关于 invokedynamic 指令</h3><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C84.png" alt="image-20200216094404600"></p>
+<h3 id="方法的调用：方法重写的本质"><a href="#方法的调用：方法重写的本质" class="headerlink" title="方法的调用：方法重写的本质"></a>方法的调用：方法重写的本质</h3><p><img src="D:%5Ctypora%5Cnotes%5Casset%5C85.png" alt="image-20200216094821151"></p>
+<h3 id="方法的调用：虚方法表"><a href="#方法的调用：虚方法表" class="headerlink" title="方法的调用：虚方法表"></a>方法的调用：虚方法表</h3><ul>
+<li>在面向对象的编程中，会很频繁的使用到动态分派，如果在每次动态分派的过程中都要重新在类的方法元数据中搜索合适的目标的话就可能影响到执行效率。因此，<em>为了提高性能</em>，JVM 采用在类的方法区建立一个虚方法表(virtual method table)(<strong>非虚方法不会出现在表中</strong>)来实现。使用索引表来代替查找</li>
+<li>每个类中都有一个虚方法表，表中存放着各个方法的实际入口</li>
+<li>虚方法表会在类加载的链接阶段被创建并开始初始化，类的变量初始值准备完成之后，JVM 会把该类的方法表也初始化完毕。</li>
+</ul>
+<h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><h3 id="对象引用分类"><a href="#对象引用分类" class="headerlink" title="对象引用分类"></a>对象引用分类</h3><p>参考：</p>
+<p><a href="https://juejin.im/post/5b4dea755188251ac1098e98" target="_blank" rel="noopener">JVM系列(五) - JVM垃圾回收算法</a></p>
+<p><a href="https://juejin.im/post/5b651200f265da0fa00a38d7#heading-3" target="_blank" rel="noopener">JVM系列(六) - JVM垃圾回收器</a></p>
+<blockquote>
+<h4 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h4></blockquote>
+<p>在代码中普遍存在的，类似<code>Object obj = new Object()</code>这类引用，只要强引用还在，垃圾收集器永远不会回收掉被引用的对象。</p>
+<blockquote>
+<h4 id="软引用-SoftReference"><a href="#软引用-SoftReference" class="headerlink" title="软引用(SoftReference)"></a>软引用(SoftReference)</h4></blockquote>
+<p><strong>有用但并非必需</strong> 的对象，可用<code>SoftReference</code>类来实现软引用。在系统将要发生<strong>内存溢出异常</strong>之前，将会把这些对象列进回收范围之中进行<strong>二次回收</strong>。如果这次回收还没有足够的内存，才会抛出内存溢出异常。</p>
+<blockquote>
+<h4 id="弱引用-WeakReference"><a href="#弱引用-WeakReference" class="headerlink" title="弱引用(WeakReference)"></a>弱引用(WeakReference)</h4></blockquote>
+<p><strong>非必需</strong> 的对象，但它的<strong>强度</strong>比软引用更弱，被弱引用关联的对象<strong>只能</strong>生存到下一次垃圾收集发生之前，<code>JDK</code>提供了<code>WeakReference</code>类来实现弱引用。无论当前内存是否足够，用软引用相关联的对象都会被回收掉。</p>
+<blockquote>
+<h4 id="虚引用-PhatomReference"><a href="#虚引用-PhatomReference" class="headerlink" title="虚引用(PhatomReference)"></a>虚引用(PhatomReference)</h4></blockquote>
+<p>虚引用也称为幽灵引用或幻影引用，是最弱的一种引用关系，<code>JDK</code>提供了<code>PhantomReference</code>类来实现虚引用。为一个对象设置虚引用的唯一目的是：能在这个对象在<strong>垃圾回收器</strong>回收时收到一个<strong>系统通知</strong></p>
+<h3 id="finalize-二次标记"><a href="#finalize-二次标记" class="headerlink" title="finalize() 二次标记"></a>finalize() 二次标记</h3><p>一个对象是否应该在垃圾回收器在<code>GC</code>时回收，至少要经历<strong>两次标记过程</strong>。</p>
+<p>第一次标记过程，通过<strong>可达性分析算法</strong>分析对象是否与<code>GC Roots</code>可达。经过第一次标记，并且被筛选为<strong>不可达</strong>的对象会进行第二次标记。</p>
+<p>第二次标记过程，判断不可达对象是否有必要执行<code>finalize</code>方法。执行条件是当前对象的<code>finalize</code>方法被重写，并且还未被系统调用过。如果允许执行那么这个对象将会被放到一个叫<code>F-Query</code>的队列中，等待被执行。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">注意：由于finalize由一个优先级比较低的Finalizer线程运行，所以该对象的的finalize方法不一定被执行，即使被执行了，也不保证finalize方法一定会执行完。如果对象第二次小规模标记，即finalize方法中拯救自己，只需要重新和引用链上的任一对象建立关联即可。</span><br></pre></td></tr></table></figure>
+
+<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><p>参考：</p>
+<p><a href="https://www.cnblogs.com/chenpt/p/9799095.html" target="_blank" rel="noopener">Jvm垃圾回收器（算法篇）</a></p>
+<blockquote>
+<h4 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h4></blockquote>
+<ul>
+<li>标记</li>
+</ul>
+<p>标记出所有需要回收的对象</p>
+<p><strong>一次标记：</strong>在经过 <em>可达性分析算法</em> 后，对象没有与 GC Root 相关的引用链，那么则被第一次标记，并且进行一次筛选：当对象有必要执行 finalize() 方法时，则将该对象放入 F-Queue 队列中</p>
+<p><strong>二次标记：</strong>对 F-Queue 队列中的对象进行二次标记。在执行 finalize() 方法时，如果对象重新与 GC Root 引用链上的任意对象建立了关联，则将其移除 “即将回收” 集合。否则即将被回收</p>
+<p>对被第一次标记且被第二次标记的，就可以判定位可回收对象了。</p>
+<ul>
+<li>清除</li>
+</ul>
+<p>两次标记后，还在 “即将回收” 集合的对象进行回收</p>
+<p>执行过程如下：</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C86.png" alt="img"></p>
+<p><strong>优点：</strong>最基础的可达性算法，后续的收集算法都是基于这种思想实现的</p>
+<p><strong>缺点：</strong>标记和清除效率不高，产生大量不连续的内存碎片，导致创建大对象找不到连续的空间，不得不提前触发另一次的垃圾回收</p>
+<blockquote>
+<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3></blockquote>
+<p>将可用内存按容量分为大小相等的两块，每次只使用其中一块，当这一块的内存用完了，就将还存活的对象复制到另外一块内存上，然后再把已使用过的内存空间一次清理掉</p>
+<p>复制算法过程如下：</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C87.png" alt="img"></p>
+<p><strong>优点：</strong>实现简单，效率高。解决了标记-清除算法导致的内存碎片问题</p>
+<p><strong>缺点：</strong>代价大，将内存缩小了一半。效率随对象的存活率升高而降低。</p>
+<p>现在的商业虚拟机都采用这种算法（需要改良1:1的缺点）来回收新生代。</p>
+<ul>
+<li>改良算法</li>
+</ul>
+<p><strong>1.弱代理论</strong>　</p>
+<p>分代垃圾收集基于弱代理论。具体描述如下：</p>
+<ul>
+<li>大多说分配了内存的对象并不会存活太长时间，在处于年轻时代就会死掉。</li>
+<li>很少有对象会从老年代变成年轻代。</li>
+</ul>
+<p>其中IBM研究表明：新生代中98%的对象都是”朝生夕死”； 所以并不需要按1:1比例来划分内存（解决了缺点1）；</p>
+<p><strong>2.Hotspot虚拟机新生代内存布局及算法</strong></p>
+<p>新生代内存分配一块较大的Eden空间和两块较小的Survivor空间</p>
+<p>每次使用Eden和其中一块Survivor空间</p>
+<p>回收时将Eden和Survivor空间中存活的对象一次性复制到另一块Survivor空间上</p>
+<p>最后清理掉Eden和使用过的Survivor空间。</p>
+<p>Hotspot虚拟机默认Eden和Survivor的大小比例是8:1。</p>
+<p><strong>分配担保</strong></p>
+<p>如果另一块 Survivor 空间没有足够内存来存放上一次新生代收集下来的存活对象，那么这些对象则直接通过担保机制进入老年代。</p>
+<blockquote>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h3></blockquote>
+<p>标记-整理算法是根据老年代的特点应运而生</p>
+<ul>
+<li>标记</li>
+</ul>
+<p>标记过程和标记-清理算法一致（也是基于可达性分析算法）。</p>
+<ul>
+<li>整理</li>
+</ul>
+<p>和标记-清理不同的是，该算法不是针对可回收对象进行清理，而是根据存活对象进行整理。让存活对象都向一端移动，然后直接清理掉边界以外的内存。</p>
+<p>标记-整理算法示意图</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C88.png" alt="img"></p>
+<p><strong>优点：</strong>不会像复制算法那样随着存活对象的升高而降低效率，不像标记-清除算法那样产生不连续的内存碎片</p>
+<p><strong>缺点：</strong>效率问题，除了像标记-清除算法的标记过程外，还多了一步整理过程，效率更低。</p>
+<blockquote>
+<h3 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h3></blockquote>
+<p>当前商业虚拟机的垃圾收集都是采用“ 分代收集 ”算法。</p>
+<p>根据对象存活周期的不同将内存划分为几块。一般把java堆分为新生代和老年代。JVM根据各个年代的特点采用不同的收集算法。</p>
+<p>新生代中，每次进行垃圾回收都会发现大量对象死去，只有少量存活，因此比较适合复制算法。只需要付出少量存活对象的复制成本就可以完成收集。</p>
+<p>老年代中，因为对象存活率较高，没有额外的空间进行分配担保，所以适合标记-清理、标记-整理算法来进行回收。</p>
+<h3 id="七种垃圾回收器"><a href="#七种垃圾回收器" class="headerlink" title="七种垃圾回收器"></a>七种垃圾回收器</h3><p>参考：</p>
+<p><a href="https://www.cnblogs.com/chenpt/p/9803298.html" target="_blank" rel="noopener">JVM垃圾回收器</a></p>
+<p>在 <code>JVM</code> 中，具体实现有</p>
+<ul>
+<li><code>Serial</code>,</li>
+<li><code>ParNew</code> ，</li>
+<li><code>Pallel Scavenge</code> , </li>
+<li><code>CMS</code> , </li>
+<li><code>Serial Old(MSC)</code> ，</li>
+<li><code>Parallel Old</code> ,</li>
+<li><code>G1</code> 等。</li>
+</ul>
+<p>在下图中，你可以看到 <strong>不同垃圾回收器</strong> 适合于 <strong>不同的内存区域</strong>，如果两个垃圾回收器之间 <strong>存在连线</strong>，那么表示两者可以 <strong>配合使用</strong>。</p>
+<p>如果当 <strong>垃圾回收器</strong> 进行垃圾清理时，必须 <strong>暂停</strong> 其他所有的 <strong>工作线程</strong>，直到它完全收集结束。我们称这种需要暂停工作线程才能进行清理的策略为 <em>Stop-the-World</em>。</p>
+<p>以上回收器中， <code>Serial</code>、<code>ParNew</code>、<code>Parallel Scavenge</code>、<code>Serial Old</code>、<code>Parallel Old</code> 均采用的是 <code>Stop-the-World</code> 的策略。</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C89.png" alt="img"></p>
+<p>图中有 <code>7</code> 种不同的 <strong>垃圾回收器</strong>，它们分别用于不同分代的垃圾回收。</p>
+<ul>
+<li><strong>新生代回收器：</strong>Serial，ParNew，Parallel Scavenge</li>
+<li><strong>老年代回收器：</strong>Serial Old，Parallel Old，CMS</li>
+<li><strong>整堆回收器：</strong>G1</li>
+</ul>
+<p>两个 <strong>垃圾回收器</strong> 之间有连线表示它们可以 <strong>搭配使用</strong>，可选的搭配方案如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">新生代</th>
+<th align="left">老年代</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Serial</td>
+<td align="left">Serial Old</td>
+</tr>
+<tr>
+<td align="left">Serial</td>
+<td align="left">CMS</td>
+</tr>
+<tr>
+<td align="left">ParNew</td>
+<td align="left">Serial Old</td>
+</tr>
+<tr>
+<td align="left">ParNew</td>
+<td align="left">CMS</td>
+</tr>
+<tr>
+<td align="left">Parallel Scavenge</td>
+<td align="left">Serial Old</td>
+</tr>
+<tr>
+<td align="left">Parallel Scavenge</td>
+<td align="left">Parallel Old</td>
+</tr>
+<tr>
+<td align="left">G1</td>
+<td align="left">G1</td>
+</tr>
+</tbody></table>
+<blockquote>
+<h4 id="单线程垃圾回收器"><a href="#单线程垃圾回收器" class="headerlink" title="单线程垃圾回收器"></a>单线程垃圾回收器</h4></blockquote>
+<ul>
+<li><h4 id="Serial（-XX-UseSerialGC）"><a href="#Serial（-XX-UseSerialGC）" class="headerlink" title="Serial（-XX:+UseSerialGC）"></a>Serial（-XX:+UseSerialGC）</h4></li>
+</ul>
+<p>Serial收集器是最基本的、发展历史最悠久的收集器。</p>
+<p><strong>特点：</strong>单线程、简单高效（与其他收集器的单线程相比），对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程手机效率。收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（Stop The World）。</p>
+<p><strong>应用场景</strong>：适用于Client模式下的虚拟机。</p>
+<p><strong>Serial / Serial Old收集器运行示意图</strong></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C90.png" alt="img"></p>
+<ul>
+<li><h4 id="Serial-Old（-XX-UseSerialGC）"><a href="#Serial-Old（-XX-UseSerialGC）" class="headerlink" title="Serial Old（-XX:+UseSerialGC）"></a>Serial Old（-XX:+UseSerialGC）</h4></li>
+</ul>
+<p>Serial Old是Serial收集器的老年代版本。</p>
+<p><strong>特点</strong>：同样是单线程收集器，采用标记-整理算法。</p>
+<p><strong>应用场景</strong>：主要也是使用在Client模式下的虚拟机中。也可在Server模式下使用。</p>
+<p>Server模式下主要的两大用途（在后续中详细讲解···）：</p>
+<ol>
+<li>在JDK1.5以及以前的版本中与Parallel Scavenge收集器搭配使用。</li>
+<li>作为CMS收集器的后备方案，在并发收集Concurent Mode Failure时使用。</li>
+</ol>
+<p>Serial / Serial Old收集器工作过程图（Serial收集器图示相同）：</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C91.png" alt="img"></p>
+<blockquote>
+<h4 id="多线程垃圾回收器-吞吐量优先"><a href="#多线程垃圾回收器-吞吐量优先" class="headerlink" title="多线程垃圾回收器(吞吐量优先)"></a>多线程垃圾回收器(吞吐量优先)</h4></blockquote>
+<ul>
+<li><h4 id="ParNew（-XX-UseParNewGC）"><a href="#ParNew（-XX-UseParNewGC）" class="headerlink" title="ParNew（-XX:+UseParNewGC）"></a>ParNew（-XX:+UseParNewGC）</h4></li>
+</ul>
+<p>ParNew收集器其实就是Serial收集器的多线程版本。</p>
+<p>除了使用多线程外其余行为均和Serial收集器一模一样（参数控制、收集算法、Stop The World、对象分配规则、回收策略等）。</p>
+<p><strong>特点</strong>：多线程、ParNew收集器默认开启的收集线程数与CPU的数量相同，在CPU非常多的环境中，可以使用-XX:ParallelGCThreads参数来限制垃圾收集的线程数。</p>
+<p>　　　和Serial收集器一样存在Stop The World问题</p>
+<p><strong>应用场景</strong>：ParNew收集器是许多运行在Server模式下的虚拟机中首选的新生代收集器，因为它是除了Serial收集器外，唯一一个能与CMS收集器配合工作的。</p>
+<p><strong>ParNew/Serial Old组合收集器运行示意图如下：</strong></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C92.png" alt="img"></p>
+<ul>
+<li><h4 id="Parallel-Scavenge（-XX-UseParallelGC）"><a href="#Parallel-Scavenge（-XX-UseParallelGC）" class="headerlink" title="Parallel Scavenge（-XX:+UseParallelGC）"></a>Parallel Scavenge（-XX:+UseParallelGC）</h4></li>
+</ul>
+<p>与吞吐量关系密切，故也称为吞吐量优先收集器。</p>
+<p><strong>特点</strong>：属于新生代收集器也是采用复制算法的收集器，又是并行的多线程收集器（与ParNew收集器类似）。</p>
+<p>该收集器的目标是达到一个可控制的吞吐量。还有一个值得关注的点是：GC自适应调节策略（与ParNew收集器最重要的一个区别）</p>
+<p><strong>GC自适应调节策略</strong>：Parallel Scavenge收集器可设置-XX:+UseAdptiveSizePolicy参数。当开关打开时不需要手动指定新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX:SurvivorRation）、晋升老年代的对象年龄（-XX:PretenureSizeThreshold）等，虚拟机会根据系统的运行状况收集性能监控信息，动态设置这些参数以提供最优的停顿时间和最高的吞吐量，这种调节方式称为GC的自适应调节策略。</p>
+<p>Parallel Scavenge收集器使用两个参数控制吞吐量：</p>
+<ol>
+<li><p>XX:MaxGCPauseMillis 控制最大的垃圾收集停顿时间</p>
+</li>
+<li><p>XX:GCRatio 直接设置吞吐量的大小。</p>
+</li>
+</ol>
+<ul>
+<li><h4 id="Parallel-Old（-XX-UseParallelOldGC）"><a href="#Parallel-Old（-XX-UseParallelOldGC）" class="headerlink" title="Parallel Old（-XX:+UseParallelOldGC）"></a>Parallel Old（-XX:+UseParallelOldGC）</h4></li>
+</ul>
+<p>是Parallel Scavenge收集器的老年代版本。</p>
+<p><strong>特点</strong>：多线程，采用标记-整理算法。</p>
+<p><strong>应用场景</strong>：注重高吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge+Parallel Old 收集器。</p>
+<p><strong>Parallel Scavenge/Parallel Old收集器工作过程图：</strong></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C93.png" alt="img"></p>
+<blockquote>
+<h3 id="其他的回收器（停顿时间优先）"><a href="#其他的回收器（停顿时间优先）" class="headerlink" title="其他的回收器（停顿时间优先）"></a>其他的回收器（停顿时间优先）</h3></blockquote>
+<ul>
+<li><h4 id="CMS（-XX-UseConcMarkSweepGC）"><a href="#CMS（-XX-UseConcMarkSweepGC）" class="headerlink" title="CMS（-XX:+UseConcMarkSweepGC）"></a>CMS（-XX:+UseConcMarkSweepGC）</h4></li>
+</ul>
+<p>一种以获取最短回收停顿时间为目标的收集器。</p>
+<p><strong>特点</strong>：基于标记-清除算法实现。并发收集、低停顿。</p>
+<p><strong>应用场景</strong>：适用于注重服务的响应速度，希望系统停顿时间最短，给用户带来更好的体验等场景下。如web程序、b/s服务。</p>
+<p><strong>CMS收集器的运行过程分为下列4步：</strong></p>
+<p><strong>初始标记</strong>：标记GC Roots能直接到的对象。速度很快但是仍存在Stop The World问题。</p>
+<p><strong>并发标记</strong>：进行GC Roots Tracing 的过程，找出存活对象且用户线程可并发执行。</p>
+<p><strong>重新标记</strong>：为了修正并发标记期间因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录。仍然存在Stop The World问题。</p>
+<p><strong>并发清除</strong>：对标记的对象进行清除回收。</p>
+<p> CMS收集器的内存回收过程是与用户线程一起并发执行的。</p>
+<p> CMS收集器的工作过程图：</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C94.png" alt="img"></p>
+<p>CMS收集器的缺点：</p>
+<ul>
+<li>对CPU资源非常敏感。</li>
+<li>无法处理浮动垃圾，可能出现Concurrent Model Failure失败而导致另一次Full GC的产生。</li>
+<li>因为采用标记-清除算法所以会存在空间碎片的问题，导致大对象无法分配空间，不得不提前触发一次Full GC。</li>
+</ul>
+<ul>
+<li><h4 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h4></li>
+</ul>
+<p>一款面向服务端应用的垃圾收集器。</p>
+<p><strong>特点如下：</strong></p>
+<p>并行与并发：G1能充分利用多CPU、多核环境下的硬件优势，使用多个CPU来缩短Stop-The-World停顿时间。部分收集器原本需要停顿Java线程来执行GC动作，G1收集器仍然可以通过并发的方式让Java程序继续运行。</p>
+<p>分代收集：G1能够独自管理整个Java堆，并且采用不同的方式去处理新创建的对象和已经存活了一段时间、熬过多次GC的旧对象以获取更好的收集效果。</p>
+<p>空间整合：G1运作期间不会产生空间碎片，收集后能提供规整的可用内存。</p>
+<p>可预测的停顿：G1除了追求低停顿外，还能建立可预测的停顿时间模型。能让使用者明确指定在一个长度为M毫秒的时间段内，消耗在垃圾收集上的时间不得超过N毫秒。</p>
+<p>区域化内存划片 Region，整体编为了一些不连续的内存区域，避免了全内存区的GC操作<br>核心思想是将整个堆内存区域分成大小相同的子区域(Region), 在 JVM 启动时会自动设置这些子区域的大小。<br>在堆的使用上，G1 并不要求对象的存储一定是物理上连续的只要逻辑上连续即可，每个分区也不会固定地为某个代服务，可以按需在年轻代和老年代之间切换。启动时可以通过参数 -XX:G1HeapRegionSize=n 可指定分区大小(1MB<del>32MB),默认将整堆划分为2048个分区<br>大小范围在 1MB</del>32MB，最多能设置 2048 个区域，也即能够支持的最大内存为：32MB * 2048 = 65536MB = 64G内存</p>
+<p>针对 Eden 区进行收集，Eden 区耗尽后会被触发，主要是小区域收集 + 形成连续的内存块，避免内存碎片</p>
+<ul>
+<li>Eden 区的数据移动到 Survivor 区，假如出现 Survivor 区空间不够，Eden 区数据会晋升到 Old 区</li>
+<li>Survivor 区的数据移动到新的 Survivor 区，数据晋升到 Old 区</li>
+<li>最后 Eden 区收拾干净，GC 结束，用户的应用程序继续执行</li>
+</ul>
+<p><strong>G1为什么能建立可预测的停顿时间模型？</strong></p>
+<p>因为它有计划的避免在整个Java堆中进行全区域的垃圾收集。G1跟踪各个Region里面的垃圾堆积的大小，在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的Region。这样就保证了在有限的时间内可以获取尽可能高的收集效率。</p>
+<p><strong>G1与其他收集器的区别</strong>：</p>
+<p>其他收集器的工作范围是整个新生代或者老年代、G1收集器的工作范围是整个Java堆。在使用G1收集器时，它将整个Java堆划分为多个大小相等的独立区域（Region）。虽然也保留了新生代、老年代的概念，但新生代和老年代不再是相互隔离的，他们都是一部分Region（不需要连续）的集合。</p>
+<p><strong>G1收集器存在的问题：</strong></p>
+<p>Region不可能是孤立的，分配在Region中的对象可以与Java堆中的任意对象发生引用关系。在采用可达性分析算法来判断对象是否存活时，得扫描整个Java堆才能保证准确性。其他收集器也存在这种问题（G1更加突出而已）。会导致Minor GC效率下降。</p>
+<p><strong>G1收集器是如何解决上述问题的？</strong></p>
+<p>采用Remembered Set来避免整堆扫描。G1中每个Region都有一个与之对应的Remembered Set，虚拟机发现程序在对Reference类型进行写操作时，会产生一个Write Barrier暂时中断写操作，检查Reference引用对象是否处于多个Region中（即检查老年代中是否引用了新生代中的对象），如果是，便通过CardTable把相关引用信息记录到被引用对象所属的Region的Remembered Set中。当进行内存回收时，在GC根节点的枚举范围中加入Remembered Set即可保证不对全堆进行扫描也不会有遗漏。</p>
+<p><strong>如果不计算维护 Remembered Set 的操作，G1收集器大致可分为如下步骤：</strong></p>
+<p><strong>初始标记</strong>：仅标记GC Roots能直接到的对象，并且修改TAMS（Next Top at Mark Start）的值，让下一阶段用户程序并发运行时，能在正确可用的Region中创建新对象。（需要线程停顿，但耗时很短。）</p>
+<p><strong>并发标记</strong>：从GC Roots开始对堆中对象进行可达性分析，找出存活对象。（耗时较长，但可与用户程序并发执行）</p>
+<p><strong>最终标记</strong>：为了修正在并发标记期间因用户程序执行而导致标记产生变化的那一部分标记记录。且对象的变化记录在线程Remembered Set Logs里面，把Remembered Set Logs里面的数据合并到Remembered Set中。（需要线程停顿，但可并行执行。）</p>
+<p><strong>筛选回收</strong>：对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间来制定回收计划。（可并发执行）</p>
+<p><strong>G1收集器运行示意图：</strong></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C95.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>JVM</category>
+      </categories>
+      <tags>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>设计模式之单例模式</title>
     <url>/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p>参考：</p>
@@ -1298,7 +1886,7 @@
 <p>然后调用child.start()（child子线程状态转换为RUNNABLE）；</p>
 <p>再调用child.join()，此时，Parent父线程会等待child子线程运行完再继续运行。</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/33.png" alt="Java-thread-state-transition"></p>
-<h1 id="mybatis-动态标签"><a href="#mybatis-动态标签" class="headerlink" title="mybatis 动态标签"></a>mybatis 动态标签</h1><ul>
+<h1 id="12-mybatis-动态标签"><a href="#12-mybatis-动态标签" class="headerlink" title="12.mybatis 动态标签"></a>12.mybatis 动态标签</h1><ul>
 <li><strong>if</strong></li>
 <li><strong>where</strong></li>
 <li><strong>choose</strong></li>
@@ -1307,6 +1895,66 @@
 <li><strong>trim</strong></li>
 <li><strong>set</strong></li>
 <li><strong>foreach</strong></li>
+</ul>
+<h1 id="13-JDBC-控制事务"><a href="#13-JDBC-控制事务" class="headerlink" title="13.JDBC 控制事务"></a>13.JDBC 控制事务</h1><p>参考：<a href="https://www.yiibai.com/jdbc/jdbc-transactions.html" target="_blank" rel="noopener">JDBC事务</a></p>
+<p>事务能够控制何时更改提交并应用于数据库。它将单个 SQL 语句或一组 SQL 语句视为一个逻辑单元，如果任何语句失败，整个事务将失败。</p>
+<p>要启用手动事务支持，而不是使用 JDBC 驱动程序默认使用的自动提交模式，请调用 <code>Connection</code> 对象的<code>setAutoCommit()</code>方法。 如果将布尔的<code>false</code>传递给<code>setAutoCommit()</code>，则关闭自动提交。 也可以传递一个布尔值<code>true</code>来重新打开它。</p>
+<p>例如，如果有一个名为<code>conn</code>的<code>Connection</code>对象，请将以下代码关闭自动提交 -</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="提交和回滚"><a href="#提交和回滚" class="headerlink" title="提交和回滚"></a>提交和回滚</h2><p>如果JDBC连接处于自动提交模式，默认情况下，则每个SQL语句在完成后都会提交到数据库。</p>
+<p>对于简单的应用程序可能没有问题，但是有三个原因需要考虑是否关闭自动提交并管理自己的事务 -</p>
+<ul>
+<li>提高性能</li>
+<li>保持业务流程的完整性</li>
+<li>使用分布式事务</li>
+</ul>
+<p>事务能够控制何时更改提交并应用于数据库。 它将单个SQL语句或一组SQL语句视为一个逻辑单元，如果任何语句失败，整个事务将失败。</p>
+<p>要启用手动事务支持，而不是使用JDBC驱动程序默认使用的自动提交模式，请调用<code>Connection</code>对象的<code>setAutoCommit()</code>方法。 如果将布尔的<code>false</code>传递给<code>setAutoCommit()</code>，则关闭自动提交。 也可以传递一个布尔值<code>true</code>来重新打开它。</p>
+<p>例如，如果有一个名为<code>conn</code>的<code>Connection</code>对象，请将以下代码关闭自动提交 -</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>完成更改后，若要提交更改，那么可在连接对象上调用<code>commit()</code>方法，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">conn.commit( );</span><br></pre></td></tr></table></figure>
+
+<p>否则，要使用连接名为<code>conn</code>的数据库回滚更新，请使用以下代码 -</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">conn.rollback( );</span><br></pre></td></tr></table></figure>
+
+<p>以下示例说明了如何使用提交和回滚对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//Assume a valid connection object conn</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">    String SQL = <span class="string">"INSERT INTO Employees  "</span> +</span><br><span class="line">        <span class="string">"VALUES (106, 20, 'Rita', 'Tez')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);  </span><br><span class="line">    <span class="comment">//Submit a malformed SQL statement that breaks</span></span><br><span class="line">    String SQL = <span class="string">"INSERTED IN Employees  "</span> +</span><br><span class="line">        <span class="string">"VALUES (107, 22, 'Sita', 'Singh')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);</span><br><span class="line">    <span class="comment">// If there is no error.</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">    <span class="comment">// If there is any error.</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这种情况下，上述<code>INSERT</code>语句不会成功执行，因为所有操作都被回滚了。</p>
+<h2 id="使用保存点"><a href="#使用保存点" class="headerlink" title="使用保存点"></a>使用保存点</h2><p>新的 JDBC3.0 新添加了 <code>Savepoint</code> 接口提供了额外的事务控制能力。大多数现代 DBMS 支持其环境中的保存点，如 Oracle 的 PL/SQL。</p>
+<p>设置保存点(<code>Savepoint</code>)时，可以在事务中定义逻辑回滚点。 如果通过保存点(<code>Savepoint</code>)发生错误时，则可以使用回滚方法来撤消所有更改或仅保存保存点之后所做的更改。</p>
+<p><strong>Connection</strong> 对象有两种新的方法可用来管理保存点</p>
+<ul>
+<li><strong>setSavepoint(String savepointName)：</strong>定义新的保存点，它还返回一个 <code>Savepoint</code> 对象</li>
+<li><strong>releaseSavepoint(Savepoint savepointName)：</strong>删除保存点。要注意，他需要一个 <code>Savepoint</code>对象作为参数。 该对象通常是由<code>setSavepoint()</code>方法生成的保存点。</li>
+</ul>
+<p>有一个<em>rollback (String savepointName)</em>方法，它将使用事务回滚到指定的保存点。</p>
+<p>示例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//Assume a valid connection object conn</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//set a Savepoint</span></span><br><span class="line">    Savepoint savepoint1 = conn.setSavepoint(<span class="string">"Savepoint1"</span>);</span><br><span class="line">    String SQL = <span class="string">"INSERT INTO Employees "</span> +</span><br><span class="line">        <span class="string">"VALUES (106, 24, 'Curry', 'Stephen')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);  </span><br><span class="line">    <span class="comment">//Submit a malformed SQL statement that breaks</span></span><br><span class="line">    String SQL = <span class="string">"INSERTED IN Employees "</span> +</span><br><span class="line">        <span class="string">"VALUES (107, 32, 'Kobe', 'Bryant')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);</span><br><span class="line">    <span class="comment">// If there is no error, commit the changes.</span></span><br><span class="line">    conn.commit();</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">    <span class="comment">// If there is any error.</span></span><br><span class="line">    conn.rollback(savepoint1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="14-finalize"><a href="#14-finalize" class="headerlink" title="14.finalize()"></a>14.finalize()</h1><p><strong><em>finalize() 已经在 Java9 中不被推荐使用，明确在 Object.finalize() 标记为 deprecated</em></strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Called by the garbage collector on an object when garbage collection</span></span><br><span class="line"><span class="comment">     * determines that there are no more references to the object.</span></span><br><span class="line"><span class="comment">     * A subclass overrides the &#123;<span class="doctag">@code</span> finalize&#125; method to dispose of</span></span><br><span class="line"><span class="comment">     * system resources or to perform other cleanup.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The general contract of &#123;<span class="doctag">@code</span> finalize&#125; is that it is invoked</span></span><br><span class="line"><span class="comment">     * if and when the Java&amp;trade; virtual</span></span><br><span class="line"><span class="comment">     * machine has determined that there is no longer any</span></span><br><span class="line"><span class="comment">     * means by which this object can be accessed by any thread that has</span></span><br><span class="line"><span class="comment">     * not yet died, except as a result of an action taken by the</span></span><br><span class="line"><span class="comment">     * finalization of some other object or class which is ready to be</span></span><br><span class="line"><span class="comment">     * finalized. The &#123;<span class="doctag">@code</span> finalize&#125; method may take any action, including</span></span><br><span class="line"><span class="comment">     * making this object available again to other threads; the usual purpose</span></span><br><span class="line"><span class="comment">     * of &#123;<span class="doctag">@code</span> finalize&#125;, however, is to perform cleanup actions before</span></span><br><span class="line"><span class="comment">     * the object is irrevocably discarded. For example, the finalize method</span></span><br><span class="line"><span class="comment">     * for an object that represents an input/output connection might perform</span></span><br><span class="line"><span class="comment">     * explicit I/O transactions to break the connection before the object is</span></span><br><span class="line"><span class="comment">     * permanently discarded.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The &#123;<span class="doctag">@code</span> finalize&#125; method of class &#123;<span class="doctag">@code</span> Object&#125; performs no</span></span><br><span class="line"><span class="comment">     * special action; it simply returns normally. Subclasses of</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@code</span> Object&#125; may override this definition.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The Java programming language does not guarantee which thread will</span></span><br><span class="line"><span class="comment">     * invoke the &#123;<span class="doctag">@code</span> finalize&#125; method for any given object. It is</span></span><br><span class="line"><span class="comment">     * guaranteed, however, that the thread that invokes finalize will not</span></span><br><span class="line"><span class="comment">     * be holding any user-visible synchronization locks when finalize is</span></span><br><span class="line"><span class="comment">     * invoked. If an uncaught exception is thrown by the finalize method,</span></span><br><span class="line"><span class="comment">     * the exception is ignored and finalization of that object terminates.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * After the &#123;<span class="doctag">@code</span> finalize&#125; method has been invoked for an object, no</span></span><br><span class="line"><span class="comment">     * further action is taken until the Java virtual machine has again</span></span><br><span class="line"><span class="comment">     * determined that there is no longer any means by which this object can</span></span><br><span class="line"><span class="comment">     * be accessed by any thread that has not yet died, including possible</span></span><br><span class="line"><span class="comment">     * actions by other objects or classes which are ready to be finalized,</span></span><br><span class="line"><span class="comment">     * at which point the object may be discarded.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The &#123;<span class="doctag">@code</span> finalize&#125; method is never invoked more than once by a Java</span></span><br><span class="line"><span class="comment">     * virtual machine for any given object.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * Any exception thrown by the &#123;<span class="doctag">@code</span> finalize&#125; method causes</span></span><br><span class="line"><span class="comment">     * the finalization of this object to be halted, but is otherwise</span></span><br><span class="line"><span class="comment">     * ignored.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable the &#123;<span class="doctag">@code</span> Exception&#125; raised by this method</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> java.lang.ref.WeakReference</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> java.lang.ref.PhantomReference</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@jls</span> 12.6 Finalization of Class Instances</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>由以下这段可知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Called by the garbage collector on an object when garbage collection determines that there are no more references to the object.A subclass overrides the &#123;<span class="meta">@code</span> finalize&#125; method to dispose of system resources or to perform other cleanup.</span><br><span class="line">    </span><br><span class="line"><span class="comment">//当垃圾回收确定不再存在对对象的引用时，垃圾回收器对对象调用。子类重写&#123;@code finalize&#125;方法以释放系统资源或执行其他清理。</span></span><br></pre></td></tr></table></figure>
+
+<p>该方法会被垃圾回收器处理没有任何引用指向的对象的时候所调用，并且该方法由子类去重写回收对象的实现</p>
+<h1 id="15-crontab-命令"><a href="#15-crontab-命令" class="headerlink" title="15.crontab 命令"></a>15.crontab 命令</h1><blockquote>
+<p>Linux crontab 是用来定期执行程序的命令</p>
+</blockquote>
+<p>通过crontab 命令，我们可以在固定的间隔时间执行指定的系统指令或 shell script脚本。时间间隔的单位可以是分钟、小时、日、月、周及以上的任意组合。这个命令非常适合周期性的日志分析或数据备份等工作。</p>
+<h2 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">crontab [-u user] file crontab [-u user] [ -e | -l | -r ]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>-u user：用来设定某个用户的crontab服务；</li>
+<li>file：file是命令文件的名字,表示将file做为crontab的任务列表文件并载入crontab。如果在命令行中没有指定这个文件，crontab命令将接受标准输入（键盘）上键入的命令，并将它们载入crontab。</li>
+<li>-e：编辑某个用户的crontab文件内容。如果不指定用户，则表示编辑当前用户的crontab文件。</li>
+<li>-l：显示某个用户的crontab文件内容，如果不指定用户，则表示显示当前用户的crontab文件内容。</li>
+<li>-r：从/var/spool/cron目录中删除某个用户的crontab文件，如果不指定用户，则默认删除当前用户的crontab文件。</li>
+<li>-i：在删除用户的crontab文件时给确认提示</li>
 </ul>
 ]]></content>
       <categories>
