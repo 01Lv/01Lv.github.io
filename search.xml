@@ -10,6 +10,8 @@
 <li><strong>方法区(method):</strong> 用于存放类信息，常量，静态变量，编译后的字节码等，是线程共享的(也被称为非堆，即None-Heap)</li>
 </ol>
 <p><strong>Java 的垃圾回收器(GC) 主要针对堆区</strong></p>
+<a id="more"></a>
+
 <h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p><strong>由于跨平台性的设计，Java的指令都是根据栈来设计</strong>。不同平台CPU架构不同，所以不能设计为基于寄存器的。优点是跨平台，指令集小，编译器容易实现，缺点是性能下降，实现同样的功能需要更多的指令。</p>
 <h2 id="JVM-生命周期"><a href="#JVM-生命周期" class="headerlink" title="JVM 生命周期"></a>JVM 生命周期</h2><h3 id="虚拟机启动"><a href="#虚拟机启动" class="headerlink" title="虚拟机启动"></a>虚拟机启动</h3><p>Java 虚拟机的启动是通过<strong>引导类加载器</strong>(bootstrap class loader)创建一个初始类(initial class)来完成，这个类是由虚拟机的具体实现指定的</p>
 <h3 id="虚拟机的执行"><a href="#虚拟机的执行" class="headerlink" title="虚拟机的执行"></a>虚拟机的执行</h3><ul>
