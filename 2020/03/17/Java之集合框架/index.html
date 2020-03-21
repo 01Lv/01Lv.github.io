@@ -277,7 +277,6 @@
 <p><a href="https://juejin.im/post/5da41417f265da5ba532b21c" target="_blank" rel="noopener">详解Java集合框架，让你全面掌握！</a></p>
 <p>在 Java2 之前，Java 是没有完整的集合框架。它只有一些简单的可以自扩展的容器类，比如 Vector，Stack，Hashtable 等。但由于效率的原因遭受诟病，于是不得不进行改革。</p>
 <a id="more"></a>
-
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/25.png" alt="img"></p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/26.png" alt="img"></p>
 <p>从上面的集合框架可以看到，</p>
@@ -289,22 +288,36 @@
 <li>Set</li>
 <li>Queue</li>
 </ul>
-<p><strong><em>List</em></strong> 代表了 <strong>有序</strong>, <strong>可重复</strong> 集合，可直接根据元素的索引来访问；</p>
-<p><strong><em>Set</em></strong> 代表了 <strong>无序</strong>, <strong>不可重复</strong> 集合，只能根据元素本身来访问；</p>
-<p><strong><em>Queue</em></strong> 是队列集合</p>
-<p><strong><em>Map</em></strong> 代表的是 <strong>存储key/value</strong> 的集合，可根据元素的 key 来访问 value。</p>
-<h1 id="Set-集合"><a href="#Set-集合" class="headerlink" title="Set 集合"></a>Set 集合</h1><p>Set集合与Collection的方法相同，由于Set集合不允许存储相同的元素，所以如果把两个相同元素添加到同一个Set集合，则添加操作失败，新元素不会被加入，add()方法返回false。</p>
-<h2 id="1-HashSet"><a href="#1-HashSet" class="headerlink" title="1.HashSet"></a>1.<strong>HashSet</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Set&lt;String&gt; set=<span class="keyword">new</span> HashSet();</span><br><span class="line">   set.add(<span class="string">"hello world"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   System.out.println(<span class="string">"集合中元素个数："</span></span><br><span class="line">        +set.size());</span><br><span class="line">   System.out.println(<span class="string">"集合中元素为："</span></span><br><span class="line">       +set.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>由源码可知 <strong><em>HashSet</em></strong> 的底层是通过 <strong><em>HashMap</em></strong> 实现的</p>
+<p><em><strong>List</strong></em> 代表了 <strong>有序</strong>, <strong>可重复</strong> 集合，可直接根据元素的索引来访问；</p>
+<p><em><strong>Set</strong></em> 代表了 <strong>无序</strong>, <strong>不可重复</strong> 集合，只能根据元素本身来访问；</p>
+<p><em><strong>Queue</strong></em> 是队列集合</p>
+<p><em><strong>Map</strong></em> 代表的是 <strong>存储key/value</strong> 的集合，可根据元素的 key 来访问 value。</p>
+<h1>Set 集合</h1>
+<p>Set集合与Collection的方法相同，由于Set集合不允许存储相同的元素，所以如果把两个相同元素添加到同一个Set集合，则添加操作失败，新元素不会被加入，add()方法返回false。</p>
+<h2 id="1-HashSet"><a class="header-anchor" href="#1-HashSet">¶</a>1.<strong>HashSet</strong></h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Set&lt;String&gt; set=<span class="keyword">new</span> HashSet();</span><br><span class="line">   set.add(<span class="string">"hello world"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   System.out.println(<span class="string">"集合中元素个数："</span></span><br><span class="line">        +set.size());</span><br><span class="line">   System.out.println(<span class="string">"集合中元素为："</span></span><br><span class="line">       +set.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由源码可知 <em><strong>HashSet</strong></em> 的底层是通过 <em><strong>HashMap</strong></em> 实现的</p>
 <p>查看 <strong>add()</strong> 的源码</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//调用 HashMap 的 put()</span></span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>put()</strong> 的源码主要是通过 <u>hash值</u> 以及 <u>equals()</u> 方法来避免重复的添加</p>
-<h2 id="2-LinkedHashSet"><a href="#2-LinkedHashSet" class="headerlink" title="2.LinkedHashSet"></a>2.<strong>LinkedHashSet</strong></h2><h2 id="3-TreeSet"><a href="#3-TreeSet" class="headerlink" title="3.TreeSet"></a>3.<strong>TreeSet</strong></h2><h2 id="4-EnumSet"><a href="#4-EnumSet" class="headerlink" title="4.EnumSet"></a>4.<strong>EnumSet</strong></h2><h1 id="List-集合"><a href="#List-集合" class="headerlink" title="List 集合"></a>List 集合</h1><blockquote>
+<h2 id="2-LinkedHashSet"><a class="header-anchor" href="#2-LinkedHashSet">¶</a>2.<strong>LinkedHashSet</strong></h2>
+<h2 id="3-TreeSet"><a class="header-anchor" href="#3-TreeSet">¶</a>3.<strong>TreeSet</strong></h2>
+<h2 id="4-EnumSet"><a class="header-anchor" href="#4-EnumSet">¶</a>4.<strong>EnumSet</strong></h2>
+<h1>List 集合</h1>
+<blockquote>
 <p>List集合代表一个有序、可重复集合，集合中每个元素都有其对应的顺序索引。List集合默认按照元素的添加顺序设置元素的索引，可以通过索引（类似数组的下标）来访问指定位置的集合元素。</p>
 </blockquote>
-<h2 id="1-ArrayList"><a href="#1-ArrayList" class="headerlink" title="1.ArrayList"></a>1.ArrayList</h2><h2 id="2-LinkedList"><a href="#2-LinkedList" class="headerlink" title="2.LinkedList"></a>2.<strong>LinkedList</strong></h2><h2 id="3-Vector"><a href="#3-Vector" class="headerlink" title="3.Vector"></a>3.<strong>Vector</strong></h2><h2 id="4-Stack"><a href="#4-Stack" class="headerlink" title="4.Stack"></a>4.<strong>Stack</strong></h2><h2 id="5-Iterator接口和ListIterator接口"><a href="#5-Iterator接口和ListIterator接口" class="headerlink" title="5.Iterator接口和ListIterator接口"></a>5.<strong>Iterator接口和ListIterator接口</strong></h2><h1 id="Map-集合"><a href="#Map-集合" class="headerlink" title="Map 集合"></a>Map 集合</h1><h2 id="1-HashMap与Hashtable"><a href="#1-HashMap与Hashtable" class="headerlink" title="1.HashMap与Hashtable"></a>1.<strong>HashMap与Hashtable</strong></h2><h2 id="2-LinkedHashMap"><a href="#2-LinkedHashMap" class="headerlink" title="2.LinkedHashMap"></a>2.<strong>LinkedHashMap</strong></h2><h2 id="3-Properties"><a href="#3-Properties" class="headerlink" title="3.Properties"></a>3.<strong>Properties</strong></h2><h2 id="4-TreeMap"><a href="#4-TreeMap" class="headerlink" title="4.TreeMap"></a>4.<strong>TreeMap</strong></h2><p>未完待续……</p>
+<h2 id="1-ArrayList"><a class="header-anchor" href="#1-ArrayList">¶</a>1.ArrayList</h2>
+<h2 id="2-LinkedList"><a class="header-anchor" href="#2-LinkedList">¶</a>2.<strong>LinkedList</strong></h2>
+<h2 id="3-Vector"><a class="header-anchor" href="#3-Vector">¶</a>3.<strong>Vector</strong></h2>
+<h2 id="4-Stack"><a class="header-anchor" href="#4-Stack">¶</a>4.<strong>Stack</strong></h2>
+<h2 id="5-Iterator接口和ListIterator接口"><a class="header-anchor" href="#5-Iterator接口和ListIterator接口">¶</a>5.<strong>Iterator接口和ListIterator接口</strong></h2>
+<h1>Map 集合</h1>
+<h2 id="1-HashMap与Hashtable"><a class="header-anchor" href="#1-HashMap与Hashtable">¶</a>1.<strong>HashMap与Hashtable</strong></h2>
+<h2 id="2-LinkedHashMap"><a class="header-anchor" href="#2-LinkedHashMap">¶</a>2.<strong>LinkedHashMap</strong></h2>
+<h2 id="3-Properties"><a class="header-anchor" href="#3-Properties">¶</a>3.<strong>Properties</strong></h2>
+<h2 id="4-TreeMap"><a class="header-anchor" href="#4-TreeMap">¶</a>4.<strong>TreeMap</strong></h2>
+<p>未完待续…</p>
 
     </div>
 
@@ -408,7 +421,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Set-集合"><span class="nav-number">1.</span> <span class="nav-text">Set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashSet"><span class="nav-number">1.1.</span> <span class="nav-text">1.HashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashSet"><span class="nav-number">1.2.</span> <span class="nav-text">2.LinkedHashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-TreeSet"><span class="nav-number">1.3.</span> <span class="nav-text">3.TreeSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-EnumSet"><span class="nav-number">1.4.</span> <span class="nav-text">4.EnumSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List-集合"><span class="nav-number">2.</span> <span class="nav-text">List 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList"><span class="nav-number">2.1.</span> <span class="nav-text">1.ArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedList"><span class="nav-number">2.2.</span> <span class="nav-text">2.LinkedList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Vector"><span class="nav-number">2.3.</span> <span class="nav-text">3.Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Stack"><span class="nav-number">2.4.</span> <span class="nav-text">4.Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Iterator接口和ListIterator接口"><span class="nav-number">2.5.</span> <span class="nav-text">5.Iterator接口和ListIterator接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Map-集合"><span class="nav-number">3.</span> <span class="nav-text">Map 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashMap与Hashtable"><span class="nav-number">3.1.</span> <span class="nav-text">1.HashMap与Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashMap"><span class="nav-number">3.2.</span> <span class="nav-text">2.LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Properties"><span class="nav-number">3.3.</span> <span class="nav-text">3.Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-TreeMap"><span class="nav-number">3.4.</span> <span class="nav-text">4.TreeMap</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">Set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashSet"><span class="nav-number">1.1.</span> <span class="nav-text">¶1.HashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashSet"><span class="nav-number">1.2.</span> <span class="nav-text">¶2.LinkedHashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-TreeSet"><span class="nav-number">1.3.</span> <span class="nav-text">¶3.TreeSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-EnumSet"><span class="nav-number">1.4.</span> <span class="nav-text">¶4.EnumSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">List 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList"><span class="nav-number">2.1.</span> <span class="nav-text">¶1.ArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedList"><span class="nav-number">2.2.</span> <span class="nav-text">¶2.LinkedList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Vector"><span class="nav-number">2.3.</span> <span class="nav-text">¶3.Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Stack"><span class="nav-number">2.4.</span> <span class="nav-text">¶4.Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Iterator接口和ListIterator接口"><span class="nav-number">2.5.</span> <span class="nav-text">¶5.Iterator接口和ListIterator接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">Map 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashMap与Hashtable"><span class="nav-number">3.1.</span> <span class="nav-text">¶1.HashMap与Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashMap"><span class="nav-number">3.2.</span> <span class="nav-text">¶2.LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Properties"><span class="nav-number">3.3.</span> <span class="nav-text">¶3.Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-TreeMap"><span class="nav-number">3.4.</span> <span class="nav-text">¶4.TreeMap</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -482,12 +495,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">242k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:40</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

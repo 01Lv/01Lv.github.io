@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考： 创建Stream 在学习 Java8 的 Stream 的时候，发现廖雪峰的网站上有一道题挺有意思，顺便可以练练手。  编写一个能输出斐波拉契数列（Fibonacci）的LongStream：  11, 1, 2, 3, 5, 8, 13, 21, 34, ...  最后捣鼓出来的答案：">
+  <meta name="description" content="参考： 创建Stream 在学习 Java8 的 Stream 的时候，发现廖雪峰的网站上有一道题挺有意思，顺便可以练练手。  编写一个能输出斐波拉契数列（Fibonacci）的LongStream：  11, 1, 2, 3, 5, 8, 13, 21, 34, ... 最后捣鼓出来的答案：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LongStream实现Fibonacci数列">
 <meta property="og:url" content="https://01lv.github.io/2020/03/09/LongStream%E5%AE%9E%E7%8E%B0Fibonacci%E6%95%B0%E5%88%97/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="参考： 创建Stream 在学习 Java8 的 Stream 的时候，发现廖雪峰的网站上有一道题挺有意思，顺便可以练练手。  编写一个能输出斐波拉契数列（Fibonacci）的LongStream：  11, 1, 2, 3, 5, 8, 13, 21, 34, ...  最后捣鼓出来的答案：">
+<meta property="og:description" content="参考： 创建Stream 在学习 Java8 的 Stream 的时候，发现廖雪峰的网站上有一道题挺有意思，顺便可以练练手。  编写一个能输出斐波拉契数列（Fibonacci）的LongStream：  11, 1, 2, 3, 5, 8, 13, 21, 34, ... 最后捣鼓出来的答案：">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-09T01:12:24.000Z">
 <meta property="article:modified_time" content="2020-03-09T01:22:47.654Z">
@@ -275,27 +275,23 @@
 <li>编写一个能输出斐波拉契数列（Fibonacci）的<code>LongStream</code>：</li>
 </ul>
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">13</span>, <span class="number">21</span>, <span class="number">34</span>, ...</span><br></pre></td></tr></table></figure>
-
 <p>最后捣鼓出来的答案：</p>
 <a id="more"></a>
-
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Learn Java from https://www.liaoxuefeng.com/</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> mikelv</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		LongStream fib = LongStream.generate(<span class="keyword">new</span> FibSupplier());</span><br><span class="line">		<span class="comment">// 打印Fibonacci数列：1，1，2，3，5，8，13，21...</span></span><br><span class="line">		fib.limit(<span class="number">10</span>).forEach(System.out::println);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FibSupplier</span> <span class="keyword">implements</span> <span class="title">LongSupplier</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> y = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getAsLong</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		sum = x + y;</span><br><span class="line">		x = y;</span><br><span class="line">		y = sum;</span><br><span class="line">		<span class="keyword">return</span> x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>对比之前网上的常用的实现方法确实简洁了不少，而且更易于理解。代码地址：<a href="https://gitee.com/mikeLv01/stream-fibonacci-demo" target="_blank" rel="noopener">https://gitee.com/mikeLv01/stream-fibonacci-demo</a></p>
 <p>转载：<a href="https://blog.csdn.net/blue_hh/article/details/75453603" target="_blank" rel="noopener">大龙湖畔</a></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.homework.lhh;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Ex10</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> num[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        num[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        num[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        System.out.println(<span class="string">"斐波那契数列前20项的值如下："</span>);</span><br><span class="line">        System.out.print(num[<span class="number">0</span>]+<span class="string">" "</span>+num[<span class="number">1</span>]+<span class="string">" "</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; <span class="number">20</span>; i++)&#123;</span><br><span class="line">            num[i] = num[i - <span class="number">1</span>] + num[i - <span class="number">2</span>];</span><br><span class="line">            System.out.print(num[i]+<span class="string">" "</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><blockquote>
-<h3 id="基于-Supplier"><a href="#基于-Supplier" class="headerlink" title="基于 Supplier"></a>基于 Supplier</h3></blockquote>
+<h2 id="知识点"><a class="header-anchor" href="#知识点">¶</a>知识点</h2>
+<blockquote>
+<h3 id="基于-Supplier"><a class="header-anchor" href="#基于-Supplier">¶</a>基于 Supplier</h3>
+</blockquote>
 <p>创建<code>Stream</code>还可以通过<code>Stream.generate()</code>方法，它需要传入一个<code>Supplier</code>对象：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String&gt; s = Stream.generate(Supplier&lt;String&gt; sp);</span><br></pre></td></tr></table></figure>
-
 <p>基于<code>Supplier</code>创建的<code>Stream</code>会不断调用<code>Supplier.get()</code>方法来不断产生下一个元素，这种<code>Stream</code>保存的不是元素，而是算法，它可以用来表示无限序列。</p>
 <p>例如，我们编写一个能不断生成自然数的<code>Supplier</code>，它的代码非常简单，每次调用<code>get()</code>方法，就生成下一个自然数：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Stream&lt;Integer&gt; natual = Stream.generate(<span class="keyword">new</span> NatualSupplier());</span><br><span class="line">        <span class="comment">// 注意：无限序列必须先变成有限序列再打印:</span></span><br><span class="line">        natual.limit(<span class="number">20</span>).forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NatualSupplier</span> <span class="keyword">implements</span> <span class="title">Supplier</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        n++;</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>总结：</p>
-<p>如果用<code>List</code>表示，即便在<code>int</code>范围内，也会占用巨大的内存，而<code>Stream</code>几乎不占用空间，<strong><em>因为每个元素都是实时计算出来的，用的时候再算</em></strong>。</p>
+<p>如果用<code>List</code>表示，即便在<code>int</code>范围内，也会占用巨大的内存，而<code>Stream</code>几乎不占用空间，<em><strong>因为每个元素都是实时计算出来的，用的时候再算</strong></em>。</p>
 
     </div>
 
@@ -398,7 +394,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-Supplier"><span class="nav-number">1.1.</span> <span class="nav-text">基于 Supplier</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点"><span class="nav-number">1.</span> <span class="nav-text">¶知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-Supplier"><span class="nav-number">1.1.</span> <span class="nav-text">¶基于 Supplier</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -472,12 +468,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">242k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:40</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考： 面试必备：Java线程池解析 概念简单理解，它就是一个管理线程的池子  它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。  提高响应速度。 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。  重复利用。 线程用完，再放回池子，可以达到重">
+  <meta name="description" content="参考： 面试必备：Java线程池解析 概念 简单理解，它就是一个管理线程的池子   它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。   提高响应速度。 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。   重复利用。 线程用完，再放回池子，可">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java之线程池解析">
 <meta property="og:url" content="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="参考： 面试必备：Java线程池解析 概念简单理解，它就是一个管理线程的池子  它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。  提高响应速度。 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。  重复利用。 线程用完，再放回池子，可以达到重">
+<meta property="og:description" content="参考： 面试必备：Java线程池解析 概念 简单理解，它就是一个管理线程的池子   它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。   提高响应速度。 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。   重复利用。 线程用完，再放回池子，可">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/27.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/28.png">
@@ -274,78 +274,107 @@
       
         <p>参考：</p>
 <p><a href="https://juejin.im/post/5d1882b1f265da1ba84aa676" target="_blank" rel="noopener">面试必备：Java线程池解析</a></p>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>简单理解，它就是一个管理线程的池子</p>
+<h1>概念</h1>
+<p>简单理解，它就是一个管理线程的池子</p>
 <ul>
-<li><p><strong>它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗</strong>。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。</p>
+<li>
+<p><strong>它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗</strong>。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。</p>
 </li>
-<li><p><strong>提高响应速度。</strong> 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。</p>
+<li>
+<p><strong>提高响应速度。</strong> 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。</p>
 </li>
-<li><p><strong>重复利用。</strong> 线程用完，再放回池子，可以达到重复利用的效果，节省资源。</p>
+<li>
+<p><strong>重复利用。</strong> 线程用完，再放回池子，可以达到重复利用的效果，节省资源。</p>
 </li>
 </ul>
 <a id="more"></a>
-
-<h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><p>线程池可以通过 ThreadPoolExecutor 来创建</p>
+<h1>创建</h1>
+<p>线程池可以通过 ThreadPoolExecutor 来创建</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize,<span class="keyword">long</span> keepAliveTime,TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
-
 <p>几个核心参数的作用：</p>
 <ul>
-<li><p><strong>corePoolSize：</strong> 线程池核心线程数最大值</p>
+<li>
+<p><strong>corePoolSize：</strong> 线程池核心线程数最大值</p>
 </li>
-<li><p><strong>maximumPoolSize：</strong> 线程池最大线程数大小</p>
+<li>
+<p><strong>maximumPoolSize：</strong> 线程池最大线程数大小</p>
 </li>
-<li><p><strong>keepAliveTime：</strong> 线程池中非核心线程空闲的存活时间大小</p>
+<li>
+<p><strong>keepAliveTime：</strong> 线程池中非核心线程空闲的存活时间大小</p>
 </li>
-<li><p><strong>unit：</strong> 线程空闲存活时间单位</p>
+<li>
+<p><strong>unit：</strong> 线程空闲存活时间单位</p>
 </li>
-<li><p><strong>workQueue：</strong> 存放任务的阻塞队列</p>
+<li>
+<p><strong>workQueue：</strong> 存放任务的阻塞队列</p>
 </li>
-<li><p><strong>threadFactory：</strong> 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题。</p>
+<li>
+<p><strong>threadFactory：</strong> 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题。</p>
 </li>
-<li><p><strong>handler：</strong>  线城池的饱和策略事件，主要有四种类型。</p>
+<li>
+<p><strong>handler：</strong>  线城池的饱和策略事件，主要有四种类型。</p>
 </li>
 </ul>
-<h1 id="任务执行"><a href="#任务执行" class="headerlink" title="任务执行"></a>任务执行</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/27.png" alt="img"></p>
+<h1>任务执行</h1>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/27.png" alt="img"></p>
 <ul>
-<li><p>提交一个任务，线程池里存活的核心线程数小于线程数corePoolSize时，线程池会创建一个核心线程去处理提交的任务。</p>
+<li>
+<p>提交一个任务，线程池里存活的核心线程数小于线程数corePoolSize时，线程池会创建一个核心线程去处理提交的任务。</p>
 </li>
-<li><p>如果线程池核心线程数已满，即线程数已经等于corePoolSize，一个新提交的任务，会被放进任务队列workQueue排队等待执行。</p>
+<li>
+<p>如果线程池核心线程数已满，即线程数已经等于corePoolSize，一个新提交的任务，会被放进任务队列workQueue排队等待执行。</p>
 </li>
-<li><p>当线程池里面存活的线程数已经等于corePoolSize了,并且任务队列workQueue也满，判断线程数是否达到maximumPoolSize，即最大线程数是否已满，如果没到达，创建一个非核心线程执行提交的任务。</p>
+<li>
+<p>当线程池里面存活的线程数已经等于corePoolSize了,并且任务队列workQueue也满，判断线程数是否达到maximumPoolSize，即最大线程数是否已满，如果没到达，创建一个非核心线程执行提交的任务。</p>
 </li>
-<li><p>如果当前的线程数达到了maximumPoolSize，还有新的任务过来的话，直接采用拒绝策略处理。</p>
+<li>
+<p>如果当前的线程数达到了maximumPoolSize，还有新的任务过来的话，直接采用拒绝策略处理。</p>
 </li>
 </ul>
-<h2 id="四种拒绝策略"><a href="#四种拒绝策略" class="headerlink" title="四种拒绝策略"></a>四种拒绝策略</h2><ul>
-<li><p>AbortPolicy(抛出一个异常，默认的)</p>
+<h2 id="四种拒绝策略"><a class="header-anchor" href="#四种拒绝策略">¶</a>四种拒绝策略</h2>
+<ul>
+<li>
+<p>AbortPolicy(抛出一个异常，默认的)</p>
 </li>
-<li><p>DiscardPolicy(直接丢弃任务)</p>
+<li>
+<p>DiscardPolicy(直接丢弃任务)</p>
 </li>
-<li><p>DiscardOldestPolicy（丢弃队列里最老的任务，将当前这个任务继续提交给线程池）</p>
+<li>
+<p>DiscardOldestPolicy（丢弃队列里最老的任务，将当前这个任务继续提交给线程池）</p>
 </li>
-<li><p>CallerRunsPolicy（交给线程池调用所在的线程进行处理)</p>
+<li>
+<p>CallerRunsPolicy（交给线程池调用所在的线程进行处理)</p>
 </li>
 </ul>
 <p><strong>为了形象描述线程池执行，我打个比喻：</strong></p>
 <ul>
-<li><p>核心线程比作公司正式员工</p>
+<li>
+<p>核心线程比作公司正式员工</p>
 </li>
-<li><p>非核心线程比作外包员工</p>
+<li>
+<p>非核心线程比作外包员工</p>
 </li>
-<li><p>阻塞队列比作需求池</p>
+<li>
+<p>阻塞队列比作需求池</p>
 </li>
-<li><p>提交任务比作提需求</p>
+<li>
+<p>提交任务比作提需求</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/28.png" alt="img"></p>
 </li>
-<li><p>当产品提个需求，正式员工（核心线程）先接需求（执行任务）</p>
+<li>
+<p>当产品提个需求，正式员工（核心线程）先接需求（执行任务）</p>
 </li>
-<li><p>如果正式员工都有需求在做，即核心线程数已满），产品就把需求先放需求池（阻塞队列）。</p>
+<li>
+<p>如果正式员工都有需求在做，即核心线程数已满），产品就把需求先放需求池（阻塞队列）。</p>
 </li>
-<li><p>如果需求池(阻塞队列)也满了，但是这时候产品继续提需求,怎么办呢？那就请外包（非核心线程）来做。</p>
+<li>
+<p>如果需求池(阻塞队列)也满了，但是这时候产品继续提需求,怎么办呢？那就请外包（非核心线程）来做。</p>
 </li>
-<li><p>如果所有员工（最大线程数也满了）都有需求在做了，那就执行拒绝策略。</p>
+<li>
+<p>如果所有员工（最大线程数也满了）都有需求在做了，那就执行拒绝策略。</p>
 </li>
-<li><p>如果外包员工把需求做完了，它经过一段（keepAliveTime）空闲时间，就离开公司了。</p>
+<li>
+<p>如果外包员工把需求做完了，它经过一段（keepAliveTime）空闲时间，就离开公司了。</p>
 </li>
 </ul>
 <p>好的，到这里。<strong>面试问题1-&gt;Java的线程池说一下，各个参数的作用，如何进行的?</strong> 是否已经迎刃而解啦， 我觉得这个问题，回答：<strong>线程池构造函数的corePoolSize,maximumPoolSize等参数，并且能描述清楚线程池的执行流程</strong> 就差不多啦。</p>
@@ -452,7 +481,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建"><span class="nav-number">2.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务执行"><span class="nav-number">3.</span> <span class="nav-text">任务执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四种拒绝策略"><span class="nav-number">3.1.</span> <span class="nav-text">四种拒绝策略</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">任务执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四种拒绝策略"><span class="nav-number">3.1.</span> <span class="nav-text">¶四种拒绝策略</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -526,12 +555,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">242k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:40</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

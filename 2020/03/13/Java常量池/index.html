@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考： Java常量池 Java中的常量池(字符串常量池、class常量池和运行时常量池) Java常量池理解与总结 Java 中的常量池主要分为 Class文件常量池，运行时常量池，全局字符串常量池 Class 文件常量池class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就包">
+  <meta name="description" content="参考： Java常量池 Java中的常量池(字符串常量池、class常量池和运行时常量池) Java常量池理解与总结 Java 中的常量池主要分为 Class文件常量池，运行时常量池，全局字符串常量池 Class 文件常量池 class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java常量池">
 <meta property="og:url" content="https://01lv.github.io/2020/03/13/Java%E5%B8%B8%E9%87%8F%E6%B1%A0/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="参考： Java常量池 Java中的常量池(字符串常量池、class常量池和运行时常量池) Java常量池理解与总结 Java 中的常量池主要分为 Class文件常量池，运行时常量池，全局字符串常量池 Class 文件常量池class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就包">
+<meta property="og:description" content="参考： Java常量池 Java中的常量池(字符串常量池、class常量池和运行时常量池) Java常量池理解与总结 Java 中的常量池主要分为 Class文件常量池，运行时常量池，全局字符串常量池 Class 文件常量池 class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-13T06:58:10.000Z">
 <meta property="article:modified_time" content="2020-03-13T07:53:05.708Z">
@@ -250,7 +250,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>3k</span>
+              <span>3.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -274,50 +274,48 @@
 <p><a href="https://blog.csdn.net/zm13007310400/article/details/77534349" target="_blank" rel="noopener">Java中的常量池(字符串常量池、class常量池和运行时常量池)</a></p>
 <p><a href="https://www.jianshu.com/p/c7f47de2ee80" target="_blank" rel="noopener">Java常量池理解与总结</a></p>
 <p>Java 中的常量池主要分为 <strong>Class文件常量池</strong>，<strong>运行时常量池</strong>，<strong>全局字符串常量池</strong></p>
-<h1 id="Class-文件常量池"><a href="#Class-文件常量池" class="headerlink" title="Class 文件常量池"></a>Class 文件常量池</h1><p>class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就包括class文件常量池。 class文件中存在常量池（非运行时常量池），其在编译阶段就已经确定。</p>
+<h1>Class 文件常量池</h1>
+<p>class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就包括class文件常量池。 class文件中存在常量池（非运行时常量池），其在编译阶段就已经确定。</p>
 <a id="more"></a>
-
 <p>通过一个简单的例子说明情况：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JavaBean</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> value = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">public</span> String s = <span class="string">"abc"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> f = <span class="number">0x101</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setValue</span><span class="params">(<span class="keyword">int</span> v)</span></span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> temp = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">this</span>.value = temp + v;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getValue</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>通过 javac 命令编译之后，用 javap -v 命令查看编译后的文件</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">org</span>.<span class="title">developer</span>.<span class="title">es</span>.<span class="title">test</span>.<span class="title">demo</span></span></span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: <span class="number">52</span></span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #6.#30         // java/lang/Object."&lt;init&gt;":()V</span><br><span class="line">   #2 = Fieldref           #5.#31         // org/developer/es/test/demo.value:I</span><br><span class="line">   #3 = String             #32            // abc</span><br><span class="line">   #4 = Fieldref           #5.#33         // org/developer/es/test/demo.s:Ljava/lang/String;</span><br><span class="line">   #5 = Class              #34            // org/developer/es/test/demo</span><br><span class="line">   #6 = Class              #35            // java/lang/Object</span><br><span class="line">   #7 = Utf8               value</span><br><span class="line">   #8 = Utf8               I</span><br><span class="line">   #9 = Utf8               s</span><br><span class="line">  #10 = Utf8               Ljava/lang/String;</span><br><span class="line">  #11 = Utf8               f</span><br><span class="line">  #12 = Utf8               ConstantValue</span><br><span class="line">  #13 = Integer            257</span><br><span class="line">  #14 = Utf8               &lt;init&gt;</span><br><span class="line">  #15 = Utf8               ()V</span><br><span class="line">  #16 = Utf8               Code</span><br><span class="line">  #17 = Utf8               LineNumberTable</span><br><span class="line">  #18 = Utf8               LocalVariableTable</span><br><span class="line">  #19 = Utf8               this</span><br><span class="line">  #20 = Utf8               Lorg/developer/es/test/demo;</span><br><span class="line">  #21 = Utf8               setValue</span><br><span class="line">  #22 = Utf8               (I)V</span><br><span class="line">  #23 = Utf8               v</span><br><span class="line">  #24 = Utf8               temp</span><br><span class="line">  #25 = Utf8               MethodParameters</span><br><span class="line">  #26 = Utf8               getValue</span><br><span class="line">  #27 = Utf8               ()I</span><br><span class="line">  #28 = Utf8               SourceFile</span><br><span class="line">  #29 = Utf8               demo.java</span><br><span class="line">  #30 = NameAndType        #14:#15        // "&lt;init&gt;":()V</span><br><span class="line">  #31 = NameAndType        #7:#8          // value:I</span><br><span class="line">  #32 = Utf8               abc</span><br><span class="line">  #33 = NameAndType        #9:#10         // s:Ljava/lang/String;</span><br><span class="line">  #34 = Utf8               org/developer/es/test/demo</span><br><span class="line">  #35 = Utf8               java/lang/Object</span><br></pre></td></tr></table></figure>
-
 <p>class 文件常量池主要存放两大常量：<strong>字面量和符号引用</strong></p>
-<p>1) 字面量：字面量接近java语言层面的常量概念，主要包括：</p>
+<ol>
+<li>字面量：字面量接近java语言层面的常量概念，主要包括：</li>
+</ol>
 <ul>
-<li><strong>文本字符串</strong>，也就是我们经常申明的： public String s = “abc”;中的”abc”</li>
+<li><strong>文本字符串</strong>，也就是我们经常申明的： public String s = “abc”;中的&quot;abc&quot;</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#9 = Utf8               s</span><br><span class="line">#3 = String             #31            // abc</span><br><span class="line">#31 = Utf8              abc</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>用final修饰的成员变量，包括静态变量、实例变量和局部变量</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#11 = Utf8               f</span><br><span class="line"> #12 = Utf8               ConstantValue</span><br><span class="line"> #13 = Integer            257</span><br></pre></td></tr></table></figure>
-
-<p>2) 符号引用 符号引用主要设涉及编译原理方面的概念，包括下面三类常量:</p>
+<ol start="2">
+<li>符号引用 符号引用主要设涉及编译原理方面的概念，包括下面三类常量:</li>
+</ol>
 <ul>
-<li>类和接口的全限定名，也就是java/lang/String;这样，将类名中原来的”.”替换为”/“得到的，主要用于在运行时解析得到类的直接引用，像上面</li>
+<li>类和接口的全限定名，也就是java/lang/String;这样，将类名中原来的&quot;.“替换为”/&quot;得到的，主要用于在运行时解析得到类的直接引用，像上面</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#5 = Class              #33            // JavaBasicKnowledge/JavaBean</span><br><span class="line"> #33 = Utf8               JavaBasicKnowledge/JavaBean</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>字段的名称和描述符，字段也就是类或者接口中声明的变量，包括类级别变量和实例级的变量</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#4 = Fieldref           #5.#32         // JavaBasicKnowledge/JavaBean.value:I</span><br><span class="line"> #5 = Class              #33            // JavaBasicKnowledge/JavaBean</span><br><span class="line"> #32 = NameAndType       #7:#8          // value:I</span><br><span class="line"></span><br><span class="line"> #7 = Utf8               value</span><br><span class="line"> #8 = Utf8               I</span><br><span class="line"></span><br><span class="line"> <span class="comment">//这两个是局部变量，值保留字段名称</span></span><br><span class="line"> #23 = Utf8               v</span><br><span class="line"> #24 = Utf8               temp</span><br></pre></td></tr></table></figure>
-
 <p>可以看到，对于方法中的局部变量名，class文件的常量池仅仅保存字段名。</p>
 <ul>
 <li>方法中的名称和描述符，也即参数类型+返回值</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#21 = Utf8               setValue</span><br><span class="line"> #22 = Utf8               (I)V</span><br><span class="line"></span><br><span class="line"> #25 = Utf8               getValue</span><br><span class="line"> #26 = Utf8               ()I</span><br></pre></td></tr></table></figure>
-
-<p><strong><em>什么时字面量和符号引用</em></strong></p>
+<p><em><strong>什么时字面量和符号引用</strong></em></p>
 <ul>
 <li>字面量包括：1.文本字符串 2.八种基本类型的值 3.被声明为final的常量</li>
 <li>符号引用：1.类和方法的全限定名 2.字段的名称和描述符 3.方法的名称和描述符</li>
 </ul>
-<h1 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h1><p>运行时常量池是方法区的一部分，所以也是全局贡献的，我们知道，jvm在执行某个类的时候，必须经过<strong>加载、链接（验证、准备、解析）、初始化</strong>，在第一步加载的时候需要完成：</p>
+<h1>运行时常量池</h1>
+<p>运行时常量池是方法区的一部分，所以也是全局贡献的，我们知道，jvm在执行某个类的时候，必须经过<strong>加载、链接（验证、准备、解析）、初始化</strong>，在第一步加载的时候需要完成：</p>
 <ul>
 <li>通过一个类的全限定名来获取此类的二进制字节流</li>
 <li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li>
@@ -327,7 +325,7 @@
 <p>上面的第二条，将class字节流代表的静态存储结构转化为方法区的运行时数据结构，其中就包含了class文件常量池进入运行时常量池的过程，这里需要强调一下<strong>不同的类共用一个运行时常量池</strong>，同时在进入运行时常量池的过程中，多个class文件中常量池相同的字符串，多个class文件中常量池中相同的字符串只会存在一份在运行时常量池，这也是一种优化。</p>
 <p>运行时常量池的作用是存储java class文件常量池中的符号信息，运行时常量池中保存着一些class文件中描述的符号引用，同时在类的解析阶段还会将这些符号引用翻译出直接引用（直接指向实例对象的指针，内存地址），翻译出来的直接引用也是存储在运行时常量池中。</p>
 <p>运行时常量池相对于class常量池一大特征就是具有动态性，java规范并不要求常量只能在运行时才产生，也就是说运行时常量池的内容并不全部来自class常量池，在运行时可以通过代码生成常量并将其放入运行时常量池中，这种特性被用的最多的就是String.intern()。</p>
-<p>未完待续……</p>
+<p>未完待续…</p>
 
     </div>
 
@@ -431,7 +429,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-文件常量池"><span class="nav-number">1.</span> <span class="nav-text">Class 文件常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行时常量池"><span class="nav-number">2.</span> <span class="nav-text">运行时常量池</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">Class 文件常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">运行时常量池</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -505,12 +503,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">242k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:40</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

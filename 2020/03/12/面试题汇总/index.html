@@ -286,9 +286,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="1-如果一条sql执行时间过长，如何优化…"><a href="#1-如果一条sql执行时间过长，如何优化…" class="headerlink" title="1.如果一条sql执行时间过长，如何优化…"></a>1.如果一条sql执行时间过长，如何优化…</h1><p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312230201.png" alt="img"></p>
+        <h1>1.如果一条sql执行时间过长，如何优化…</h1>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312230201.png" alt="img"></p>
 <a id="more"></a>
-
 <p>1、查看sql是否涉及多表的联表或者子查询，如果有，看是否能进行业务拆分，相关字段冗余或者合并成临时表（业务和算法的优化）</p>
 <p>2、涉及链表的查询，是否能进行分表查询，单表查询之后的结果进行字段整合</p>
 <p>3、如果以上两种都不能操作，非要链表查询，那么考虑对相对应的查询条件做索引。加快查询速度</p>
@@ -296,7 +296,8 @@
 <p>5、数据库主从分离，读写分离，降低读写针对同一表同时的压力，至于主从同步，mysql有自带的binlog实现 主从同步</p>
 <p>6、explain分析sql语句，查看执行计划，分析索引是否用上，分析扫描行数等等</p>
 <p>7、查看mysql执行日志，看看是否有其他方面的问题</p>
-<h1 id="2-前端通过http请求后端的详细过程"><a href="#2-前端通过http请求后端的详细过程" class="headerlink" title="2.前端通过http请求后端的详细过程"></a>2.前端通过http请求后端的详细过程</h1><p>参考：</p>
+<h1>2.前端通过http请求后端的详细过程</h1>
+<p>参考：</p>
 <p><a href="https://juejin.im/post/5c3b21e4e51d455231347349#heading-6" target="_blank" rel="noopener">浅析一次HTTP请求</a></p>
 <p><a href="https://www.jianshu.com/p/c1d6a294d3c0" target="_blank" rel="noopener">一次完整的HTTP请求与响应涉及了哪些知识？真的讲得好很细</a></p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312232201.png" alt="img"></p>
@@ -310,20 +311,25 @@
 <p>当目的主机收到一个以太网数据帧时，数据就开始从协议栈中由底向上升，同时去掉各层协议加上的报文首部。每层协议盒都要去检查报文首部中的协议标识，以确定接收数据的上层协议。这个过程称作分用（Demultiplexing）。协议是通过目的端口号、源I P地址和源端口号进行解包的。</p>
 <p>通过以上步骤我们从TCP/IP模型的角度来理解了一次HTTP请求与响应的过程。</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/20200312232701.png" alt="img"></p>
-<h2 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h2><h3 id="Http是什么？"><a href="#Http是什么？" class="headerlink" title="Http是什么？"></a>Http是什么？</h3><p>通俗来讲，他就是计算机通过网络进行通信的规则，是一个基于请求与响应，无状态的，应用层的协议，常基于TCP/IP协议传输数据。目前任何终端（手机，笔记本电脑。。）之间进行任何一种通信都必须按照Http协议进行，否则无法连接。</p>
+<h2 id="HTTP协议"><a class="header-anchor" href="#HTTP协议">¶</a>HTTP协议</h2>
+<h3 id="Http是什么？"><a class="header-anchor" href="#Http是什么？">¶</a>Http是什么？</h3>
+<p>通俗来讲，他就是计算机通过网络进行通信的规则，是一个基于请求与响应，无状态的，应用层的协议，常基于TCP/IP协议传输数据。目前任何终端（手机，笔记本电脑。。）之间进行任何一种通信都必须按照Http协议进行，否则无法连接。</p>
 <p><strong>四个基于：</strong></p>
-<p><strong>请求与响应：</strong>客户端发送请求，服务器端响应数据</p>
-<p><strong>无状态的：</strong>协议对于事务处理没有记忆能力，客户端第一次与服务器建立连接发送请求时需要进行一系列的安全认证匹配等，因此增加页面等待时间，当客户端向服务器端发送请求，服务器端响应完毕后，两者断开连接，也不保存连接状态，一刀两断！恩断义绝！从此路人！下一次客户端向同样的服务器发送请求时，由于他们之前已经遗忘了彼此，所以需要重新建立连接。</p>
-<p><strong>应用层：</strong>Http是属于应用层的协议，配合TCP/IP使用。</p>
-<p><strong>TCP/IP：</strong>Http使用TCP作为它的支撑运输协议。HTTP客户机发起一个与服务器的TCP连接，一旦连接建立，浏览器（客户机）和服务器进程就可以通过套接字接口访问TCP。</p>
+<p>**请求与响应：**客户端发送请求，服务器端响应数据</p>
+<p>**无状态的：**协议对于事务处理没有记忆能力，客户端第一次与服务器建立连接发送请求时需要进行一系列的安全认证匹配等，因此增加页面等待时间，当客户端向服务器端发送请求，服务器端响应完毕后，两者断开连接，也不保存连接状态，一刀两断！恩断义绝！从此路人！下一次客户端向同样的服务器发送请求时，由于他们之前已经遗忘了彼此，所以需要重新建立连接。</p>
+<p>**应用层：**Http是属于应用层的协议，配合TCP/IP使用。</p>
+<p>**TCP/IP：**Http使用TCP作为它的支撑运输协议。HTTP客户机发起一个与服务器的TCP连接，一旦连接建立，浏览器（客户机）和服务器进程就可以通过套接字接口访问TCP。</p>
 <p><strong>针对无状态的一些解决策略：</strong></p>
 <p>有时需要对用户之前的HTTP通信状态进行保存，比如执行一次登陆操作，在30分钟内所有的请求都不需要再次登陆。于是引入了Cookie技术。</p>
-<p>HTTP/1.1想出了持久连接（HTTP keep-alive）方法。其特点是，只要任意一端没有明确提出断开连接，则保持TCP连接状态，在请求首部字段中的Connection: keep-alive即为表明使用了持久连接。<br> 等等还有很多。。。。。。</p>
+<p>HTTP/1.1想出了持久连接（HTTP keep-alive）方法。其特点是，只要任意一端没有明确提出断开连接，则保持TCP连接状态，在请求首部字段中的Connection: keep-alive即为表明使用了持久连接。<br>
+等等还有很多。。。。。。</p>
 <p>下面开始讲解重头戏：HTTP请求报文，响应报文，对应于上述步骤的2，3，4，5，6。</p>
 <p>HTTP报文是面向文本的，报文中的每一个字段都是一些ASCII码串，各个字段的长度是不确定的。HTTP有两类报文：请求报文和响应报文。</p>
-<h2 id="HTTP请求报文"><a href="#HTTP请求报文" class="headerlink" title="HTTP请求报文"></a>HTTP请求报文</h2><p>一个HTTP请求报文由请求行（request line）、请求头部（header）、空行和请求数据4个部分组成，下图给出了请求报文的一般格式。</p>
+<h2 id="HTTP请求报文"><a class="header-anchor" href="#HTTP请求报文">¶</a>HTTP请求报文</h2>
+<p>一个HTTP请求报文由请求行（request line）、请求头部（header）、空行和请求数据4个部分组成，下图给出了请求报文的一般格式。</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/1.png" alt="img"></p>
-<h3 id="1-请求行"><a href="#1-请求行" class="headerlink" title="1.请求行"></a>1.请求行</h3><p>请求行分为三个部分：请求方法、请求地址和协议版本</p>
+<h3 id="1-请求行"><a class="header-anchor" href="#1-请求行">¶</a>1.请求行</h3>
+<p>请求行分为三个部分：请求方法、请求地址和协议版本</p>
 <p><strong>请求方法</strong></p>
 <p>HTTP/1.1 定义的请求方法有8种：GET、POST、PUT、DELETE、PATCH、HEAD、OPTIONS、TRACE。</p>
 <p>最常的两种GET和POST，如果是RESTful接口的话一般会用到GET、POST、DELETE、PUT。</p>
@@ -336,131 +342,176 @@
 <p>有时会带参数，GET请求</p>
 <p><strong>协议版本</strong></p>
 <p>协议版本的格式为：HTTP/主版本号.次版本号，常用的有HTTP/1.0和HTTP/1.1</p>
-<h3 id="2-请求头部"><a href="#2-请求头部" class="headerlink" title="2.请求头部"></a>2.请求头部</h3><p>请求头部为请求报文添加了一些附加信息，由“名/值”对组成，每行一对，名和值之间使用冒号分隔。</p>
+<h3 id="2-请求头部"><a class="header-anchor" href="#2-请求头部">¶</a>2.请求头部</h3>
+<p>请求头部为请求报文添加了一些附加信息，由“名/值”对组成，每行一对，名和值之间使用冒号分隔。</p>
 <p>常见请求头如下：</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/3.png" alt="img"></p>
 <p>请求头部的最后会有一个空行，表示请求头部结束，接下来为请求数据，这一行非常重要，必不可少。</p>
-<h3 id="3-请求数据"><a href="#3-请求数据" class="headerlink" title="3.请求数据"></a>3.请求数据</h3><p>可选部分，比如GET请求就没有请求数据。</p>
+<h3 id="3-请求数据"><a class="header-anchor" href="#3-请求数据">¶</a>3.请求数据</h3>
+<p>可选部分，比如GET请求就没有请求数据。</p>
 <p>下面是一个POST方法的请求报文：</p>
 <blockquote>
-<p>POST 　/index.php　HTTP/1.1                                                                　　 请求行<br> Host: localhost<br> User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2　　请求头<br> Accept: text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8<br> Accept-Language: zh-cn,zh;q=0.5<br> Accept-Encoding: gzip, deflate<br> Connection: keep-alive<br> Referer: <a href="https://link.jianshu.com?t=http://localhost/" target="_blank" rel="noopener">http://localhost/</a><br> Content-Length：25<br> Content-Type：application/x-www-form-urlencoded<br> 　空行<br> username=aa&amp;password=1234　　请求数据</p>
+<p>POST 　/index.php　HTTP/1.1                                                                　　 请求行<br>
+Host: localhost<br>
+User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2　　请求头<br>
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8<br>
+Accept-Language: zh-cn,zh;q=0.5<br>
+Accept-Encoding: gzip, deflate<br>
+Connection: keep-alive<br>
+Referer: <a href="https://link.jianshu.com?t=http://localhost/" target="_blank" rel="noopener">http://localhost/</a><br>
+Content-Length：25<br>
+Content-Type：application/x-www-form-urlencoded<br>
+　空行<br>
+username=aa&amp;password=1234　　请求数据</p>
 </blockquote>
-<h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><p><img src="http://q6s1x2hw2.bkt.clouddn.com/4.png" alt="img"></p>
+<h2 id="HTTP响应报文"><a class="header-anchor" href="#HTTP响应报文">¶</a>HTTP响应报文</h2>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/4.png" alt="img"></p>
 <p>HTTP响应报文主要由状态行、响应头部、空行以及响应数据组成。</p>
-<h3 id="1-状态行"><a href="#1-状态行" class="headerlink" title="1.状态行"></a>1.状态行</h3><p>由3部分组成，分别为：协议版本，状态码，状态码描述。</p>
+<h3 id="1-状态行"><a class="header-anchor" href="#1-状态行">¶</a>1.状态行</h3>
+<p>由3部分组成，分别为：协议版本，状态码，状态码描述。</p>
 <p>其中协议版本与请求报文一致，状态码描述是对状态码的简单描述，所以这里就只介绍状态码。</p>
 <p><strong>状态码</strong></p>
-<p>状态代码为3位数字。<br> 1xx：指示信息–表示请求已接收，继续处理。<br> 2xx：成功–表示请求已被成功接收、理解、接受。<br> 3xx：重定向–要完成请求必须进行更进一步的操作。<br> 4xx：客户端错误–请求有语法错误或请求无法实现。<br> 5xx：服务器端错误–服务器未能实现合法的请求。</p>
+<p>状态代码为3位数字。<br>
+1xx：指示信息–表示请求已接收，继续处理。<br>
+2xx：成功–表示请求已被成功接收、理解、接受。<br>
+3xx：重定向–要完成请求必须进行更进一步的操作。<br>
+4xx：客户端错误–请求有语法错误或请求无法实现。<br>
+5xx：服务器端错误–服务器未能实现合法的请求。</p>
 <p>下面列举几个常见的：</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/5.png" alt="img"></p>
-<h3 id="2-响应头部"><a href="#2-响应头部" class="headerlink" title="2.响应头部"></a>2.响应头部</h3><p>与请求头部类似，为响应报文添加了一些附加信息</p>
+<h3 id="2-响应头部"><a class="header-anchor" href="#2-响应头部">¶</a>2.响应头部</h3>
+<p>与请求头部类似，为响应报文添加了一些附加信息</p>
 <p>常见响应头部如下：</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/6.png" alt="img"></p>
-<h3 id="3-响应数据"><a href="#3-响应数据" class="headerlink" title="3.响应数据"></a>3.响应数据</h3><p>用于存放需要返回给客户端的数据信息。</p>
+<h3 id="3-响应数据"><a class="header-anchor" href="#3-响应数据">¶</a>3.响应数据</h3>
+<p>用于存放需要返回给客户端的数据信息。</p>
 <p>下面是一个响应报文的实例：</p>
 <blockquote>
 <p>HTTP/1.1 200 OK　　状态行</p>
 </blockquote>
-<p>Date: Sun, 17 Mar 2013 08:12:54 GMT　　响应头部<br> Server: Apache/2.2.8 (Win32) PHP/5.2.5<br> X-Powered-By: PHP/5.2.5<br> Set-Cookie: PHPSESSID=c0huq7pdkmm5gg6osoe3mgjmm3; path=/<br> Expires: Thu, 19 Nov 1981 08:52:00 GMT<br> Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0<br> Pragma: no-cache<br> Content-Length: 4393<br> Keep-Alive: timeout=5, max=100<br> Connection: Keep-Alive<br> Content-Type: text/html; charset=utf-8</p>
+<p>Date: Sun, 17 Mar 2013 08:12:54 GMT　　响应头部<br>
+Server: Apache/2.2.8 (Win32) PHP/5.2.5<br>
+X-Powered-By: PHP/5.2.5<br>
+Set-Cookie: PHPSESSID=c0huq7pdkmm5gg6osoe3mgjmm3; path=/<br>
+Expires: Thu, 19 Nov 1981 08:52:00 GMT<br>
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0<br>
+Pragma: no-cache<br>
+Content-Length: 4393<br>
+Keep-Alive: timeout=5, max=100<br>
+Connection: Keep-Alive<br>
+Content-Type: text/html; charset=utf-8</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">空行</span><br><span class="line"> <span class="tag">&lt;<span class="name">html</span>&gt;</span>　　响应数据</span><br><span class="line"> <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">title</span>&gt;</span>HTTP响应示例<span class="tag">&lt;<span class="name">title</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"> Hello HTTP!</span><br><span class="line"> <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>关于请求头部和响应头部的知识点很多，这里只是简单介绍。</p>
 <p>通过以上步骤，数据已经传递完毕，HTTP/1.1会维持持久连接，但持续一段时间总会有关闭连接的时候，这时候据需要断开TCP连接</p>
-<h1 id="3-递归算-n-的阶乘"><a href="#3-递归算-n-的阶乘" class="headerlink" title="3.递归算 n 的阶乘"></a>3.递归算 n 的阶乘</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">while</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        Sytem.out.print(rec(m) + <span class="string">" "</span>);</span><br><span class="line">        m--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">rec</span><span class="params">(Integer m)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        m = m * rec( m - <span class="number">1</span> );</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="4-List-和-Set-的区别"><a href="#4-List-和-Set-的区别" class="headerlink" title="4.List 和 Set 的区别"></a>4.List 和 Set 的区别</h1><p><strong><em>List</em></strong> 和 <strong><em>Set</em></strong> 都继承自 Collection，用来存放数据项集合</p>
+<h1>3.递归算 n 的阶乘</h1>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">while</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        Sytem.out.print(rec(m) + <span class="string">" "</span>);</span><br><span class="line">        m--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title">rec</span><span class="params">(Integer m)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        m = m * rec( m - <span class="number">1</span> );</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1>4.List 和 Set 的区别</h1>
+<p><em><strong>List</strong></em> 和 <em><strong>Set</strong></em> 都继承自 Collection，用来存放数据项集合</p>
 <p>区别：</p>
 <ol>
 <li>List 和 Set 之间有个很重要的区别就是是否允许重复元素的存在，List 中允许插入重复元素，而 Set 不允许重复元素存在，List 中允许插入重复元素，而 Set 不允许重复元素存在</li>
 <li>与元素先后存放顺序有关，List 是有序集合，保留元素插入顺序；Set 是无序集合</li>
 <li>List 可通过下标访问，而 Set 不能</li>
 </ol>
-<h1 id="5-什么是-RESTful-API"><a href="#5-什么是-RESTful-API" class="headerlink" title="5.什么是 RESTful API"></a>5.什么是 RESTful API</h1><p>参考：</p>
+<h1>5.什么是 RESTful API</h1>
+<p>参考：</p>
 <p><a href="https://www.jianshu.com/p/84568e364ee8" target="_blank" rel="noopener">深入理解什么是RESTful API ？</a></p>
 <p>REST 全称是 Representational State Transfer (表现层状态转移)</p>
 <blockquote>
 <p>URL 定位资源，用 HTTP 动词 (GET,POST,DELETE,PUT) 描述操作</p>
 </blockquote>
 <ul>
-<li><strong>Resource：</strong>资源，即数据。</li>
+<li>**Resource：**资源，即数据。</li>
 </ul>
 <blockquote>
-<p>REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。</p>
+<p>REST的名称&quot;表现层状态转化&quot;中，省略了主语。“表现层&quot;其实指的是&quot;资源”（Resources）的&quot;表现层&quot;。</p>
 </blockquote>
 <blockquote>
-<p><strong>所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。</strong>它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源标识符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
+<p>**所谓&quot;资源&quot;，就是网络上的一个实体，或者说是网络上的一个具体信息。**它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源标识符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
 </blockquote>
 <ul>
-<li><strong>Representational：</strong>某种表现形式，比如用 JSON, XML, JPEG 等</li>
+<li>**Representational：**某种表现形式，比如用 JSON, XML, JPEG 等</li>
 </ul>
 <blockquote>
-<p>资源”是一种信息实体，它可以有多种外在表现形式。<strong>我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。</strong></p>
+<p>资源&quot;是一种信息实体，它可以有多种外在表现形式。<strong>我们把&quot;资源&quot;具体呈现出来的形式，叫做它的&quot;表现层&quot;（Representation）。</strong></p>
 </blockquote>
 <blockquote>
 <p>比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。</p>
 </blockquote>
 <blockquote>
-<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
+<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的&quot;.html&quot;后缀名是不必要的，因为这个后缀名表示格式，属于&quot;表现层&quot;范畴，而URI应该只代表&quot;资源&quot;的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对&quot;表现层&quot;的描述。</p>
 </blockquote>
 <ul>
-<li><strong>State Transfer：</strong>状态变化。通过 HTTP 动词实现</li>
+<li>**State Transfer：**状态变化。通过 HTTP 动词实现</li>
 </ul>
 <blockquote>
 <p>访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。</p>
 </blockquote>
 <blockquote>
-<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。</strong></p>
+<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生&quot;状态转化&quot;（State Transfer）。而这种转化是建立在表现层之上的，所以就是&quot;表现层状态转化&quot;。</strong></p>
 </blockquote>
 <blockquote>
 <p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
 </blockquote>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ul>
+<h2 id="总结："><a class="header-anchor" href="#总结：">¶</a>总结：</h2>
+<ul>
 <li>每个 URI 代表一个资源</li>
-<li>客户端和服务段之间，传递这种资源的某种<strong><em>表现层</em></strong></li>
-<li>客户端通过4个HTTP动词，对服务端资源进行操作，实现”表现层状态转化”</li>
+<li>客户端和服务段之间，传递这种资源的某种<em><strong>表现层</strong></em></li>
+<li>客户端通过4个HTTP动词，对服务端资源进行操作，实现&quot;表现层状态转化&quot;</li>
 </ul>
-<h2 id="误区"><a href="#误区" class="headerlink" title="误区"></a>误区</h2><blockquote>
-<p><strong>最常见的一种设计错误，就是URI包含动词。</strong>因为”资源”表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。</p>
+<h2 id="误区"><a class="header-anchor" href="#误区">¶</a>误区</h2>
+<blockquote>
+<p>**最常见的一种设计错误，就是URI包含动词。**因为&quot;资源&quot;表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。</p>
 </blockquote>
 <blockquote>
 <p><strong>另一个设计误区，就是在URI中加入版本号</strong></p>
 </blockquote>
-<h1 id="6-接口和抽象类的区别"><a href="#6-接口和抽象类的区别" class="headerlink" title="6.接口和抽象类的区别"></a>6.接口和抽象类的区别</h1><p><a href="https://www.cnblogs.com/dolphin0520/p/3811437.html" target="_blank" rel="noopener">深入理解Java的接口和抽象类</a></p>
+<h1>6.接口和抽象类的区别</h1>
+<p><a href="https://www.cnblogs.com/dolphin0520/p/3811437.html" target="_blank" rel="noopener">深入理解Java的接口和抽象类</a></p>
 <p><a href="https://www.nowcoder.com/questionTerminal/bdb310cc6e384e78b2564dfd3ba4197c" target="_blank" rel="noopener">抽象类</a></p>
 <blockquote>
 <p>从设计层面上来说，</p>
 <p>抽象是对类的抽象，是一种模板设计；</p>
 <p>接口是行为的抽象，是一种行为的规范；</p>
 </blockquote>
-<h2 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h2><p>抽象类和普通类的区别：</p>
+<h2 id="抽象类"><a class="header-anchor" href="#抽象类">¶</a>抽象类</h2>
+<p>抽象类和普通类的区别：</p>
 <p>抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public。</p>
 <p>抽象类不能创建对象</p>
 <p>果一个类继承于一个抽象类，则子类必须实现父类的抽象方法。如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类。</p>
-<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>接口可以有 <strong><em>变量</em></strong> 和 <strong><em>方法</em></strong>。</p>
+<h2 id="接口"><a class="header-anchor" href="#接口">¶</a>接口</h2>
+<p>接口可以有 <em><strong>变量</strong></em> 和 <em><strong>方法</strong></em>。</p>
 <p>变量 会被隐式指定为 public static final 并且只能是 public static final，<strong>用 private 修饰会报编译错误</strong></p>
-<p>方法会被隐式地指定为public abstract方法且只能是public abstract方法<strong>，用其他关键字，比如private、protected、static、 final等修饰会报编译错误</strong></p>
+<p>方法会被隐式地指定为public abstract方法且只能是public abstract方法**，用其他关键字，比如private、protected、static、 final等修饰会报编译错误**</p>
 <p>接口中不能含有 <strong>静态代码块和静态方法</strong></p>
-<p><strong>jdk8 以后，接口也可以有方法体 ，</strong>用 <strong><em>default</em></strong> 修饰的方法体</p>
-<h3 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h3><blockquote>
+<p>**jdk8 以后，接口也可以有方法体 ，**用 <em><strong>default</strong></em> 修饰的方法体</p>
+<h3 id="区别："><a class="header-anchor" href="#区别：">¶</a>区别：</h3>
+<blockquote>
 <p>抽象类是对整个类整体进行抽象，包括属性、行为;</p>
 <p>但是接口却是对类局部（行为）进行抽象。</p>
 </blockquote>
 <p>一个类只能继承一个抽象类，而一个类却可以实现多个接口</p>
-<h1 id="7-final修饰符的理解"><a href="#7-final修饰符的理解" class="headerlink" title="7.final修饰符的理解"></a>7.final修饰符的理解</h1><p>参考：</p>
+<h1>7.final修饰符的理解</h1>
+<p>参考：</p>
 <p><a href="http://www.51gjie.com/java/569.html" target="_blank" rel="noopener">Java final关键字</a></p>
-<h2 id="final修饰类"><a href="#final修饰类" class="headerlink" title="final修饰类"></a>final修饰类</h2><p>final修饰类即表示此类已经是“最后的、最终的”含义。因此，用final修饰的类<strong>不能被继承</strong>，即<strong>不能拥有自己的子类</strong>。如果试图对一个已经用final修饰的类进行继承，在编译期间或发生错误。</p>
-<h2 id="final修饰方法"><a href="#final修饰方法" class="headerlink" title="final修饰方法"></a>final修饰方法</h2><p>final修饰的方法表示此方法已经是“最后的、最终的”含义，亦即<strong>此方法不能被重写</strong>（可以重载多个final修饰的方法）。</p>
+<h2 id="final修饰类"><a class="header-anchor" href="#final修饰类">¶</a>final修饰类</h2>
+<p>final修饰类即表示此类已经是“最后的、最终的”含义。因此，用final修饰的类<strong>不能被继承</strong>，即<strong>不能拥有自己的子类</strong>。如果试图对一个已经用final修饰的类进行继承，在编译期间或发生错误。</p>
+<h2 id="final修饰方法"><a class="header-anchor" href="#final修饰方法">¶</a>final修饰方法</h2>
+<p>final修饰的方法表示此方法已经是“最后的、最终的”含义，亦即<strong>此方法不能被重写</strong>（可以重载多个final修饰的方法）。</p>
 <p>此处需要注意的一点是：因为重写的前提是子类可以从父类中继承此方法，如果父类中final修饰的方法同时访问控制权限为private，将会导致子类中不能直接继承到此方法，因此，此时可以在子类中定义相同的方法名和参数，此时不再产生重写与final的矛盾，而是在子类中重新定义了新的方法。</p>
-<h2 id="final修饰变量"><a href="#final修饰变量" class="headerlink" title="final修饰变量"></a>final修饰变量</h2><p>final修饰的变量表示此变量是“最后的、最终的”含义。一旦定义了final变量并在首次为其显示初始化后，<strong>final修饰的变量值不可被改变</strong>(即不能再赋值)。</p>
+<h2 id="final修饰变量"><a class="header-anchor" href="#final修饰变量">¶</a>final修饰变量</h2>
+<p>final修饰的变量表示此变量是“最后的、最终的”含义。一旦定义了final变量并在首次为其显示初始化后，<strong>final修饰的变量值不可被改变</strong>(即不能再赋值)。</p>
 <p>final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。</p>
-<h1 id="8-Java创建对象的方式"><a href="#8-Java创建对象的方式" class="headerlink" title="8.Java创建对象的方式"></a>8.Java创建对象的方式</h1><ol>
+<h1>8.Java创建对象的方式</h1>
+<ol>
 <li><strong>使用 new 关键字</strong></li>
-<li><strong>使用反射的 Class 类的 newInstance() 方法</strong>：ObjectName obj = ObjectName.class.newInstance(); </li>
+<li><strong>使用反射的 Class 类的 newInstance() 方法</strong>：ObjectName obj = ObjectName.class.newInstance();</li>
 <li><strong>使用反射的 Constructor 类的 newInstance() 方法</strong>：ObjectName obj = ObjectName.class.getConstructor.newInstance();</li>
 <li><strong>使用对象的克隆 clone() 方法</strong>：ObjectName obj = obj.clone();</li>
 <li><strong>使用反序列化（ObjectInputStream）的readObject()方法</strong>： try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) { ObjectName obj = ois.readObject(); }</li>
 </ol>
-<h1 id="9-重写和重载区别-高频"><a href="#9-重写和重载区别-高频" class="headerlink" title="9.重写和重载区别(高频)"></a>9.重写和重载区别(高频)</h1><ul>
+<h1>9.重写和重载区别(高频)</h1>
+<ul>
 <li>重写</li>
 </ul>
 <blockquote>
@@ -474,7 +525,8 @@
 <p>重载是在一个类里面，方法名字相同，而参数不同。返回类型可以相同也可以不同。</p>
 <p>每个重载的方法(或者构造函数)都必须有一个独一无二的参数类型列表</p>
 </blockquote>
-<h1 id="10-collection-和-collections的区别"><a href="#10-collection-和-collections的区别" class="headerlink" title="10.collection 和 collections的区别"></a>10.collection 和 collections的区别</h1><ul>
+<h1>10.collection 和 collections的区别</h1>
+<ul>
 <li>Collection</li>
 </ul>
 <blockquote>
@@ -487,22 +539,22 @@
 <p>java.util.Collections 是一个包装类。它包含有各种有关集合操作的<strong>静态多态方法</strong></p>
 <p>此类 <strong>不能实例化</strong>，就像一个 <strong>工具类</strong>, 服务于 Java 的 Collection 类</p>
 </blockquote>
-<h1 id="11-Thread的-join"><a href="#11-Thread的-join" class="headerlink" title="11.Thread的 join()"></a>11.Thread的 join()</h1><p>转载自：</p>
+<h1>11.Thread的 join()</h1>
+<p>转载自：</p>
 <p><a href="https://www.cnblogs.com/huangzejun/p/7908898.html" target="_blank" rel="noopener">Java 浅析 Thread.join()</a></p>
 <blockquote>
 <p>当一个线程必须等待另一个线程执行完毕才能执行时，Thread 类提供了 join 这个方法来完成这个功能</p>
 </blockquote>
 <p>举例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Parent</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 创建child对象，此时child表示的线程处于NEW状态</span></span><br><span class="line">        Child child = <span class="keyword">new</span> Child();</span><br><span class="line">        <span class="comment">// child表示的线程转换为RUNNABLE状态</span></span><br><span class="line">        child.start();</span><br><span class="line">        <span class="comment">// 等待child线程运行完再继续运行</span></span><br><span class="line">        child.join();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Child</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面代码展示了两个类：Parent（父线程类），Child（子线程类）。</p>
 <p>Parent.main()方法是程序的入口，通过 Child child = new Child(); 新建child子线程（此时 child子线程处于NEW状态）；</p>
 <p>然后调用child.start()（child子线程状态转换为RUNNABLE）；</p>
 <p>再调用child.join()，此时，Parent父线程会等待child子线程运行完再继续运行。</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/33.png" alt="Java-thread-state-transition"></p>
-<h1 id="12-mybatis-动态标签"><a href="#12-mybatis-动态标签" class="headerlink" title="12.mybatis 动态标签"></a>12.mybatis 动态标签</h1><ul>
+<h1>12.mybatis 动态标签</h1>
+<ul>
 <li><strong>if</strong></li>
 <li><strong>where</strong></li>
 <li><strong>choose</strong></li>
@@ -512,13 +564,14 @@
 <li><strong>set</strong></li>
 <li><strong>foreach</strong></li>
 </ul>
-<h1 id="13-JDBC-控制事务"><a href="#13-JDBC-控制事务" class="headerlink" title="13.JDBC 控制事务"></a>13.JDBC 控制事务</h1><p>参考：<a href="https://www.yiibai.com/jdbc/jdbc-transactions.html" target="_blank" rel="noopener">JDBC事务</a></p>
+<h1>13.JDBC 控制事务</h1>
+<p>参考：<a href="https://www.yiibai.com/jdbc/jdbc-transactions.html" target="_blank" rel="noopener">JDBC事务</a></p>
 <p>事务能够控制何时更改提交并应用于数据库。它将单个 SQL 语句或一组 SQL 语句视为一个逻辑单元，如果任何语句失败，整个事务将失败。</p>
 <p>要启用手动事务支持，而不是使用 JDBC 驱动程序默认使用的自动提交模式，请调用 <code>Connection</code> 对象的<code>setAutoCommit()</code>方法。 如果将布尔的<code>false</code>传递给<code>setAutoCommit()</code>，则关闭自动提交。 也可以传递一个布尔值<code>true</code>来重新打开它。</p>
 <p>例如，如果有一个名为<code>conn</code>的<code>Connection</code>对象，请将以下代码关闭自动提交 -</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-
-<h2 id="提交和回滚"><a href="#提交和回滚" class="headerlink" title="提交和回滚"></a>提交和回滚</h2><p>如果JDBC连接处于自动提交模式，默认情况下，则每个SQL语句在完成后都会提交到数据库。</p>
+<h2 id="提交和回滚"><a class="header-anchor" href="#提交和回滚">¶</a>提交和回滚</h2>
+<p>如果JDBC连接处于自动提交模式，默认情况下，则每个SQL语句在完成后都会提交到数据库。</p>
 <p>对于简单的应用程序可能没有问题，但是有三个原因需要考虑是否关闭自动提交并管理自己的事务 -</p>
 <ul>
 <li>提高性能</li>
@@ -529,41 +582,37 @@
 <p>要启用手动事务支持，而不是使用JDBC驱动程序默认使用的自动提交模式，请调用<code>Connection</code>对象的<code>setAutoCommit()</code>方法。 如果将布尔的<code>false</code>传递给<code>setAutoCommit()</code>，则关闭自动提交。 也可以传递一个布尔值<code>true</code>来重新打开它。</p>
 <p>例如，如果有一个名为<code>conn</code>的<code>Connection</code>对象，请将以下代码关闭自动提交 -</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-
 <p>完成更改后，若要提交更改，那么可在连接对象上调用<code>commit()</code>方法，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn.commit( );</span><br></pre></td></tr></table></figure>
-
 <p>否则，要使用连接名为<code>conn</code>的数据库回滚更新，请使用以下代码 -</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conn.rollback( );</span><br></pre></td></tr></table></figure>
-
 <p>以下示例说明了如何使用提交和回滚对象</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//Assume a valid connection object conn</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">    String SQL = <span class="string">"INSERT INTO Employees  "</span> +</span><br><span class="line">        <span class="string">"VALUES (106, 20, 'Rita', 'Tez')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);  </span><br><span class="line">    <span class="comment">//Submit a malformed SQL statement that breaks</span></span><br><span class="line">    String SQL = <span class="string">"INSERTED IN Employees  "</span> +</span><br><span class="line">        <span class="string">"VALUES (107, 22, 'Sita', 'Singh')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);</span><br><span class="line">    <span class="comment">// If there is no error.</span></span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">    <span class="comment">// If there is any error.</span></span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这种情况下，上述<code>INSERT</code>语句不会成功执行，因为所有操作都被回滚了。</p>
-<h2 id="使用保存点"><a href="#使用保存点" class="headerlink" title="使用保存点"></a>使用保存点</h2><p>新的 JDBC3.0 新添加了 <code>Savepoint</code> 接口提供了额外的事务控制能力。大多数现代 DBMS 支持其环境中的保存点，如 Oracle 的 PL/SQL。</p>
+<h2 id="使用保存点"><a class="header-anchor" href="#使用保存点">¶</a>使用保存点</h2>
+<p>新的 JDBC3.0 新添加了 <code>Savepoint</code> 接口提供了额外的事务控制能力。大多数现代 DBMS 支持其环境中的保存点，如 Oracle 的 PL/SQL。</p>
 <p>设置保存点(<code>Savepoint</code>)时，可以在事务中定义逻辑回滚点。 如果通过保存点(<code>Savepoint</code>)发生错误时，则可以使用回滚方法来撤消所有更改或仅保存保存点之后所做的更改。</p>
 <p><strong>Connection</strong> 对象有两种新的方法可用来管理保存点</p>
 <ul>
-<li><strong>setSavepoint(String savepointName)：</strong>定义新的保存点，它还返回一个 <code>Savepoint</code> 对象</li>
-<li><strong>releaseSavepoint(Savepoint savepointName)：</strong>删除保存点。要注意，他需要一个 <code>Savepoint</code>对象作为参数。 该对象通常是由<code>setSavepoint()</code>方法生成的保存点。</li>
+<li>**setSavepoint(String savepointName)：**定义新的保存点，它还返回一个 <code>Savepoint</code> 对象</li>
+<li>**releaseSavepoint(Savepoint savepointName)：**删除保存点。要注意，他需要一个 <code>Savepoint</code>对象作为参数。 该对象通常是由<code>setSavepoint()</code>方法生成的保存点。</li>
 </ul>
-<p>有一个<em>rollback (String savepointName)</em>方法，它将使用事务回滚到指定的保存点。</p>
+<p>有一个*rollback (String savepointName)*方法，它将使用事务回滚到指定的保存点。</p>
 <p>示例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//Assume a valid connection object conn</span></span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//set a Savepoint</span></span><br><span class="line">    Savepoint savepoint1 = conn.setSavepoint(<span class="string">"Savepoint1"</span>);</span><br><span class="line">    String SQL = <span class="string">"INSERT INTO Employees "</span> +</span><br><span class="line">        <span class="string">"VALUES (106, 24, 'Curry', 'Stephen')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);  </span><br><span class="line">    <span class="comment">//Submit a malformed SQL statement that breaks</span></span><br><span class="line">    String SQL = <span class="string">"INSERTED IN Employees "</span> +</span><br><span class="line">        <span class="string">"VALUES (107, 32, 'Kobe', 'Bryant')"</span>;</span><br><span class="line">    stmt.executeUpdate(SQL);</span><br><span class="line">    <span class="comment">// If there is no error, commit the changes.</span></span><br><span class="line">    conn.commit();</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">    <span class="comment">// If there is any error.</span></span><br><span class="line">    conn.rollback(savepoint1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="14-finalize"><a href="#14-finalize" class="headerlink" title="14.finalize()"></a>14.finalize()</h1><p><strong><em>finalize() 已经在 Java9 中不被推荐使用，明确在 Object.finalize() 标记为 deprecated</em></strong></p>
+<h1>14.finalize()</h1>
+<p><em><strong>finalize() 已经在 Java9 中不被推荐使用，明确在 Object.finalize() 标记为 deprecated</strong></em></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Called by the garbage collector on an object when garbage collection</span></span><br><span class="line"><span class="comment">     * determines that there are no more references to the object.</span></span><br><span class="line"><span class="comment">     * A subclass overrides the &#123;<span class="doctag">@code</span> finalize&#125; method to dispose of</span></span><br><span class="line"><span class="comment">     * system resources or to perform other cleanup.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The general contract of &#123;<span class="doctag">@code</span> finalize&#125; is that it is invoked</span></span><br><span class="line"><span class="comment">     * if and when the Java&amp;trade; virtual</span></span><br><span class="line"><span class="comment">     * machine has determined that there is no longer any</span></span><br><span class="line"><span class="comment">     * means by which this object can be accessed by any thread that has</span></span><br><span class="line"><span class="comment">     * not yet died, except as a result of an action taken by the</span></span><br><span class="line"><span class="comment">     * finalization of some other object or class which is ready to be</span></span><br><span class="line"><span class="comment">     * finalized. The &#123;<span class="doctag">@code</span> finalize&#125; method may take any action, including</span></span><br><span class="line"><span class="comment">     * making this object available again to other threads; the usual purpose</span></span><br><span class="line"><span class="comment">     * of &#123;<span class="doctag">@code</span> finalize&#125;, however, is to perform cleanup actions before</span></span><br><span class="line"><span class="comment">     * the object is irrevocably discarded. For example, the finalize method</span></span><br><span class="line"><span class="comment">     * for an object that represents an input/output connection might perform</span></span><br><span class="line"><span class="comment">     * explicit I/O transactions to break the connection before the object is</span></span><br><span class="line"><span class="comment">     * permanently discarded.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The &#123;<span class="doctag">@code</span> finalize&#125; method of class &#123;<span class="doctag">@code</span> Object&#125; performs no</span></span><br><span class="line"><span class="comment">     * special action; it simply returns normally. Subclasses of</span></span><br><span class="line"><span class="comment">     * &#123;<span class="doctag">@code</span> Object&#125; may override this definition.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The Java programming language does not guarantee which thread will</span></span><br><span class="line"><span class="comment">     * invoke the &#123;<span class="doctag">@code</span> finalize&#125; method for any given object. It is</span></span><br><span class="line"><span class="comment">     * guaranteed, however, that the thread that invokes finalize will not</span></span><br><span class="line"><span class="comment">     * be holding any user-visible synchronization locks when finalize is</span></span><br><span class="line"><span class="comment">     * invoked. If an uncaught exception is thrown by the finalize method,</span></span><br><span class="line"><span class="comment">     * the exception is ignored and finalization of that object terminates.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * After the &#123;<span class="doctag">@code</span> finalize&#125; method has been invoked for an object, no</span></span><br><span class="line"><span class="comment">     * further action is taken until the Java virtual machine has again</span></span><br><span class="line"><span class="comment">     * determined that there is no longer any means by which this object can</span></span><br><span class="line"><span class="comment">     * be accessed by any thread that has not yet died, including possible</span></span><br><span class="line"><span class="comment">     * actions by other objects or classes which are ready to be finalized,</span></span><br><span class="line"><span class="comment">     * at which point the object may be discarded.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * The &#123;<span class="doctag">@code</span> finalize&#125; method is never invoked more than once by a Java</span></span><br><span class="line"><span class="comment">     * virtual machine for any given object.</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * Any exception thrown by the &#123;<span class="doctag">@code</span> finalize&#125; method causes</span></span><br><span class="line"><span class="comment">     * the finalization of this object to be halted, but is otherwise</span></span><br><span class="line"><span class="comment">     * ignored.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Throwable the &#123;<span class="doctag">@code</span> Exception&#125; raised by this method</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> java.lang.ref.WeakReference</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@see</span> java.lang.ref.PhantomReference</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@jls</span> 12.6 Finalization of Class Instances</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
-
 <p>由以下这段可知</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Called by the garbage collector on an object when garbage collection determines that there are no more references to the object.A subclass overrides the &#123;<span class="meta">@code</span> finalize&#125; method to dispose of system resources or to perform other cleanup.</span><br><span class="line">    </span><br><span class="line"><span class="comment">//当垃圾回收确定不再存在对对象的引用时，垃圾回收器对对象调用。子类重写&#123;@code finalize&#125;方法以释放系统资源或执行其他清理。</span></span><br></pre></td></tr></table></figure>
-
 <p>该方法会被垃圾回收器处理没有任何引用指向的对象的时候所调用，并且该方法由子类去重写回收对象的实现</p>
-<h1 id="15-crontab-命令"><a href="#15-crontab-命令" class="headerlink" title="15.crontab 命令"></a>15.crontab 命令</h1><blockquote>
+<h1>15.crontab 命令</h1>
+<blockquote>
 <p>Linux crontab 是用来定期执行程序的命令</p>
 </blockquote>
 <p>通过crontab 命令，我们可以在固定的间隔时间执行指定的系统指令或 shell script脚本。时间间隔的单位可以是分钟、小时、日、月、周及以上的任意组合。这个命令非常适合周期性的日志分析或数据备份等工作。</p>
-<h2 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab [-u user] file crontab [-u user] [ -e | -l | -r ]</span><br></pre></td></tr></table></figure>
-
+<h2 id="命令格式"><a class="header-anchor" href="#命令格式">¶</a>命令格式</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab [-u user] file crontab [-u user] [ -e | -l | -r ]</span><br></pre></td></tr></table></figure>
 <ul>
 <li>-u user：用来设定某个用户的crontab服务；</li>
 <li>file：file是命令文件的名字,表示将file做为crontab的任务列表文件并载入crontab。如果在命令行中没有指定这个文件，crontab命令将接受标准输入（键盘）上键入的命令，并将它们载入crontab。</li>
@@ -674,7 +723,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-如果一条sql执行时间过长，如何优化…"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-前端通过http请求后端的详细过程"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-递归算-n-的阶乘"><span class="nav-number">3.</span> <span class="nav-text">3.递归算 n 的阶乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-List-和-Set-的区别"><span class="nav-number">4.</span> <span class="nav-text">4.List 和 Set 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-什么是-RESTful-API"><span class="nav-number">5.</span> <span class="nav-text">5.什么是 RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">5.1.</span> <span class="nav-text">总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">5.2.</span> <span class="nav-text">误区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-接口和抽象类的区别"><span class="nav-number">6.</span> <span class="nav-text">6.接口和抽象类的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象类"><span class="nav-number">6.1.</span> <span class="nav-text">抽象类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">6.2.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别："><span class="nav-number">6.2.1.</span> <span class="nav-text">区别：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-final修饰符的理解"><span class="nav-number">7.</span> <span class="nav-text">7.final修饰符的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰类"><span class="nav-number">7.1.</span> <span class="nav-text">final修饰类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰方法"><span class="nav-number">7.2.</span> <span class="nav-text">final修饰方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰变量"><span class="nav-number">7.3.</span> <span class="nav-text">final修饰变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Java创建对象的方式"><span class="nav-number">8.</span> <span class="nav-text">8.Java创建对象的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-重写和重载区别-高频"><span class="nav-number">9.</span> <span class="nav-text">9.重写和重载区别(高频)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-collection-和-collections的区别"><span class="nav-number">10.</span> <span class="nav-text">10.collection 和 collections的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-Thread的-join"><span class="nav-number">11.</span> <span class="nav-text">11.Thread的 join()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-mybatis-动态标签"><span class="nav-number">12.</span> <span class="nav-text">12.mybatis 动态标签</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-JDBC-控制事务"><span class="nav-number">13.</span> <span class="nav-text">13.JDBC 控制事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提交和回滚"><span class="nav-number">13.1.</span> <span class="nav-text">提交和回滚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用保存点"><span class="nav-number">13.2.</span> <span class="nav-text">使用保存点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-finalize"><span class="nav-number">14.</span> <span class="nav-text">14.finalize()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-crontab-命令"><span class="nav-number">15.</span> <span class="nav-text">15.crontab 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令格式"><span class="nav-number">15.1.</span> <span class="nav-text">命令格式</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">¶HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">¶HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">¶1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">¶2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">¶3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">¶HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">¶1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">¶2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">¶3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">3.递归算 n 的阶乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">4.List 和 Set 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">5.什么是 RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">5.1.</span> <span class="nav-text">¶总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">5.2.</span> <span class="nav-text">¶误区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">6.接口和抽象类的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象类"><span class="nav-number">6.1.</span> <span class="nav-text">¶抽象类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">6.2.</span> <span class="nav-text">¶接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别："><span class="nav-number">6.2.1.</span> <span class="nav-text">¶区别：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">7.final修饰符的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰类"><span class="nav-number">7.1.</span> <span class="nav-text">¶final修饰类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰方法"><span class="nav-number">7.2.</span> <span class="nav-text">¶final修饰方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰变量"><span class="nav-number">7.3.</span> <span class="nav-text">¶final修饰变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">8.Java创建对象的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">9.重写和重载区别(高频)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">10.</span> <span class="nav-text">10.collection 和 collections的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">11.</span> <span class="nav-text">11.Thread的 join()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">12.</span> <span class="nav-text">12.mybatis 动态标签</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">13.</span> <span class="nav-text">13.JDBC 控制事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提交和回滚"><span class="nav-number">13.1.</span> <span class="nav-text">¶提交和回滚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用保存点"><span class="nav-number">13.2.</span> <span class="nav-text">¶使用保存点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">14.</span> <span class="nav-text">14.finalize()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">15.</span> <span class="nav-text">15.crontab 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令格式"><span class="nav-number">15.1.</span> <span class="nav-text">¶命令格式</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -748,12 +797,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">241k</span>
+    <span title="站点总字数">242k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:39</span>
+    <span title="站点阅读时长">3:40</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
