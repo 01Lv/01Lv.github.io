@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringCloud之Gateway总结</title>
+    <url>/2020/03/22/SpringCloud%E4%B9%8BGateway%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://www.bilibili.com/video/av93813318?p=66" target="_blank" rel="noopener">尚硅谷</a></p>
+<blockquote>
+<p>SpringCloud Gateway 使用的 Webflux 中的 reactor-netty 响应式编程组件，底层使用了 Netty 通讯框架</p>
+</blockquote>
+<a id="more"></a>
+<p><img src="https://img-blog.csdnimg.cn/20200322233751799.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200322232150746"></p>
+<p>在 SpringCloud Finchley 正式版之前，SpringCloud 推荐的网关是 Netflix 提供的 Zuul</p>
+<ol>
+<li>Zuul 1.x 是一个基于阻塞 I/O 的 API Gateway</li>
+<li>Zuul 1.x <strong>基于 Servlet 2.5 使用阻塞架构</strong> 它不支持任何长连接(如 WebSocket) Zuul 的设计模式和 Nginx 很像，每次 I/O 操作都是从工作线程中选择一个执行，请求线程被阻塞到工作线程完成</li>
+<li>Spring Cloud Gateway 建立在 Spring Framework5, Project Reactor 和 Spring Boot 2 之上，使用非阻塞 API</li>
+<li>Spring Cloud Gateway 还支持 WebSocket</li>
+</ol>
+<p>传统的 Web 框架，比如说：Struts2，SpringMVC 等都是基于 Servlet API 与 Servlet 容器基础之上运行的</p>
+<p>但是在 Servlet3.1 之后有了异步非阻塞的支持。而 WebFlux 是一个典型的非阻塞异步的框架，它的核心是基于 Reactor 的相关 API 实现的。</p>
+<p>Spring WebFlux 是 Spring5.0 引入的新的响应式框架，区别于 SpringMVC，它不需要依赖 Servlet API，它是完全异步非阻塞的，并且基于 Reactor 来实现响应式流规范</p>
+]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+        <tag>gateway</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker总结</title>
+    <url>/2020/03/22/Docker%E9%94%99%E8%AF%AF%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<blockquote>
+<p>好记忆不如烂笔头</p>
+</blockquote>
+<h1>1.docker: Error response from daemon: Cannot link to /mysql, as it does not belong to the default network</h1>
+<p>参考</p>
+<p><a href="https://lhalcyon.com/docker-networklink-issue/" target="_blank" rel="noopener">无法链接到由docker-compose启动的正在运行的容器问题解决</a></p>
+<p>首先要通过 <code>--link mysql</code>, 链接到 mysql。通过 <code>docker inspect mysql</code> ，可以看到</p>
+<p><img src="https://img-blog.csdnimg.cn/20200322223814662.png#pic_center" alt="image-20200322223735944"></p>
+<p>首先通过命令列出所有 docker 网络 .</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20200322223828851.png#pic_center" alt="image-20200322223220201"></p>
+<p>docker-compose 在运行时会创建一个新的网络 .例如在我遇到的情况中,是已有一个由 docker-compose 运行的 base-service_default 的网络 , 后面想通过 <code>docker run xxx</code> 命令链接上 <code>base-service_default</code> 网络 .</p>
+<p>原来的命令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -p 8080:8080 --name mall-admin \</span><br><span class="line">--link 679 \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">-v /mydata/app/admin/logs:/var/logs \</span><br><span class="line">-d mall/mall-admin:1.0-SNAPSHOT</span><br></pre></td></tr></table></figure>
+<p>正确的运行命令</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -p 8080:8080 --name mall-admin \</span><br><span class="line">--link 679 \</span><br><span class="line">--net base-service_default \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">-v /mydata/app/admin/logs:/var/logs \</span><br><span class="line">-d mall/mall-admin:1.0-SNAPSHOT</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker可视化管理工具</title>
     <url>/2020/03/22/Docker%E5%8F%AF%E8%A7%86%E5%8C%96%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</url>
     <content><![CDATA[<p>参考：</p>
