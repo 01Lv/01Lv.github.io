@@ -39,7 +39,7 @@
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/6.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/33.png">
 <meta property="article:published_time" content="2020-03-12T14:58:51.000Z">
-<meta property="article:modified_time" content="2020-03-21T02:01:28.659Z">
+<meta property="article:modified_time" content="2020-03-22T06:05:43.282Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
@@ -235,7 +235,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-21 10:01:28" itemprop="dateModified" datetime="2020-03-21T10:01:28+08:00">2020-03-21</time>
+                <time title="修改时间：2020-03-22 14:05:43" itemprop="dateModified" datetime="2020-03-22T14:05:43+08:00">2020-03-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,7 +267,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>13k</span>
+              <span>14k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -621,6 +621,12 @@ Content-Type: text/html; charset=utf-8</p>
 <li>-r：从/var/spool/cron目录中删除某个用户的crontab文件，如果不指定用户，则默认删除当前用户的crontab文件。</li>
 <li>-i：在删除用户的crontab文件时给确认提示</li>
 </ul>
+<h1>16.sleep() 和 wait() 区别</h1>
+<p>参考：</p>
+<p><a href="https://www.cnblogs.com/diegodu/p/7866073.html" target="_blank" rel="noopener">JAVA线程sleep和wait方法区别</a></p>
+<p><strong>sleep</strong> 是线程类 (<em><strong>Thread</strong></em>) 的方法，导致此线程暂停执行指定时间，给执行机会给其它线程，但是监控状态依然保持，到时后会自动恢复，<strong>调用 sleep 不会释放对象锁</strong>。由于没有释放对象锁，所以不能调用里面的同步方法</p>
+<p><strong>wait</strong> 方法是 (<em><strong>Object</strong></em>) 类里的方法；当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去（释放）了对象的机锁（暂时失去机锁，wait(long timeout)超时时间到后还需要返还对象锁）；可以调用里面的同步方法，其他线程可以访问；wait()使用notify或者notifyAlll或者指定睡眠时间来唤醒当前等待池中的线程。<br>
+wiat()必须放在synchronized block中，否则会在program runtime时扔出”java.lang.IllegalMonitorStateException“异常。</p>
 
     </div>
 
@@ -723,7 +729,7 @@ Content-Type: text/html; charset=utf-8</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">¶HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">¶HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">¶1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">¶2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">¶3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">¶HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">¶1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">¶2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">¶3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">3.递归算 n 的阶乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">4.List 和 Set 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">5.什么是 RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">5.1.</span> <span class="nav-text">¶总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">5.2.</span> <span class="nav-text">¶误区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">6.接口和抽象类的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象类"><span class="nav-number">6.1.</span> <span class="nav-text">¶抽象类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">6.2.</span> <span class="nav-text">¶接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别："><span class="nav-number">6.2.1.</span> <span class="nav-text">¶区别：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">7.final修饰符的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰类"><span class="nav-number">7.1.</span> <span class="nav-text">¶final修饰类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰方法"><span class="nav-number">7.2.</span> <span class="nav-text">¶final修饰方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰变量"><span class="nav-number">7.3.</span> <span class="nav-text">¶final修饰变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">8.Java创建对象的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">9.重写和重载区别(高频)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">10.</span> <span class="nav-text">10.collection 和 collections的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">11.</span> <span class="nav-text">11.Thread的 join()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">12.</span> <span class="nav-text">12.mybatis 动态标签</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">13.</span> <span class="nav-text">13.JDBC 控制事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提交和回滚"><span class="nav-number">13.1.</span> <span class="nav-text">¶提交和回滚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用保存点"><span class="nav-number">13.2.</span> <span class="nav-text">¶使用保存点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">14.</span> <span class="nav-text">14.finalize()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">15.</span> <span class="nav-text">15.crontab 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令格式"><span class="nav-number">15.1.</span> <span class="nav-text">¶命令格式</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">1.如果一条sql执行时间过长，如何优化…</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">2.前端通过http请求后端的详细过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP协议"><span class="nav-number">2.1.</span> <span class="nav-text">¶HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Http是什么？"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶Http是什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP请求报文"><span class="nav-number">2.2.</span> <span class="nav-text">¶HTTP请求报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-请求行"><span class="nav-number">2.2.1.</span> <span class="nav-text">¶1.请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-请求头部"><span class="nav-number">2.2.2.</span> <span class="nav-text">¶2.请求头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-请求数据"><span class="nav-number">2.2.3.</span> <span class="nav-text">¶3.请求数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应报文"><span class="nav-number">2.3.</span> <span class="nav-text">¶HTTP响应报文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-状态行"><span class="nav-number">2.3.1.</span> <span class="nav-text">¶1.状态行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-响应头部"><span class="nav-number">2.3.2.</span> <span class="nav-text">¶2.响应头部</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-响应数据"><span class="nav-number">2.3.3.</span> <span class="nav-text">¶3.响应数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">3.递归算 n 的阶乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">4.List 和 Set 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">5.什么是 RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">5.1.</span> <span class="nav-text">¶总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#误区"><span class="nav-number">5.2.</span> <span class="nav-text">¶误区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">6.</span> <span class="nav-text">6.接口和抽象类的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象类"><span class="nav-number">6.1.</span> <span class="nav-text">¶抽象类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">6.2.</span> <span class="nav-text">¶接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区别："><span class="nav-number">6.2.1.</span> <span class="nav-text">¶区别：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">7.</span> <span class="nav-text">7.final修饰符的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰类"><span class="nav-number">7.1.</span> <span class="nav-text">¶final修饰类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰方法"><span class="nav-number">7.2.</span> <span class="nav-text">¶final修饰方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final修饰变量"><span class="nav-number">7.3.</span> <span class="nav-text">¶final修饰变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">8.</span> <span class="nav-text">8.Java创建对象的方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">9.</span> <span class="nav-text">9.重写和重载区别(高频)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">10.</span> <span class="nav-text">10.collection 和 collections的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">11.</span> <span class="nav-text">11.Thread的 join()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">12.</span> <span class="nav-text">12.mybatis 动态标签</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">13.</span> <span class="nav-text">13.JDBC 控制事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提交和回滚"><span class="nav-number">13.1.</span> <span class="nav-text">¶提交和回滚</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用保存点"><span class="nav-number">13.2.</span> <span class="nav-text">¶使用保存点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">14.</span> <span class="nav-text">14.finalize()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">15.</span> <span class="nav-text">15.crontab 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#命令格式"><span class="nav-number">15.1.</span> <span class="nav-text">¶命令格式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">16.</span> <span class="nav-text">16.sleep() 和 wait() 区别</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -739,20 +745,20 @@ Content-Type: text/html; charset=utf-8</p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -797,12 +803,12 @@ Content-Type: text/html; charset=utf-8</p>
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">242k</span>
+    <span title="站点总字数">244k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:40</span>
+    <span title="站点阅读时长">3:41</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

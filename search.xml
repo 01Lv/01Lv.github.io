@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker可视化管理工具</title>
+    <url>/2020/03/22/Docker%E5%8F%AF%E8%A7%86%E5%8C%96%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="http://www.macrozheng.com/#/deploy/mall_swarm_deploy_docker?id=%E5%8F%AF%E8%A7%86%E5%8C%96%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7" target="_blank" rel="noopener">可视化管理工具</a></p>
+<blockquote>
+<p>Portainer 是一款轻量级的应用，它提供了图形化界面，用于方便的管理Docker环境，包括单机环境和集群环境</p>
+</blockquote>
+<ul>
+<li>官网地址：<a href="https://github.com/portainer/portainer" target="_blank" rel="noopener">https://github.com/portainer/portainer</a></li>
+<li>获取Docker镜像文件：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull portainer/portainer</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<ul>
+<li>使用docker容器运行Portainer：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -p 9000:9000 -p 8000:8000 --name portainer \</span><br><span class="line">--restart=always \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">-v /mydata/portainer/data:/data \</span><br><span class="line">-d portainer/portainer</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看Portainer的DashBoard信息：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_01.png" alt="img"></p>
+<ul>
+<li>查看所有运行中的容器信息：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_02.png" alt="img"></p>
+<ul>
+<li>查看所有已经下载的Docker镜像：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_03.png" alt="img"></p>
+<ul>
+<li>查看<code>mall-portal</code>应用的统计信息：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_04.png" alt="img"></p>
+<ul>
+<li>查看<code>mall-portal</code>应用的运行过程中打印的日志信息：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_05.png" alt="img"></p>
+<ul>
+<li>进入<code>mall-portal</code>应用的容器内部来操作容器内部系统：</li>
+</ul>
+<p><img src="http://www.macrozheng.com/images/mall_swarm_linux_06.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mall-swarm优秀项目学习总结</title>
+    <url>/2020/03/22/mall-swarm%E4%BC%98%E7%A7%80%E9%A1%B9%E7%9B%AE%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://mp.weixin.qq.com/s/K46F_Yuh8xhOmK_2qjfLkw" target="_blank" rel="noopener">文章</a></p>
+<p><a href="https://github.com/macrozheng/mall-swarm" target="_blank" rel="noopener">项目地址</a></p>
+<h1>结构</h1>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">mall</span><br><span class="line">├── mall-common <span class="comment">-- 工具类及通用代码模块</span></span><br><span class="line">├── mall-mbg <span class="comment">-- MyBatisGenerator生成的数据库操作代码模块</span></span><br><span class="line">├── mall-<span class="keyword">security</span> <span class="comment">-- 封装SpringSecurity+JWT的安全认证的模块</span></span><br><span class="line">├── mall-registry <span class="comment">-- 基于Eureka的微服务注册中心</span></span><br><span class="line">├── mall-config <span class="comment">-- 基于Spring Cloud Config的微服务配置中心</span></span><br><span class="line">├── mall-gateway <span class="comment">-- 基于Spring Cloud Gateway的微服务API网关服务</span></span><br><span class="line">├── mall-monitor <span class="comment">-- 基于Spring Boot Admin的微服务监控中心</span></span><br><span class="line">├── mall-<span class="keyword">admin</span> <span class="comment">-- 后台管理系统服务</span></span><br><span class="line">├── mall-<span class="keyword">search</span> <span class="comment">-- 基于Elasticsearch的商品搜索系统服务</span></span><br><span class="line">├── mall-portal <span class="comment">-- 移动端商城系统服务</span></span><br><span class="line">└── mall-demo <span class="comment">-- 微服务远程调用测试服务</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>未完成…</p>
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>mall</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RPC框架之gRPC</title>
+    <url>/2020/03/22/RPC%E6%A1%86%E6%9E%B6%E4%B9%8BgRPC/</url>
+    <content><![CDATA[<p>gradlew = gradle + wrapper</p>
+<p>该命令可允许运行环境不存在 gradle 的文件或者文件，通过这个命令会下载相关的 gradle 运行环境以及文件</p>
+<a id="more"></a>
+<p>未完成…</p>
+]]></content>
+      <categories>
+        <category>gRPC</category>
+      </categories>
+      <tags>
+        <tag>gRPC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka知识点</title>
+    <url>/2020/03/21/Kafka%E7%9F%A5%E8%AF%86%E7%82%B9/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://lotabout.me/2018/kafka-introduction/" target="_blank" rel="noopener">Kafka 入门介绍</a></p>
+<h1>概述</h1>
+<blockquote>
+<p>kafka 是一个 <strong>分布式</strong> 的基于 <strong>发布/订阅模式</strong> 的 <strong>消息队列</strong>, 主要应用于大数据实时处理领域</p>
+</blockquote>
+<a id="more"></a>
+<h1>MQ传统应用场景之异步处理</h1>
+<p><img src="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200322162858699"></p>
+<h1>使用消息队列的好处</h1>
+<ul>
+<li>解耦</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">允许你独立的扩展或修改两边的处理过程,只要确保它们遵守同样的接口约束</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可恢复性</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">系统的一部分组件失效时, 不会影响到整个系统。消息队列降低了进程间的耦合度,所以即使一个处理消息的进程挂掉,加入队列中的消息仍然可以在系统恢复后被处理</span><br></pre></td></tr></table></figure>
+<ul>
+<li>缓冲</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">有助于控制和优化数据流经过系统的速度,解决生产消息和消费消息的处理速度不一致的情况</span><br></pre></td></tr></table></figure>
+<ul>
+<li>灵活性 &amp;  峰值处理能力</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="code"><pre><span class="line">在访问量剧增的情况下, 应用仍然需要继续发挥作用，但是这样的突发流量并不常见。使用消息队列能够使关键组件顶住突发的访问压力,而不会因为突发的超负荷的请求而完全崩溃.</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Kafka</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JVM知识点集合</title>
     <url>/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/</url>
     <content><![CDATA[<h2 id="1"><a class="header-anchor" href="#1">¶</a>1</h2>
@@ -2149,6 +2270,12 @@ Content-Type: text/html; charset=utf-8</p>
 <li>-r：从/var/spool/cron目录中删除某个用户的crontab文件，如果不指定用户，则默认删除当前用户的crontab文件。</li>
 <li>-i：在删除用户的crontab文件时给确认提示</li>
 </ul>
+<h1>16.sleep() 和 wait() 区别</h1>
+<p>参考：</p>
+<p><a href="https://www.cnblogs.com/diegodu/p/7866073.html" target="_blank" rel="noopener">JAVA线程sleep和wait方法区别</a></p>
+<p><strong>sleep</strong> 是线程类 (<em><strong>Thread</strong></em>) 的方法，导致此线程暂停执行指定时间，给执行机会给其它线程，但是监控状态依然保持，到时后会自动恢复，<strong>调用 sleep 不会释放对象锁</strong>。由于没有释放对象锁，所以不能调用里面的同步方法</p>
+<p><strong>wait</strong> 方法是 (<em><strong>Object</strong></em>) 类里的方法；当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去（释放）了对象的机锁（暂时失去机锁，wait(long timeout)超时时间到后还需要返还对象锁）；可以调用里面的同步方法，其他线程可以访问；wait()使用notify或者notifyAlll或者指定睡眠时间来唤醒当前等待池中的线程。<br>
+wiat()必须放在synchronized block中，否则会在program runtime时扔出”java.lang.IllegalMonitorStateException“异常。</p>
 ]]></content>
       <categories>
         <category>日常</category>
