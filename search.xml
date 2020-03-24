@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>排序算法之插入排序</title>
+    <url>/2020/03/24/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E4%B9%8B%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<blockquote>
+<p>把 n 个待排序的元素看成为一个有序表和一个无序表。开始时有序表中只包含 1 个元素，无序表中包含有 n - 1个元素，排序过程中每次从无序表中取出第一个元素，将它插入到有序表中的适当位置，使之成为新的有序表，重复 n - 1 次可完成排序的过程。</p>
+</blockquote>
+<a id="more"></a>
+<p>直接插入排序的时间复杂度是 <em><strong>O(N^2)</strong></em>, 且是一个稳定的算法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> arr[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>; i&lt;arr.length;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//插入的数</span></span><br><span class="line">        <span class="keyword">int</span> insertVal = arr[i];</span><br><span class="line">        <span class="comment">//被插入的位置(准备和前一个数比较)</span></span><br><span class="line">        <span class="keyword">int</span> index = i-<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//如果插入的数比被插入的数小</span></span><br><span class="line">        <span class="keyword">while</span>(index&gt;=<span class="number">0</span>&amp;&amp;insertVal &lt; arr[index])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//将把 arr[index] 向后移动</span></span><br><span class="line">            arr[index+<span class="number">1</span>]=arr[index];</span><br><span class="line">            <span class="comment">//让 index 向前移动</span></span><br><span class="line">            index--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//把插入的数放入合适位置</span></span><br><span class="line">        arr[index+<span class="number">1</span>]=insertVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+        <tag>插入排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>查找算法之二分查找</title>
+    <url>/2020/03/24/%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95%E4%B9%8B%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</url>
+    <content><![CDATA[<blockquote>
+<p>又称为 <strong>折半查找</strong>，要求待查找的序列有序。每次取中间位置的值与待查关键字比较，如果中间位置的值比待查关键字大，则在前半部分循环这个查找的过程，如果中间位置的值比待查关键字小，则在后半部分循环这个查找的过程。直到查找到了为止，否则序列中没有待查的关键字。</p>
+</blockquote>
+<a id="more"></a>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">biSearch</span><span class="params">(<span class="keyword">int</span> []array,<span class="keyword">int</span> key)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> lo=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> hi=array.length-<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> mid;</span><br><span class="line">    <span class="keyword">while</span>(lo&lt;=hi)&#123;</span><br><span class="line">        mid=(lo+hi)/<span class="number">2</span>;<span class="comment">//中间位置</span></span><br><span class="line">        <span class="keyword">if</span>(array[mid] == key)&#123;</span><br><span class="line">            <span class="keyword">return</span> mid+<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(array[mid] &lt; key)&#123; <span class="comment">//向右查找</span></span><br><span class="line">            lo=mid+<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123; <span class="comment">//向左查找</span></span><br><span class="line">            hi=mid-<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>查找</tag>
+        <tag>二分查找</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>排序算法之快速排序</title>
+    <url>/2020/03/24/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E4%B9%8B%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/57436476" target="_blank" rel="noopener">快速排序你真的会了吗？</a></p>
+<p><a href="https://blog.csdn.net/MoreWindows/article/details/6684558" target="_blank" rel="noopener">白话经典算法系列之六 快速排序 快速搞定</a></p>
+<blockquote>
+<p>快速排序利用了分治的策略。而分治的基本基本思想是：将原问题划分为若干与原问题类似子问题，解决这些子问题，将子问题的解组成原问题的解。</p>
+</blockquote>
+<a id="more"></a>
+<p>快速排序是在实践中最快的已知排序算法，平均运行时间为 <strong>O(NlogN)</strong>，最坏的运行时间为 <strong>O(N^2)</strong></p>
+<p>该方法的基本思想是：</p>
+<ol>
+<li>先从数列中取出一个数作为基准数</li>
+<li>分区过程，将比这个数大的数全放到它的右边，小于或等于它的数全放到它的左边</li>
+<li>再对左右区间重复第二步，直到各区间只有一个数</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> low,<span class="keyword">int</span> high)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> start = low;</span><br><span class="line">    <span class="keyword">int</span> end = high;</span><br><span class="line">    <span class="keyword">int</span> key = a[low]; </span><br><span class="line">    <span class="keyword">while</span>(end&gt;start)&#123;</span><br><span class="line">        <span class="comment">//从后往前比较</span></span><br><span class="line">        <span class="keyword">while</span>(end&gt;start&amp;&amp;a[end]&gt;=key) </span><br><span class="line">            <span class="comment">//如果没有比关键值小的，比较下一个，直到有比关键值小的交换位置，然后又从前往后比较</span></span><br><span class="line">            end--;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(a[end]&lt;=key)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = a[end];</span><br><span class="line">            a[end] = a[start];</span><br><span class="line">            a[start] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//从前往后比较</span></span><br><span class="line">        <span class="keyword">while</span>(end&gt;start&amp;&amp;a[start]&lt;=key)</span><br><span class="line">            <span class="comment">//如果没有比关键值大的，比较下一个，直到有比关键值大的交换位置</span></span><br><span class="line">            start++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(a[start]&gt;=key)&#123;</span><br><span class="line">            <span class="keyword">int</span> temp = a[start];</span><br><span class="line">            a[start] = a[end];</span><br><span class="line">            a[end] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//此时第一次循环比较结束，关键值的位置已经确定了。左边的值都比关键值小，右边的</span></span><br><span class="line">        <span class="comment">//值都比关键值大，但是两边的顺序还有可能是不一样的，进行下面的递归调用</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//递归</span></span><br><span class="line">    <span class="keyword">if</span>(start&gt;low) sort(a,low,start-<span class="number">1</span>);<span class="comment">//左边序列。第一个索引位置到关键值索引-1</span></span><br><span class="line">    <span class="keyword">if</span>(end&lt;high) sort(a,end+<span class="number">1</span>,high);<span class="comment">//右边序列。从关键值索引+1 到最后一个</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+        <tag>快速排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>排序算法之冒泡排序</title>
+    <url>/2020/03/24/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E4%B9%8B%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://juejin.im/post/5bbc7c6de51d450e5c47a26c" target="_blank" rel="noopener">漫画：什么是冒泡排序？</a></p>
+<p>由于这几天即将参加 广发银行的广州分行 的技术面试。所以准备这几天 “临时抱佛脚”，看看能不能成功上岸哈哈。</p>
+<p>记得大学学的冒泡排序是最简单的排序算法，没有任何的优化处理。参考了下前辈的文章，果然我跟优秀的人还是由很大的差距！</p>
+<a id="more"></a>
+<blockquote>
+<p>冒泡排序的英文 <strong>Bubble Sort</strong>，是一种最基础的交换排序。</p>
+</blockquote>
+<p>该排序算法实现的效果有点像汽水中常常有许多小小的气泡，哗啦哗啦飘到上面来。</p>
+<p>而我们的冒泡排序之所以叫做冒泡排序，正是因为这种排序算法的每一个元素都可以像小气泡一样，根据自身大小，一点一点向着数组的一侧移动。</p>
+<p>原始的冒泡排序是 <em><strong>稳定的排序</strong></em>。由于该排序算法的每一轮要遍历所有元素，轮转的次数和元素数量相当，所以时间复杂度是<strong>O（N^2）</strong> 。</p>
+<p>冒泡排序的第一版：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> array[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp  = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++)&#123;        </span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; array.length - i - <span class="number">1</span>; j++)        </span><br><span class="line">		&#123;            </span><br><span class="line">			<span class="keyword">if</span>(array[j] &gt; array[j+<span class="number">1</span>])            </span><br><span class="line">			&#123;                </span><br><span class="line">				tmp = array[j];                </span><br><span class="line">				array[j] = array[j+<span class="number">1</span>];                </span><br><span class="line">				array[j+<span class="number">1</span>] = tmp;            </span><br><span class="line">			&#125;        </span><br><span class="line">		&#125;    </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">9</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">7</span>&#125;;    </span><br><span class="line">	sort(array);    </span><br><span class="line">	System.out.println(Arrays.toString(array));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于在排序的过程中可能出现已经有序的情况下，仍进行排序的话，就会造成许多的无用功。所以将排序进行了改良，性能得到大大的提升。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> array[])</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span> tmp  = <span class="number">0</span>;    </span><br><span class="line">	<span class="comment">//记录最后一次交换的位置    </span></span><br><span class="line">	<span class="keyword">int</span> lastExchangeIndex = <span class="number">0</span>;    </span><br><span class="line">	<span class="comment">//无序数列的边界，每次比较只需要比到这里为止    </span></span><br><span class="line">	<span class="keyword">int</span> sortBorder = array.length - <span class="number">1</span>;    </span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++)&#123;        </span><br><span class="line">		<span class="comment">//有序标记，每一轮的初始是true        </span></span><br><span class="line">		<span class="keyword">boolean</span> isSorted = <span class="keyword">true</span>;        </span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; sortBorder; j++)&#123;            </span><br><span class="line">			<span class="keyword">if</span>(array[j] &gt; array[j+<span class="number">1</span>])   </span><br><span class="line">			&#123;                </span><br><span class="line">				tmp = array[j];                </span><br><span class="line">				array[j] = array[j+<span class="number">1</span>];                </span><br><span class="line">				array[j+<span class="number">1</span>] = tmp;                </span><br><span class="line">				<span class="comment">//有元素交换，所以不是有序，标记变为false                </span></span><br><span class="line">				isSorted = <span class="keyword">false</span>;                </span><br><span class="line">				<span class="comment">//把无序数列的边界更新为最后一次交换元素的位置                </span></span><br><span class="line">				lastExchangeIndex = j;            </span><br><span class="line">			&#125;        </span><br><span class="line">		&#125;        </span><br><span class="line">		sortBorder = lastExchangeIndex;        </span><br><span class="line">		<span class="keyword">if</span>(isSorted)&#123;            </span><br><span class="line">			<span class="keyword">break</span>;        </span><br><span class="line">		&#125;    </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;    </span><br><span class="line">	sort(array);    </span><br><span class="line">	System.out.println(Arrays.toString(array));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序</tag>
+        <tag>冒泡排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java之Thread总结</title>
+    <url>/2020/03/24/Java%E4%B9%8BThread%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<a id="more"></a>
+<h1>Thread.yield详解</h1>
+<p>转载自：</p>
+<p><a href="https://blog.csdn.net/dabing69221/article/details/17426953" target="_blank" rel="noopener">Java Thread.yield详解</a></p>
+<blockquote>
+<p>使当前线程从 执行状态(运行状态) 变为 可执行状态(就绪状态).</p>
+</blockquote>
+<p>cpu 会从众多的 <strong>可执行态</strong> 里选择，也就是说，当前也就是刚刚的那个线程还是有可能会被再次执行到的，并不是说一定会执行其它线程而该线程在下一次中不会执行到。</p>
+<p>Java线程中有一个Thread.yield( )方法，很多人翻译成线程让步。顾名思义，就是说当一个线程使用了这个方法之后，它就会把自己CPU执行的时间让掉，让自己或者其它的线程运行。</p>
+<p>打个比方：现在有很多人在排队上厕所，好不容易轮到这个人上厕所了，突然这个人说：“我要和大家来个竞赛，看谁先抢到厕所！”，然后所有的人在同一起跑线冲向厕所，有可能是别人抢到了，也有可能他自己有抢到了。我们还知道线程有个优先级的问题，那么手里有优先权的这些人就一定能抢到厕所的位置吗? 不一定的，他们只是概率上大些，也有可能没特权的抢到了。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Thread</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker网络</title>
     <url>/2020/03/23/Docker%E7%BD%91%E7%BB%9C/</url>
     <content><![CDATA[<p>参考：</p>
@@ -412,11 +523,21 @@
 <h2 id="点对点模式"><a class="header-anchor" href="#点对点模式">¶</a>点对点模式</h2>
 <p>一对一，消费者主动拉取数据，消息收到后消息清除</p>
 <p>消息生产者生产消息发送到 Queue 种，然后消息消费者从 Queue 中取出并且消费消息。消息被消费后，queue 中不再有存储，所以消息消费者不可能消费到已经被消费的消息。Queue 支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212356791.png" alt="image-20200323212356791"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center" alt="image-20200323212356791"></p>
 <h2 id="发布订阅模式"><a class="header-anchor" href="#发布订阅模式">¶</a>发布订阅模式</h2>
 <p>一对多，消费者消费数据之后不会清除消息</p>
 <p>消息生产者 (发布) 将消息发布到 topic 中，同时有多个消息消费者 (订阅) 消费该消息。和点对点方式不同，发布到 topic 的消息会被所有订阅者消费</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212620425.png" alt="image-20200323212620425"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324163834909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200323212620425"></p>
+<h1>Kafka 工作流程及文件存储机制</h1>
+<p><img src="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200324110116815"></p>
+<p>在图中，各个名词的解释：</p>
+<ul>
+<li>**broker：**一个broker就是一个节点，由众多的节点构成一个 Kafka 集群</li>
+<li>**Topic：**直译为 <strong>主题</strong>。生产者与消费者交互数据的地方</li>
+<li>**leader 和 follower：**在每个节点中都有两个 <strong>replication(即副本)</strong>，每个leader 的 follower 都不在同一个节点中，为了防止某个节点 down 机，导致这个 topic 所有数据丢失。follower 的主要作用是为了备份 leader 的数据。</li>
+<li>**offset：**偏移量，记录数据保存的下标。consumer 每次消费完数据后都会记录 offset</li>
+</ul>
+<p><strong>topic</strong> 是逻辑上的概念，而 <strong>partition</strong> 是物理上的概念，每个 partition 对应于一个 <strong>log</strong> 文件，该 log 文件中存储的就是 producer 生产的数据。Producer 生产的数据会被不断追加到该 log <strong>文件末端</strong>，且每条数据都有自己的 offset。消费者组中的每个消费者，都会实时记录自己消费到哪个 offset。以便出错恢复时，从上次的位置继续消费。</p>
 ]]></content>
       <categories>
         <category>Kafka</category>

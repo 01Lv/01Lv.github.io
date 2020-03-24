@@ -28,10 +28,11 @@
 <meta property="og:description" content="转载自： Kafka 入门介绍 概述  kafka 是一个 分布式 的基于 发布&#x2F;订阅模式 的 消息队列, 主要应用于大数据实时处理领域">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
-<meta property="og:image" content="d:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212356791.png">
-<meta property="og:image" content="d:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212620425.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200324163834909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2020-03-21T07:50:07.000Z">
-<meta property="article:modified_time" content="2020-03-23T13:26:21.614Z">
+<meta property="article:modified_time" content="2020-03-24T08:39:48.301Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -227,7 +228,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-23 21:26:21" itemprop="dateModified" datetime="2020-03-23T21:26:21+08:00">2020-03-23</time>
+                <time title="修改时间：2020-03-24 16:39:48" itemprop="dateModified" datetime="2020-03-24T16:39:48+08:00">2020-03-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +260,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>590</span>
+              <span>1.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -308,11 +309,21 @@
 <h2 id="点对点模式"><a class="header-anchor" href="#点对点模式">¶</a>点对点模式</h2>
 <p>一对一，消费者主动拉取数据，消息收到后消息清除</p>
 <p>消息生产者生产消息发送到 Queue 种，然后消息消费者从 Queue 中取出并且消费消息。消息被消费后，queue 中不再有存储，所以消息消费者不可能消费到已经被消费的消息。Queue 支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212356791.png" alt="image-20200323212356791"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center" alt="image-20200323212356791"></p>
 <h2 id="发布订阅模式"><a class="header-anchor" href="#发布订阅模式">¶</a>发布订阅模式</h2>
 <p>一对多，消费者消费数据之后不会清除消息</p>
 <p>消息生产者 (发布) 将消息发布到 topic 中，同时有多个消息消费者 (订阅) 消费该消息。和点对点方式不同，发布到 topic 的消息会被所有订阅者消费</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200323212620425.png" alt="image-20200323212620425"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200324163834909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200323212620425"></p>
+<h1>Kafka 工作流程及文件存储机制</h1>
+<p><img src="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200324110116815"></p>
+<p>在图中，各个名词的解释：</p>
+<ul>
+<li>**broker：**一个broker就是一个节点，由众多的节点构成一个 Kafka 集群</li>
+<li>**Topic：**直译为 <strong>主题</strong>。生产者与消费者交互数据的地方</li>
+<li>**leader 和 follower：**在每个节点中都有两个 <strong>replication(即副本)</strong>，每个leader 的 follower 都不在同一个节点中，为了防止某个节点 down 机，导致这个 topic 所有数据丢失。follower 的主要作用是为了备份 leader 的数据。</li>
+<li>**offset：**偏移量，记录数据保存的下标。consumer 每次消费完数据后都会记录 offset</li>
+</ul>
+<p><strong>topic</strong> 是逻辑上的概念，而 <strong>partition</strong> 是物理上的概念，每个 partition 对应于一个 <strong>log</strong> 文件，该 log 文件中存储的就是 producer 生产的数据。Producer 生产的数据会被不断追加到该 log <strong>文件末端</strong>，且每条数据都有自己的 offset。消费者组中的每个消费者，都会实时记录自己消费到哪个 offset。以便出错恢复时，从上次的位置继续消费。</p>
 
     </div>
 
@@ -415,7 +426,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">MQ传统应用场景之异步处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">使用消息队列的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">消息队列的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#点对点模式"><span class="nav-number">4.1.</span> <span class="nav-text">¶点对点模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅模式"><span class="nav-number">4.2.</span> <span class="nav-text">¶发布订阅模式</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">MQ传统应用场景之异步处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">使用消息队列的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">消息队列的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#点对点模式"><span class="nav-number">4.1.</span> <span class="nav-text">¶点对点模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅模式"><span class="nav-number">4.2.</span> <span class="nav-text">¶发布订阅模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Kafka 工作流程及文件存储机制</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -431,20 +442,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">57</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -489,12 +500,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">257k</span>
+    <span title="站点总字数">262k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">3:54</span>
+    <span title="站点阅读时长">3:58</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
