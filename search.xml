@@ -7,6 +7,8 @@
 <p><a href="https://docs.spring.io/spring-security/site/docs/5.3.1.BUILD-SNAPSHOT/reference/html5/#preface" target="_blank" rel="noopener">官网</a></p>
 <p><a href="https://www.springcloud.cc/spring-security.html#jc-form" target="_blank" rel="noopener">Spring Security参考，中文文档值得关注</a></p>
 <p><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=mall%E6%95%B4%E5%90%88springsecurity%E5%92%8Cjwt%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%EF%BC%88%E4%B8%80%EF%BC%89" target="_blank" rel="noopener">mall整合SpringSecurity和JWT实现认证和授权（一）</a></p>
+<p><a href="https://www.zhihu.com/question/19786827" target="_blank" rel="noopener">COOKIE和SESSION有什么区别？</a></p>
+<p><a href="https://juejin.im/post/5a437441f265da43294e54c3" target="_blank" rel="noopener">聊一聊JWT与session</a></p>
 <h1>定义</h1>
 <blockquote>
 <p>SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能，像所有的Spring项目一样，它对自定义需求具有强大的扩展性。</p>
@@ -16,14 +18,24 @@
 <p>JWT是JSON WEB TOKEN的缩写，它是基于 RFC 7519 标准定义的一种可以安全传输的的JSON对象，由于使用了数字签名，所以是可信任和安全的。</p>
 </blockquote>
 <a id="more"></a>
+<h1>授权和认证</h1>
+<p>认证就是让服务器知道你是谁；授权就是服务器让你知道你什么能干，什么不能干</p>
 <h1>JWT</h1>
+<h2 id="定义"><a class="header-anchor" href="#定义">¶</a>定义</h2>
+<p>JSON Web Token（JWT）是一种开放标准（RFC 7519），它定义了一种紧凑且独立的方式，可以将各方之间的信息作为JSON对象进行安全传输。该信息可以验证和信任，因为是经过数字签名的。</p>
+<h2 id="组成"><a class="header-anchor" href="#组成">¶</a>组成</h2>
 <p>JWT token 的格式：<strong>header</strong>.<strong>payload</strong>.<strong>signature</strong></p>
 <ul>
-<li><em><strong>header</strong></em> 中用于存放签名的生成算法</li>
-</ul>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;<span class="attr">"alg"</span>: <span class="string">"HS512"</span>&#125;</span><br></pre></td></tr></table></figure>
+<li><em><strong>header</strong></em> 中用于存放签名的生成算法。通常包含两个字段，分别是 <u>typ(type)</u> 和 <u>alg(algorithm)</u>
 <ul>
-<li><em><strong>payload</strong></em> 中用于存放用户名，token的生成时间和过期时间*</li>
+<li>typ：token的类型，这里固定为 JWT</li>
+<li>alg：使用的 hash 算法，例如：HMAC SHA256 或者 RSA</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">    <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><em><strong>payload</strong></em> 存储我们需要传递的信息的部分，存放用户名，token的生成时间和过期时间，</li>
 </ul>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;<span class="attr">"sub"</span>:<span class="string">"admin"</span>,<span class="attr">"created"</span>:<span class="number">1489079981393</span>,<span class="attr">"exp"</span>:<span class="number">1489684781</span>&#125;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -33,14 +45,59 @@
 <h2 id="实例"><a class="header-anchor" href="#实例">¶</a>实例</h2>
 <p>这是一个JWT的字符串</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1NTY3NzkxMjUzMDksImV4cCI6MTU1NzM4MzkyNX0.d-iki0193X0bBOETf2UN3r3PotNIEAV7mzIxxeI5IxFyzzkOZxS0PGfF_SK6wxCv2K8S0cZjMkv6b5bCqc0VBwCopy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<p>可以在该网站上获得解析结果：<a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a></p>
 <h2 id="实现认证和授权的原理"><a class="header-anchor" href="#实现认证和授权的原理">¶</a>实现认证和授权的原理</h2>
 <ol>
 <li>用户调用登录接口，登录成功后获取到 JWT 的 token</li>
 <li>之后用户每次调用接口都在 http 的 header 中添加一个 [头叫 <em><strong>Authorization</strong></em> 的，值为 JWT 的 token]</li>
 <li>后台程序通过对Authorization头中信息的解码及数字签名校验来获取其中的用户信息，从而实现认证和授权。</li>
 </ol>
-<h2 id="整合SpringSecurity及JWT"><a class="header-anchor" href="#整合SpringSecurity及JWT">¶</a><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=%E6%95%B4%E5%90%88springsecurity%E5%8F%8Ajwt" target="_blank" rel="noopener">整合SpringSecurity及JWT</a></h2>
+<h2 id="流程图"><a class="header-anchor" href="#流程图">¶</a>流程图</h2>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/109.png" alt="109"></p>
+<h1>Session 和 Cookie</h1>
+<blockquote>
+<p>Session 是服务端用来记录用户的状态的一种机制。</p>
+</blockquote>
+<p>由于 HTTP 协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建特定的 Session，用于标识这个用户，并且跟踪用户。</p>
+<p>这个 Session 是保存在服务端的，有一个唯一标识。在服务端保存 Session 的方法很多，内存，数据库，文件都有，<strong>不过一般是通过 redis 进行存储</strong>。</p>
+<h2 id="服务端如何识别特定的客户？"><a class="header-anchor" href="#服务端如何识别特定的客户？">¶</a>服务端如何识别特定的客户？</h2>
+<p>这个时候 Cookie 登场了，每次 Http 请求的时候，客户端都会发送相应的 Cookie 信息到服务端。实际上大多数应用都是用 Cookie 来实现 Session 跟踪的。每一次创建 Session 的时候，服务端会在 Http 协议中告诉客户端，需要在 Cookie 里面记录一个 Session ID，以后每次请求把这个 <em><strong>会话ID</strong></em> 发送到服务器，服务端就知道你是谁了。</p>
+<p>有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做 <em><strong>URL重写</strong></em>  的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 <u>sid=xxxxx</u> 这样的参数，服务端据此来识别用户。</p>
+<h2 id="Cookie"><a class="header-anchor" href="#Cookie">¶</a>Cookie</h2>
+<p>Cookie其实还可以用在一些方便用户的场景下，设想你某次登陆过一个网站，下次登录的时候不想再次输入账号了，怎么办？这个信息可以写到Cookie里面，访问网站的时候，网站页面的脚本可以读取这个信息，就自动帮你把用户名给填了，能够方便一下用户。这也是Cookie名称的由来，给用户的一点甜头。</p>
+<h2 id="流程图-v2"><a class="header-anchor" href="#流程图-v2">¶</a>流程图</h2>
+<p><img src="http://q6s1x2hw2.bkt.clouddn.com/110.png" alt="110"></p>
+<h2 id="总结"><a class="header-anchor" href="#总结">¶</a>总结</h2>
+<p>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；<br>
+Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</p>
+<h2 id="优劣势"><a class="header-anchor" href="#优劣势">¶</a>优劣势</h2>
+<h3 id="优点"><a class="header-anchor" href="#优点">¶</a>优点</h3>
+<ul>
+<li>
+<p>相比JWT，最大的优势就在于可以主动清除session了</p>
+</li>
+<li>
+<p>session保存在服务器端，相对较为安全</p>
+</li>
+<li>
+<p>结合cookie使用，较为灵活，兼容性较好</p>
+</li>
+</ul>
+<h3 id="劣势"><a class="header-anchor" href="#劣势">¶</a>劣势</h3>
+<ul>
+<li>
+<p>cookie + session在跨域场景表现并不好</p>
+</li>
+<li>
+<p>如果是分布式部署，需要做多机共享session机制，实现方法可将session存储到数据库中或者redis中</p>
+</li>
+<li>
+<p>基于 cookie 的机制很容易被 CSRF</p>
+</li>
+<li>
+<p>查询session信息可能会有数据库查询操作</p>
+</li>
+</ul>
+<h1><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=%E6%95%B4%E5%90%88springsecurity%E5%8F%8Ajwt" target="_blank" rel="noopener">整合SpringSecurity及JWT</a></h1>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--JWT(Json Web Token)登录支持--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>未完待续…</p>
 ]]></content>
