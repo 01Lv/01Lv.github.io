@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/25.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/26.png">
 <meta property="article:published_time" content="2020-03-17T05:09:41.000Z">
-<meta property="article:modified_time" content="2020-03-24T14:35:15.052Z">
+<meta property="article:modified_time" content="2020-03-26T08:35:40.138Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="集合">
@@ -227,7 +227,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-24 22:35:15" itemprop="dateModified" datetime="2020-03-24T22:35:15+08:00">2020-03-24</time>
+                <time title="修改时间：2020-03-26 16:35:40" itemprop="dateModified" datetime="2020-03-26T16:35:40+08:00">2020-03-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,7 +259,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.7k</span>
+              <span>5.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -338,10 +338,13 @@
 <p>List集合代表一个有序、可重复集合，集合中每个元素都有其对应的顺序索引。List集合默认按照元素的添加顺序设置元素的索引，可以通过索引（类似数组的下标）来访问指定位置的集合元素。</p>
 </blockquote>
 <h2 id="1-ArrayList"><a class="header-anchor" href="#1-ArrayList">¶</a>1.ArrayList</h2>
-<p>ArrayList 底层是数组，数组遍历速度快。</p>
+<p>ArrayList 底层是动态数组，数组遍历速度快。</p>
 <p>在工作中，<strong>遍历的需求比增删多</strong>，即便是增加元素往往也只是从尾部插入元素，而 ArrayList 在尾部插入元素也是 <strong>O(1)</strong>。</p>
 <p>ArrayList 增删没有想象中慢，ArrayList 的增删底层调用的 copyOf() 被优化过，加上现代 CPU 对内存可以块操作，普通大小的 ArrayList 增删比 LinkedList 更快</p>
 <p>如果考虑到线程安全问题，可以参考 CopyOnWriteArrayList，它的思想在 Linux 文件系统有用到。</p>
+<h2 id="源码"><a class="header-anchor" href="#源码">¶</a>源码</h2>
+<p>通过查看源码可以发现 ArrayList 的默认初始容量为 10</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Default initial capacity.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="2-LinkedList"><a class="header-anchor" href="#2-LinkedList">¶</a>2.<strong>LinkedList</strong></h2>
 <p>LinkedList 底层是链表，链表增删元素快。</p>
 <p>LinkedList 本身就实现了 Queue 接口。</p>
@@ -464,7 +467,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">Set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashSet"><span class="nav-number">1.1.</span> <span class="nav-text">¶1.HashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashSet"><span class="nav-number">1.2.</span> <span class="nav-text">¶2.LinkedHashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-TreeSet"><span class="nav-number">1.3.</span> <span class="nav-text">¶3.TreeSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-EnumSet"><span class="nav-number">1.4.</span> <span class="nav-text">¶4.EnumSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">Queue集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">2.1.</span> <span class="nav-text">¶示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生产者"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费者"><span class="nav-number">2.1.2.</span> <span class="nav-text">¶消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">2.1.3.</span> <span class="nav-text">¶测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">List 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList"><span class="nav-number">3.1.</span> <span class="nav-text">¶1.ArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedList"><span class="nav-number">3.2.</span> <span class="nav-text">¶2.LinkedList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Vector"><span class="nav-number">3.3.</span> <span class="nav-text">¶3.Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Stack"><span class="nav-number">3.4.</span> <span class="nav-text">¶4.Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Iterator接口和ListIterator接口"><span class="nav-number">3.5.</span> <span class="nav-text">¶5.Iterator接口和ListIterator接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">Map 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashMap与Hashtable"><span class="nav-number">4.1.</span> <span class="nav-text">¶1.HashMap与Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashMap"><span class="nav-number">4.2.</span> <span class="nav-text">¶2.LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Properties"><span class="nav-number">4.3.</span> <span class="nav-text">¶3.Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-TreeMap"><span class="nav-number">4.4.</span> <span class="nav-text">¶4.TreeMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-ConcurrentHashMap"><span class="nav-number">4.5.</span> <span class="nav-text">¶5.ConcurrentHashMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">线程安全</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">Set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashSet"><span class="nav-number">1.1.</span> <span class="nav-text">¶1.HashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashSet"><span class="nav-number">1.2.</span> <span class="nav-text">¶2.LinkedHashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-TreeSet"><span class="nav-number">1.3.</span> <span class="nav-text">¶3.TreeSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-EnumSet"><span class="nav-number">1.4.</span> <span class="nav-text">¶4.EnumSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">Queue集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-number">2.1.</span> <span class="nav-text">¶示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生产者"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费者"><span class="nav-number">2.1.2.</span> <span class="nav-text">¶消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">2.1.3.</span> <span class="nav-text">¶测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">List 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-ArrayList"><span class="nav-number">3.1.</span> <span class="nav-text">¶1.ArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码"><span class="nav-number">3.2.</span> <span class="nav-text">¶源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedList"><span class="nav-number">3.3.</span> <span class="nav-text">¶2.LinkedList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Vector"><span class="nav-number">3.4.</span> <span class="nav-text">¶3.Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Stack"><span class="nav-number">3.5.</span> <span class="nav-text">¶4.Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Iterator接口和ListIterator接口"><span class="nav-number">3.6.</span> <span class="nav-text">¶5.Iterator接口和ListIterator接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">Map 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-HashMap与Hashtable"><span class="nav-number">4.1.</span> <span class="nav-text">¶1.HashMap与Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-LinkedHashMap"><span class="nav-number">4.2.</span> <span class="nav-text">¶2.LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Properties"><span class="nav-number">4.3.</span> <span class="nav-text">¶3.Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-TreeMap"><span class="nav-number">4.4.</span> <span class="nav-text">¶4.TreeMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-ConcurrentHashMap"><span class="nav-number">4.5.</span> <span class="nav-text">¶5.ConcurrentHashMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">线程安全</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -480,20 +483,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-count">60</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -538,12 +541,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">269k</span>
+    <span title="站点总字数">272k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:04</span>
+    <span title="站点阅读时长">4:07</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -1,6 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java异常总结</title>
+    <url>/2020/03/26/Java%E5%BC%82%E5%B8%B8%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://www.nowcoder.com/test/question/done?tid=31937511&amp;qid=22460#summary" target="_blank" rel="noopener">Java异常</a></p>
+<a id="more"></a>
+<p><img src="https://img-blog.csdnimg.cn/20200326130859755.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="111"></p>
+<ol>
+<li>
+<p>粉红色的是受检查的异常(checked exceptions),其必须被 try{}catch语句块所捕获,或者在方法签名里通过throws子句声明.受检查的异常必须在编译时被捕捉处理,命名为 Checked Exception 是因为Java编译器要进行检查,Java虚拟机也要进行检查,以确保这个规则得到遵守.</p>
+</li>
+<li>
+<p>浅蓝色的异常是运行时异常(runtime exceptions),需要程序员自己分析代码决定是否捕获和处理,比如 空指针,被0除…</p>
+</li>
+<li>
+<p>而声明为Error的，则属于严重错误，如系统崩溃、虚拟机错误、动态链接失败等，这些错误无法恢复或者不可能捕捉，将导致应用程序中断，Error不需要捕捉。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>异常</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis知识点总结</title>
+    <url>/2020/03/26/Redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://www.cnblogs.com/lizhenghn/p/5322887.html" target="_blank" rel="noopener">Redis常用数据类型介绍、使用场景及其操作命令</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/63737596" target="_blank" rel="noopener">面试官问分布式技术面试题，一脸懵逼怎么办？</a></p>
+<h1>Redis 的主从复制是如何实现？</h1>
+<ol>
+<li>从服务器连接主服务器，发送 SYNC 命令</li>
+<li>主服务器接收到 SYNC 命令后，开始执行 BGSAVE 命令生成 RDB 文件并使用缓冲区记录此后执行的所有写命令</li>
+<li>主服务器 BGSAVE 执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令</li>
+<li>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照</li>
+<li>主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令</li>
+<li>从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令</li>
+</ol>
+<a id="more"></a>
+<h1>Redis 的 key 是如何寻址的</h1>
+<p>(1) redis 中的每一个数据库，都由一个 redisDb 的结构存储，其中：</p>
+<ul>
+<li><a href="http://redisDb.id" target="_blank" rel="noopener">redisDb.id</a> 存储着 redis 数据库以整数表示的号码</li>
+<li>redisDb.dict 存储着该库所有的键值对数据</li>
+<li>redisDb.expires 保存着每一个键的过期时间</li>
+</ul>
+<p>(2) 当 redis 服务器初始化时，会预先分配 16 个数据库 (该数量可以通过配置文件配置),所有数据库保存到结构 redisServer 的一个成员 redisServer.db 数组中。当我们选择数据库 select number 时，程序直接通过 redisServer.db[number] 来切换数据库。有时候当程序需要知道自己在哪个数据库时，直接读取 <a href="http://redisDb.id" target="_blank" rel="noopener">redisDb.id</a> 即可。</p>
+<p>(3) redis 的字典使用哈希表作为其底层实现。dict 类型使用的两个指向哈希表的指针，其中 0 号哈希表(ht[0]) 主要用于存储数据库的所有键值，而 1 号哈希表主要用于程序对 0 号哈希表进行 rehash 时使用，rehash 一般是在添加新值时会触发，这里不做过多的赘述。所以 redis 中查找一个 key，其实就是对进行该 dict 结构中的 ht[0] 进行查找操作。</p>
+<p>(4) 既然是哈希，那么我们知道就会有哈希碰撞，那么当多个哈希键 hash 之后为同一个值怎么办呢？redis 采取链表的方式来存储多个哈希碰撞的键。也就是说，当根据 key 的哈希值找到该列表后，如果列表的长度大于 1，那么我们需要遍历该链表来找到我们所查找的 key。当然，一般情况下链表长度都为是 1，所以时间复杂度可看作 <strong>O(1)</strong>。</p>
+<h2 id="寻址-key-的步骤"><a class="header-anchor" href="#寻址-key-的步骤">¶</a>寻址 key 的步骤</h2>
+<ol>
+<li>当拿到一个 key 后，redis 先判断当前库的 0 号哈希表是否为空，即：if (dict-&gt;ht[0].size == 0)。如果为 true 直接返回 NULL。</li>
+<li>判断该 0 号哈希表是否需要 rehash，因为如果在进行 rehash，那么两个表中则有可能存储该 key。如果正在进行 rehash，将调用一次 _dictRehashStep 方法，_dictRehashStep 用于对数据库字典、以及哈希键的字典进行被动 rehash。</li>
+<li>计算哈希表，根据当前字典与 key 进行哈希值的计算</li>
+<li>根据哈希值与当前字典计算哈希表的索引值</li>
+<li>根据索引值在哈希表中取出链表，遍历该链表找到 key 的位置。一般情况，该链表长度为 1</li>
+<li>当 ht[0] 查找完了之后，再进行了一次 rehash 判断，如果未在 rehashing，则直接结束，否则对 ht[1]重复 345 步骤。</li>
+</ol>
+<h1>Redis 的集群是如何实现的</h1>
+<p>Redis Cluster 是 Redis 的分布式解决方案，在 Redis3.0 版本推出</p>
+<p>Redis Cluster 去中心化，每个节点保存数据和整个集群状态，每个节点都和其他所有节点连接。</p>
+<h2 id="Redis-Cluster-节点分配"><a class="header-anchor" href="#Redis-Cluster-节点分配">¶</a>Redis Cluster 节点分配</h2>
+<p>Redis Cluster 特点：</p>
+<ol>
+<li>所有的 redis 节点彼此互联(PING-PONG 机制)，内部使用二进制协议优化传输速度和带宽</li>
+<li>节点的 fail 是通过集群中超过半数的节点检测失效时才生效</li>
+<li>客户端与 redis 节点直连,不需要中间 proxy 层。客户端不需要连接集群所有节点，连接集群中任何一个可用节点即可。</li>
+<li>redis-cluster 把所有的物理节点映射到[0-16383] 哈希槽 (hash slot)上（不一定是平均分配）,cluster 负责维护 node、slot、value。</li>
+<li>Redis 集群预分好 16384 个桶，当需要在 Redis 集群中放置一个 key-value 时，根据 CRC16(key) mod 16384 的值，决定将一个 key 放到哪个桶中。</li>
+</ol>
+<h2 id="Redis-Cluster-主从模式"><a class="header-anchor" href="#Redis-Cluster-主从模式">¶</a>Redis Cluster 主从模式</h2>
+<p>Redis Cluster 为了保证数据的高可用性，加入了主从模式。</p>
+<p>一个主节点对应一个或多个从节点，主节点提供数据存取，从节点则是从主节点拉取数据备份。当这个主节点挂掉后，就会有这个从节点选取一个来充当主节点，从而保证集群不会挂掉。所以，在集群建立的时候，一定要为每个主节点都添加了从节点。</p>
+<h2 id="Redis-Sentinel"><a class="header-anchor" href="#Redis-Sentinel">¶</a>Redis Sentinel</h2>
+<p>Redis Sentinel 用于管理多个 Redis 服务器，它有三个功能：</p>
+<ul>
+<li><strong>监控（Monitoring）</strong> - Sentinel 会不断地检查你的主服务器和从服务器是否运作正常。</li>
+<li><strong>提醒（Notification）</strong> - 当被监控的某个 Redis 服务器出现问题时， Sentinel 可以通过 API 向管理员或者其他应用程序发送通知。</li>
+<li><strong>自动故障迁移（Automatic failover）</strong> - 当一个主服务器不能正常工作时， Sentinel 会开始一次自动故障迁移操作， 它会将失效主服务器的其中一个从服务器升级为新的主服务器， 并让失效主服务器的其他从服务器改为复制新的主服务器； 当客户端试图连接失效的主服务器时， 集群也会向客户端返回新主服务器的地址， 使得集群可以使用新主服务器代替失效服务器。</li>
+</ul>
+<p>Redis 集群中应该有奇数个节点，所以至少有三个节点。</p>
+<p>哨兵监控集群中的主服务器出现故障时，需要根据 quorum 选举出一个哨兵来执行故障转移。选举需要 majority，即大多数哨兵是运行的（2 个哨兵的 majority=2，3 个哨兵的 majority=2，5 个哨兵的 majority=3，4 个哨兵的 majority=2）。</p>
+<p>假设集群仅仅部署 2 个节点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+----+         +----+</span><br><span class="line">| M1 |---------| R1 |</span><br><span class="line">| S1 |         | S2 |</span><br><span class="line">+----+         +----+</span><br></pre></td></tr></table></figure>
+<p>如果 M1 和 S1 所在服务器宕机，则哨兵只有 1 个，无法满足 majority 来进行选举，就不能执行故障转移。</p>
+<h1>Redis 如何实现分布式锁? Zookeeper 如何实现分布式锁?</h1>
+<p>分布式锁的三种实现：</p>
+<ul>
+<li>基于数据库实现</li>
+<li>基于缓存(Redis等) 实现分布式锁</li>
+<li>基于 Zookeeper 实现分布式锁</li>
+</ul>
+<h2 id="Redis-实现"><a class="header-anchor" href="#Redis-实现">¶</a>Redis 实现</h2>
+<ol>
+<li>获取锁的时候，使用 setnx 加锁，并使用 expire 命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的 value 值为一个随机生成的 UUID, 通过此在释放锁的时候进行诊断</li>
+<li>获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。</li>
+<li>释放锁的时候，通过 UUID 判断是不是该锁，若是该锁，则执行 delete 进行锁释放。</li>
+</ol>
+<h2 id="ZooKeeper-实现"><a class="header-anchor" href="#ZooKeeper-实现">¶</a>ZooKeeper 实现</h2>
+<ol>
+<li>创建一个目录 mylock；</li>
+<li>线程 A 想获取锁就在 mylock 目录下创建临时顺序节点；</li>
+<li>获取 mylock 目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；</li>
+<li>线程 B 获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；</li>
+<li>线程 A 处理完，删除自己的节点，线程 B 监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringCloud之Security总结</title>
     <url>/2020/03/24/SpringCloud%E4%B9%8BSecurity%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p>参考：</p>
@@ -574,7 +692,8 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <h1>结构</h1>
 <figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line">mall</span><br><span class="line">├── mall-common <span class="comment">-- 工具类及通用代码模块</span></span><br><span class="line">├── mall-mbg <span class="comment">-- MyBatisGenerator生成的数据库操作代码模块</span></span><br><span class="line">├── mall-<span class="keyword">security</span> <span class="comment">-- 封装SpringSecurity+JWT的安全认证的模块</span></span><br><span class="line">├── mall-registry <span class="comment">-- 基于Eureka的微服务注册中心</span></span><br><span class="line">├── mall-config <span class="comment">-- 基于Spring Cloud Config的微服务配置中心</span></span><br><span class="line">├── mall-gateway <span class="comment">-- 基于Spring Cloud Gateway的微服务API网关服务</span></span><br><span class="line">├── mall-monitor <span class="comment">-- 基于Spring Boot Admin的微服务监控中心</span></span><br><span class="line">├── mall-<span class="keyword">admin</span> <span class="comment">-- 后台管理系统服务</span></span><br><span class="line">├── mall-<span class="keyword">search</span> <span class="comment">-- 基于Elasticsearch的商品搜索系统服务</span></span><br><span class="line">├── mall-portal <span class="comment">-- 移动端商城系统服务</span></span><br><span class="line">└── mall-demo <span class="comment">-- 微服务远程调用测试服务</span></span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p>未完成…</p>
+<h1>mall-security</h1>
+<h2 id=""><a class="header-anchor" href="#">¶</a></h2>
 ]]></content>
       <categories>
         <category>SpringBoot</category>
@@ -1756,10 +1875,13 @@ IP 模块接收到 数据后也做类似的处理。从包首部中判断此 IP 
 <p>List集合代表一个有序、可重复集合，集合中每个元素都有其对应的顺序索引。List集合默认按照元素的添加顺序设置元素的索引，可以通过索引（类似数组的下标）来访问指定位置的集合元素。</p>
 </blockquote>
 <h2 id="1-ArrayList"><a class="header-anchor" href="#1-ArrayList">¶</a>1.ArrayList</h2>
-<p>ArrayList 底层是数组，数组遍历速度快。</p>
+<p>ArrayList 底层是动态数组，数组遍历速度快。</p>
 <p>在工作中，<strong>遍历的需求比增删多</strong>，即便是增加元素往往也只是从尾部插入元素，而 ArrayList 在尾部插入元素也是 <strong>O(1)</strong>。</p>
 <p>ArrayList 增删没有想象中慢，ArrayList 的增删底层调用的 copyOf() 被优化过，加上现代 CPU 对内存可以块操作，普通大小的 ArrayList 增删比 LinkedList 更快</p>
 <p>如果考虑到线程安全问题，可以参考 CopyOnWriteArrayList，它的思想在 Linux 文件系统有用到。</p>
+<h2 id="源码"><a class="header-anchor" href="#源码">¶</a>源码</h2>
+<p>通过查看源码可以发现 ArrayList 的默认初始容量为 10</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Default initial capacity.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="2-LinkedList"><a class="header-anchor" href="#2-LinkedList">¶</a>2.<strong>LinkedList</strong></h2>
 <p>LinkedList 底层是链表，链表增删元素快。</p>
 <p>LinkedList 本身就实现了 Queue 接口。</p>
