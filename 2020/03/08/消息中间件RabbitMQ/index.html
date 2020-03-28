@@ -282,7 +282,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="概述"><a class="header-anchor" href="#概述">¶</a>概述</h2>
+        <h2><span id="概述">概述</span></h2>
 <ol>
 <li>
 <p>大多应用中，可通过消息服务中间件来提升系统异步通信，扩展解耦能力</p>
@@ -301,19 +301,19 @@
 </ol>
 <p><img src="https://img-blog.csdnimg.cn/20200309155537186.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <a id="more"></a>
-<h2 id="RabbitMQ"><a class="header-anchor" href="#RabbitMQ">¶</a>RabbitMQ</h2>
+<h2><span id="rabbitmq">RabbitMQ</span></h2>
 <p>RabbitMQ 是一个由 erlang 开发的 AMQP(Advanced Message Queue Protocol) 的开源实现</p>
-<h3 id="核心概念"><a class="header-anchor" href="#核心概念">¶</a>核心概念</h3>
+<h3><span id="核心概念">核心概念</span></h3>
 <blockquote>
-<h4 id="Message"><a class="header-anchor" href="#Message">¶</a>Message</h4>
+<h4><span id="message">Message</span></h4>
 </blockquote>
 <p>消息，消息是不具名的，它由消息头和消息体组成。消息体是不透明的，而消息头则由一系列的可选属性组成，这些属性包括 routing-key(路由键) , priority，delivery-mode</p>
 <blockquote>
-<h4 id="Publisher"><a class="header-anchor" href="#Publisher">¶</a>Publisher</h4>
+<h4><span id="publisher">Publisher</span></h4>
 </blockquote>
 <p>消息的生产者，也是一个向交换器发布消息的客户端应用程序。</p>
 <blockquote>
-<h4 id="Exchange"><a class="header-anchor" href="#Exchange">¶</a>Exchange</h4>
+<h4><span id="exchange">Exchange</span></h4>
 </blockquote>
 <p>交换器，用来接收生产者发送的消息并将这些消息路由给服务器中的队列</p>
 <p>Exchange 有4种类型：</p>
@@ -334,10 +334,10 @@
 </ul>
 <p><img src="https://img-blog.csdnimg.cn/20200309155629666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <blockquote>
-<h4 id="routeKey"><a class="header-anchor" href="#routeKey">¶</a>routeKey</h4>
+<h4><span id="routekey">routeKey</span></h4>
 </blockquote>
 <p>路由Key键，交换器根据这个 key 键将 message 转发到对应的队列中</p>
-<h2 id="RabbitListener-和-RabbitHandler"><a class="header-anchor" href="#RabbitListener-和-RabbitHandler">¶</a>@RabbitListener 和 @RabbitHandler</h2>
+<h2><span id="rabbitlistener-和-rabbithandler">@RabbitListener 和 @RabbitHandler</span></h2>
 <p>转载：<a href="https://www.jianshu.com/p/911d987b5f11" target="_blank" rel="noopener">RabbitMQ：@RabbitListener 与 @RabbitHandler 及 消息序列化</a></p>
 <ul>
 <li>RabbitMQ 的序列化是指 Message 的 body 属性，即我们真正需要传输的内容，<strong>RabbitMQ 抽象出一个 MessageConvert 接口处理消息的序列化</strong>，其实现有 SimpleMessageConverter（默认）、Jackson2JsonMessageConverter 等</li>
@@ -368,7 +368,7 @@
 </li>
 </ul>
 <p><img src="https:////upload-images.jianshu.io/upload_images/9434708-77b9d3222ae376cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1200/format/webp" alt="img"></p>
-<h2 id="死信队列-dead-message-queue"><a class="header-anchor" href="#死信队列-dead-message-queue">¶</a>死信队列(dead-message-queue)</h2>
+<h2><span id="死信队列dead-message-queue">死信队列(dead-message-queue)</span></h2>
 <p>转载自: <a href="https://blog.csdn.net/zhangcongyi420/article/details/100126666" target="_blank" rel="noopener">rabbitmq死信队列详解与使用</a></p>
 <p>死信,顾名思义就是无法被消费的消息。</p>
 <p>一般来说，producer 将消息投递到 broker 或者直接到 queue 里，consumer 从queue 取出消息进行消费，但某些时候由于特定的原因无法被消费，这样的消息如果没有后续的处理，就变成了死信，有死信，自然就有了死信队列；</p>
@@ -384,7 +384,7 @@
 <li>记录死信入库，然后做后续的业务分析或处理</li>
 <li>通过死信队列，由负责监听死信的应用程序进行处理</li>
 </ol>
-<h2 id="入门示例"><a class="header-anchor" href="#入门示例">¶</a>入门示例</h2>
+<h2><span id="入门示例">入门示例</span></h2>
 <p>参考：</p>
 <p><a href="http://www.macrozheng.com/#/architect/mall_arch_09" target="_blank" rel="noopener">http://www.macrozheng.com/#/architect/mall_arch_09</a></p>
 <p>1.添加关键依赖</p>
@@ -511,7 +511,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">¶概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">2.</span> <span class="nav-text">¶RabbitMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#核心概念"><span class="nav-number">2.1.</span> <span class="nav-text">¶核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Message"><span class="nav-number">2.1.1.</span> <span class="nav-text">¶Message</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Publisher"><span class="nav-number">2.1.2.</span> <span class="nav-text">¶Publisher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exchange"><span class="nav-number">2.1.3.</span> <span class="nav-text">¶Exchange</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#routeKey"><span class="nav-number">2.1.4.</span> <span class="nav-text">¶routeKey</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RabbitListener-和-RabbitHandler"><span class="nav-number">3.</span> <span class="nav-text">¶@RabbitListener 和 @RabbitHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死信队列-dead-message-queue"><span class="nav-number">4.</span> <span class="nav-text">¶死信队列(dead-message-queue)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入门示例"><span class="nav-number">5.</span> <span class="nav-text">¶入门示例</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">RabbitMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-text">Message</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-text">Publisher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-text">Exchange</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#null"><span class="nav-text">routeKey</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">@RabbitListener 和 @RabbitHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">死信队列(dead-message-queue)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">入门示例</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -527,20 +527,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -585,12 +585,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -286,14 +286,14 @@
 <p><a href="https://www.cnblogs.com/zhishan/" target="_blank" rel="noopener">在探索中前行</a></p>
 <p><a href="https://blog.csdn.net/vbirdbest/article/details/82313903" target="_blank" rel="noopener">Spring Boot入门教程(四十五): 事务@Transactional</a></p>
 <p><a href="https://juejin.im/post/5b00c52ef265da0b95276091" target="_blank" rel="noopener">可能是最漂亮的Spring事务管理详解</a></p>
-<h1>定义</h1>
+<h1><span id="定义">定义</span></h1>
 <blockquote>
 <p>事务是一个由有限操作集合组成的逻辑单元。事务操作包含两个目的，数据一致性以及操作隔离</p>
 </blockquote>
 <p><strong>数据一致</strong> 是指事务提交时保证事务内的所有操作都成功完成，并且永久生效；事务回滚时，保证能够恢复到事务执行之前的状态。</p>
 <p><strong>操作隔离</strong> 则是指多个同时执行的事务之间应该相互独立，互不影响。</p>
 <a id="more"></a>
-<h1>属性和行为</h1>
+<h1><span id="属性和行为">属性和行为</span></h1>
 <p>提到事务，不可避免需要涉及到事务的ACID属性：</p>
 <ul>
 <li>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</li>
@@ -301,7 +301,7 @@
 <li>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</li>
 <li>持久性（Durability）：已被提交的事务对数据库的修改应该永久保存在数据库中。</li>
 </ul>
-<h1>隔离级别</h1>
+<h1><span id="隔离级别">隔离级别</span></h1>
 <p><em><strong>⭐️⭐️⭐️ 隔离级别是为了防止多个事务并发执行时，一个事务的执行不应影响其它事务的执行。</strong></em></p>
 <p>InnoDB默认的隔离级别是<code>REPEATABLE READ</code>，其可避免<em>脏读</em>和<em>不可重复读</em>，但不能避免<em>幻读</em></p>
 <table>
@@ -334,7 +334,7 @@
 </tr>
 </tbody>
 </table>
-<h1>传播机制</h1>
+<h1><span id="传播机制">传播机制</span></h1>
 <p><em><strong>传播机制是 Spring 针对方法嵌套调用时事务的创建行为提出的机制，</strong></em></p>
 <table>
 <thead>
@@ -394,7 +394,7 @@
 <p>需要指出的是，前面的<strong>六种事务</strong>传播行为是 Spring <strong>从 EJB 中引入的</strong>，他们共享相同的概念。而 <strong>PROPAGATION_NESTED</strong> 是 Spring 所特有的。</p>
 <p>以 PROPAGATION_NESTED 启动的事务内嵌于外部事务中（如果存在外部事务的话），此时，内嵌事务并不是一个独立的事务，它依赖于外部事务的存在，只有通过外部的事务提交，才能引起内部事务的提交，<strong>嵌套的子事务不能单独提交</strong>。</p>
 <p>如果熟悉 JDBC 中的保存点（SavePoint）的概念，那嵌套事务就很容易理解了，其实嵌套的子事务就是保存点的一个应用，一个事务中可以包括多个保存点，每一个嵌套子事务。另外，外部事务的回滚也会导致嵌套子事务的回滚。</p>
-<h1>Spring事务管理接口</h1>
+<h1><span id="spring事务管理接口">Spring事务管理接口</span></h1>
 <ul>
 <li><strong>PlatformTransactionManager：</strong>(平台) 事务管理器</li>
 <li>**TransactionDefinition：**事务定义信息(事务隔离级别、传播行为、超时、只读、回滚规则)</li>
@@ -403,9 +403,9 @@
 <blockquote>
 <p><strong>所谓事务管理，其实就是“按照给定的事务规则来执行提交或者回滚操作”。</strong></p>
 </blockquote>
-<h2 id="PlatformTransactionManager"><a class="header-anchor" href="#PlatformTransactionManager">¶</a>PlatformTransactionManager</h2>
+<h2><span id="platformtransactionmanager">PlatformTransactionManager</span></h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> <span class="keyword">extends</span> <span class="title">TransactionManager</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Return a currently active transaction or create a new one, according to the specified propagation behavior（根据指定的传播行为，返回当前活动的事务或创建一个新事务。）</span></span><br><span class="line">    <span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition definition)</span> <span class="keyword">throws</span> TransactionException</span>; </span><br><span class="line">    <span class="comment">// Commit the given transaction, with regard to its status（使用事务目前的状态提交事务）</span></span><br><span class="line">    <span class="function">Void <span class="title">commit</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>;  </span><br><span class="line">    <span class="comment">// Perform a rollback of the given transaction（对执行的事务进行回滚）</span></span><br><span class="line">    <span class="function">Void <span class="title">rollback</span><span class="params">(TransactionStatus status)</span> <span class="keyword">throws</span> TransactionException</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="TransactionDefinition"><a class="header-anchor" href="#TransactionDefinition">¶</a>TransactionDefinition</h2>
+<h2><span id="transactiondefinition">TransactionDefinition</span></h2>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.transaction;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.lang.Nullable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransactionDefinition</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//事务传播机制</span></span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_REQUIRED = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_SUPPORTS = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_MANDATORY = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_REQUIRES_NEW = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_NOT_SUPPORTED = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_NEVER = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">int</span> PROPAGATION_NESTED = <span class="number">6</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//事务隔离级别</span></span><br><span class="line">    <span class="keyword">int</span> ISOLATION_DEFAULT = -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> ISOLATION_READ_UNCOMMITTED = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> ISOLATION_READ_COMMITTED = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> ISOLATION_REPEATABLE_READ = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">int</span> ISOLATION_SERIALIZABLE = <span class="number">8</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> TIMEOUT_DEFAULT = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getPropagationBehavior</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getIsolationLevel</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getTimeout</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">boolean</span> <span class="title">isReadOnly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> TransactionDefinition <span class="title">withDefaults</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> StaticTransactionDefinition.INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>事务管理器接口 <strong>PlatformTransactionManager</strong> 通过 <strong>getTransaction(TransactionDefinition definition)</strong> 方法来得到一个事务，这个方法里面的参数是 <strong>TransactionDefinition类</strong> ，这个类就定义了一些基本的事务属性。</p>
 <p><img src="https://img-blog.csdnimg.cn/2020031916085413.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="img1"></p>
@@ -519,7 +519,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">属性和行为</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">传播机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Spring事务管理接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PlatformTransactionManager"><span class="nav-number">5.1.</span> <span class="nav-text">¶PlatformTransactionManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TransactionDefinition"><span class="nav-number">5.2.</span> <span class="nav-text">¶TransactionDefinition</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">属性和行为</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">传播机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Spring事务管理接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">PlatformTransactionManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">TransactionDefinition</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -535,20 +535,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -593,12 +593,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -270,7 +270,7 @@
       
         <p>参考：</p>
 <p><a href="https://blog.csdn.net/aitangyong/article/details/54134385" target="_blank" rel="noopener">JDK8新特性：接口的静态方法和默认方法</a></p>
-<h1>JDK8接口新特性</h1>
+<h1><span id="jdk8接口新特性">JDK8接口新特性</span></h1>
 <p>在 JDK8 之前，interface的方法和变量规定如下：</p>
 <ul>
 <li>变量必须是 public，static，final</li>
@@ -287,8 +287,8 @@
 <p>default方法，只能通过接口实现类的对象来调用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// static方法必须通过接口类调用</span></span><br><span class="line">        JDK8Interface.staticMethod();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//default方法必须通过实现类的对象调用</span></span><br><span class="line">        <span class="keyword">new</span> JDK8InterfaceImpl().defaultMethod();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>由于java支持一个实现类可以实现多个接口，如果多个接口中存在同样的static和default方法会怎么样呢？如果有两个接口中的静态方法一模一样，并且一个实现类同时实现了这两个接口，此时并不会产生错误，因为jdk8只能通过接口类调用接口中的静态方法，所以对编译器来说是可以区分的。但是如果两个接口中定义了一模一样的默认方法，并且一个实现类同时实现了这两个接口，那么必须在实现类中重写默认方法，否则编译失败。</p>
-<h1>JDK8, 抽象类和接口的区别</h1>
-<h2 id="抽象"><a class="header-anchor" href="#抽象">¶</a>抽象</h2>
+<h1><span id="jdk8-抽象类和接口的区别">JDK8, 抽象类和接口的区别</span></h1>
+<h2><span id="抽象">抽象</span></h2>
 <ol>
 <li>抽象类中可以由构造方法</li>
 <li>抽象类中可以存在普通属性，方法，静态属性和方法</li>
@@ -297,14 +297,14 @@
 <li>如果一个类中有一个抽象方法，那么当前类一定是抽象类；抽象类中不一定有抽象方法</li>
 <li>抽象类中的抽象方法，需要有子类实现，如果子类不实现，则子类也需要定义为抽象的</li>
 </ol>
-<h2 id="接口"><a class="header-anchor" href="#接口">¶</a>接口</h2>
+<h2><span id="接口">接口</span></h2>
 <ol>
 <li>在接口中只有常量，因为定义的变量，在编译的时候都会默认加上 public static final</li>
 <li>接口中没有构造方法，也不能实例化接口的对象。</li>
 <li>接口可以实现多继承</li>
 <li>接口中定义的方法都需要有实现类来实现，如果实现类不能实现接口中的所有方法则实现类定义为抽象类。</li>
 </ol>
-<h1>面试的回答</h1>
+<h1><span id="面试的回答">面试的回答</span></h1>
 <ol>
 <li>从设计层面上讲，抽象类是 <strong>类的抽象</strong>, 接口是 <strong>行为抽象</strong>。</li>
 <li>抽象类有构造方法；接口没有</li>
@@ -414,7 +414,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">JDK8接口新特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">JDK8, 抽象类和接口的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象"><span class="nav-number">2.1.</span> <span class="nav-text">¶抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口"><span class="nav-number">2.2.</span> <span class="nav-text">¶接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">面试的回答</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">JDK8接口新特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">JDK8, 抽象类和接口的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">抽象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">面试的回答</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -430,20 +430,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -488,12 +488,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

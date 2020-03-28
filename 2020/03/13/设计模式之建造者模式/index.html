@@ -294,8 +294,8 @@
 <li>**导演(Direct)角色：**该角色会通过调用具体建造者，创建需要的产品对象</li>
 <li>**产品(Product)角色：**产品对象就是用户需要使用的复杂对象</li>
 </ul>
-<h2 id="一-什么是建造者模式"><a class="header-anchor" href="#一-什么是建造者模式">¶</a>一.什么是建造者模式</h2>
-<h3 id="1-生活中的建造者模式"><a class="header-anchor" href="#1-生活中的建造者模式">¶</a>1.生活中的建造者模式</h3>
+<h2><span id="一什么是建造者模式">一.什么是建造者模式</span></h2>
+<h3><span id="1生活中的建造者模式">1.生活中的建造者模式</span></h3>
 <blockquote>
 <p>1.盖房子</p>
 </blockquote>
@@ -308,7 +308,7 @@
 <p>3.软件开发</p>
 </blockquote>
 <p>我们开发一款产品，需要技术主管、产品经理、苦逼的程序员。在这里，产品经理就是指挥者「Director」和客户沟通，了解产品需求，技术主管是抽象的建造者[Builder]，让猿们杂做就杂做，而程序员就是体力劳动者「即具体的建造者，按照技术主管下发的任务去做」</p>
-<h3 id="2-程序中的建造者模式"><a class="header-anchor" href="#2-程序中的建造者模式">¶</a>2.程序中的建造者模式</h3>
+<h3><span id="2程序中的建造者模式">2.程序中的建造者模式</span></h3>
 <blockquote>
 <p>建造者模式的特点</p>
 </blockquote>
@@ -356,7 +356,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="二-建造者模式的举例"><a class="header-anchor" href="#二-建造者模式的举例">¶</a>二 建造者模式的举例</h2>
+<h2><span id="二-建造者模式的举例">二 建造者模式的举例</span></h2>
 <blockquote>
 <p>1.组装电脑</p>
 </blockquote>
@@ -434,7 +434,7 @@
 <li>测试类 Test.java</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 不使用建造者模式</span></span><br><span class="line">        Computer computer = <span class="keyword">new</span> Computer(<span class="string">"主板"</span>,<span class="string">"cpu"</span>,<span class="string">"hd"</span>,<span class="string">"电源"</span>,<span class="string">"显卡"</span></span><br><span class="line">        ,<span class="string">"鼠标"</span>,<span class="string">"机箱"</span>,<span class="string">"鼠标垫"</span>) ;</span><br><span class="line">        System.out.println(<span class="string">"使用普通的构造方法组装电脑："</span>+computer.toString());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用建造者模式</span></span><br><span class="line">        ComputerB computerB = <span class="keyword">new</span> ComputerB.ComputerBuilder(<span class="string">"主板"</span>,<span class="string">"cpu"</span>,<span class="string">"hd"</span>,<span class="string">"电源"</span>,<span class="string">"显卡"</span>)</span><br><span class="line">                .setMouse(<span class="string">"鼠标"</span>).setMousePad(<span class="string">"垫子"</span>).build() ;</span><br><span class="line">        System.out.println(<span class="string">"使用建造者模式组装电脑："</span>+computerB.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="三-建造者模式的优缺点"><a class="header-anchor" href="#三-建造者模式的优缺点">¶</a>三.建造者模式的优缺点</h2>
+<h2><span id="三建造者模式的优缺点">三.建造者模式的优缺点</span></h2>
 <blockquote>
 <p>优点</p>
 </blockquote>
@@ -449,7 +449,7 @@
 <li>1、只适用于产品具有相同的特点「过程和步骤」，如果产品之间差异非常大，则不适用「使用范围受限」</li>
 <li>2、万一那天产品内部发生改变，那多个建造者都要修改，成本太大</li>
 </ul>
-<h2 id="四-建造者模式-VS-简单工厂模式"><a class="header-anchor" href="#四-建造者模式-VS-简单工厂模式">¶</a>四.建造者模式 VS 简单工厂模式</h2>
+<h2><span id="四建造者模式-vs-简单工厂模式">四.建造者模式 VS 简单工厂模式</span></h2>
 <blockquote>
 <p>相似点</p>
 </blockquote>
@@ -576,7 +576,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-什么是建造者模式"><span class="nav-number">1.</span> <span class="nav-text">¶一.什么是建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-生活中的建造者模式"><span class="nav-number">1.1.</span> <span class="nav-text">¶1.生活中的建造者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-程序中的建造者模式"><span class="nav-number">1.2.</span> <span class="nav-text">¶2.程序中的建造者模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-建造者模式的举例"><span class="nav-number">2.</span> <span class="nav-text">¶二 建造者模式的举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-建造者模式的优缺点"><span class="nav-number">3.</span> <span class="nav-text">¶三.建造者模式的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-建造者模式-VS-简单工厂模式"><span class="nav-number">4.</span> <span class="nav-text">¶四.建造者模式 VS 简单工厂模式</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">一.什么是建造者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">1.生活中的建造者模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">2.程序中的建造者模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">二 建造者模式的举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">三.建造者模式的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">四.建造者模式 VS 简单工厂模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -592,20 +592,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -650,12 +650,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

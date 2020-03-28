@@ -20,17 +20,19 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能">
+  <meta name="description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringCloud之Security总结">
 <meta property="og:url" content="https://01lv.github.io/2020/03/24/SpringCloud%E4%B9%8BSecurity%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能">
+<meta property="og:description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSe">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/109.png">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/110.png">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C112.png">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C113.png">
 <meta property="article:published_time" content="2020-03-24T15:05:59.000Z">
-<meta property="article:modified_time" content="2020-03-25T12:57:08.314Z">
+<meta property="article:modified_time" content="2020-03-27T14:37:44.056Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="SpringCloud">
 <meta property="article:tag" content="Security">
@@ -227,7 +229,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-25 20:57:08" itemprop="dateModified" datetime="2020-03-25T20:57:08+08:00">2020-03-25</time>
+                <time title="修改时间：2020-03-27 22:37:44" itemprop="dateModified" datetime="2020-03-27T22:37:44+08:00">2020-03-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -259,14 +261,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>6.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
+              <span>6 分钟</span>
             </span>
 
         </div>
@@ -284,7 +286,8 @@
 <p><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=mall%E6%95%B4%E5%90%88springsecurity%E5%92%8Cjwt%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%EF%BC%88%E4%B8%80%EF%BC%89" target="_blank" rel="noopener">mall整合SpringSecurity和JWT实现认证和授权（一）</a></p>
 <p><a href="https://www.zhihu.com/question/19786827" target="_blank" rel="noopener">COOKIE和SESSION有什么区别？</a></p>
 <p><a href="https://juejin.im/post/5a437441f265da43294e54c3" target="_blank" rel="noopener">聊一聊JWT与session</a></p>
-<h1>定义</h1>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&amp;mid=2247486003&amp;idx=1&amp;sn=7cea98049764fa7d8f7dbe05472d2e02&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">手把手带你入门 Spring Security！</a></p>
+<h1><span id="定义">定义</span></h1>
 <blockquote>
 <p>SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能，像所有的Spring项目一样，它对自定义需求具有强大的扩展性。</p>
 </blockquote>
@@ -293,12 +296,12 @@
 <p>JWT是JSON WEB TOKEN的缩写，它是基于 RFC 7519 标准定义的一种可以安全传输的的JSON对象，由于使用了数字签名，所以是可信任和安全的。</p>
 </blockquote>
 <a id="more"></a>
-<h1>授权和认证</h1>
+<h1><span id="授权和认证">授权和认证</span></h1>
 <p>认证就是让服务器知道你是谁；授权就是服务器让你知道你什么能干，什么不能干</p>
-<h1>JWT</h1>
-<h2 id="定义"><a class="header-anchor" href="#定义">¶</a>定义</h2>
+<h1><span id="jwt">JWT</span></h1>
+<h2><span id="定义">定义</span></h2>
 <p>JSON Web Token（JWT）是一种开放标准（RFC 7519），它定义了一种紧凑且独立的方式，可以将各方之间的信息作为JSON对象进行安全传输。该信息可以验证和信任，因为是经过数字签名的。</p>
-<h2 id="组成"><a class="header-anchor" href="#组成">¶</a>组成</h2>
+<h2><span id="组成">组成</span></h2>
 <p>JWT token 的格式：<strong>header</strong>.<strong>payload</strong>.<strong>signature</strong></p>
 <ul>
 <li><em><strong>header</strong></em> 中用于存放签名的生成算法。通常包含两个字段，分别是 <u>typ(type)</u> 和 <u>alg(algorithm)</u>
@@ -317,35 +320,35 @@
 <li><em><strong>signature</strong></em> 以 header 和 payload 生成的签名，一旦 header 和 payload 被篡改，验证将失败</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//secret为加密算法的密钥</span></span><br><span class="line">String signature = HMACSHA512(base64UrlEncode(header) + <span class="string">"."</span> +base64UrlEncode(payload),secret)</span><br></pre></td></tr></table></figure>
-<h2 id="实例"><a class="header-anchor" href="#实例">¶</a>实例</h2>
+<h2><span id="实例">实例</span></h2>
 <p>这是一个JWT的字符串</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1NTY3NzkxMjUzMDksImV4cCI6MTU1NzM4MzkyNX0.d-iki0193X0bBOETf2UN3r3PotNIEAV7mzIxxeI5IxFyzzkOZxS0PGfF_SK6wxCv2K8S0cZjMkv6b5bCqc0VBwCopy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h2 id="实现认证和授权的原理"><a class="header-anchor" href="#实现认证和授权的原理">¶</a>实现认证和授权的原理</h2>
+<h2><span id="实现认证和授权的原理">实现认证和授权的原理</span></h2>
 <ol>
 <li>用户调用登录接口，登录成功后获取到 JWT 的 token</li>
 <li>之后用户每次调用接口都在 http 的 header 中添加一个 [头叫 <em><strong>Authorization</strong></em> 的，值为 JWT 的 token]</li>
 <li>后台程序通过对Authorization头中信息的解码及数字签名校验来获取其中的用户信息，从而实现认证和授权。</li>
 </ol>
-<h2 id="流程图"><a class="header-anchor" href="#流程图">¶</a>流程图</h2>
+<h2><span id="流程图">流程图</span></h2>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/109.png" alt="109"></p>
-<h1>Session 和 Cookie</h1>
+<h1><span id="session-和-cookie">Session 和 Cookie</span></h1>
 <blockquote>
 <p>Session 是服务端用来记录用户的状态的一种机制。</p>
 </blockquote>
 <p>由于 HTTP 协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建特定的 Session，用于标识这个用户，并且跟踪用户。</p>
 <p>这个 Session 是保存在服务端的，有一个唯一标识。在服务端保存 Session 的方法很多，内存，数据库，文件都有，<strong>不过一般是通过 redis 进行存储</strong>。</p>
-<h2 id="服务端如何识别特定的客户？"><a class="header-anchor" href="#服务端如何识别特定的客户？">¶</a>服务端如何识别特定的客户？</h2>
+<h2><span id="服务端如何识别特定的客户">服务端如何识别特定的客户？</span></h2>
 <p>这个时候 Cookie 登场了，每次 Http 请求的时候，客户端都会发送相应的 Cookie 信息到服务端。实际上大多数应用都是用 Cookie 来实现 Session 跟踪的。每一次创建 Session 的时候，服务端会在 Http 协议中告诉客户端，需要在 Cookie 里面记录一个 Session ID，以后每次请求把这个 <em><strong>会话ID</strong></em> 发送到服务器，服务端就知道你是谁了。</p>
 <p>有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做 <em><strong>URL重写</strong></em>  的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 <u>sid=xxxxx</u> 这样的参数，服务端据此来识别用户。</p>
-<h2 id="Cookie"><a class="header-anchor" href="#Cookie">¶</a>Cookie</h2>
+<h2><span id="cookie">Cookie</span></h2>
 <p>Cookie其实还可以用在一些方便用户的场景下，设想你某次登陆过一个网站，下次登录的时候不想再次输入账号了，怎么办？这个信息可以写到Cookie里面，访问网站的时候，网站页面的脚本可以读取这个信息，就自动帮你把用户名给填了，能够方便一下用户。这也是Cookie名称的由来，给用户的一点甜头。</p>
-<h2 id="流程图-v2"><a class="header-anchor" href="#流程图-v2">¶</a>流程图</h2>
+<h2><span id="流程图">流程图</span></h2>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/110.png" alt="110"></p>
-<h2 id="总结"><a class="header-anchor" href="#总结">¶</a>总结</h2>
+<h2><span id="总结">总结</span></h2>
 <p>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；<br>
 Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</p>
-<h2 id="优劣势"><a class="header-anchor" href="#优劣势">¶</a>优劣势</h2>
-<h3 id="优点"><a class="header-anchor" href="#优点">¶</a>优点</h3>
+<h2><span id="优劣势">优劣势</span></h2>
+<h3><span id="优点">优点</span></h3>
 <ul>
 <li>
 <p>相比JWT，最大的优势就在于可以主动清除session了</p>
@@ -357,23 +360,60 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <p>结合cookie使用，较为灵活，兼容性较好</p>
 </li>
 </ul>
-<h3 id="劣势"><a class="header-anchor" href="#劣势">¶</a>劣势</h3>
+<h3><span id="劣势">劣势</span></h3>
 <ul>
-<li>
-<p>cookie + session在跨域场景表现并不好</p>
-</li>
-<li>
-<p>如果是分布式部署，需要做多机共享session机制，实现方法可将session存储到数据库中或者redis中</p>
-</li>
-<li>
-<p>基于 cookie 的机制很容易被 CSRF</p>
-</li>
-<li>
-<p>查询session信息可能会有数据库查询操作</p>
-</li>
+<li>cookie + session在跨域场景表现并不好</li>
+<li>如果是分布式部署，需要做多机共享session机制，实现方法可将session存储到数据库中或者redis中</li>
+<li>基于 cookie 的机制很容易被 CSRF</li>
+<li>查询session信息可能会有数据库查询操作</li>
 </ul>
-<h1><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=%E6%95%B4%E5%90%88springsecurity%E5%8F%8Ajwt" target="_blank" rel="noopener">整合SpringSecurity及JWT</a></h1>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--JWT(Json Web Token)登录支持--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1><span id="入门-springsecurity">入门 SpringSecurity</span></h1>
+<p>依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>创建一个 HelloController</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问 <code>/hello</code>，需要登录才可以</p>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C112.png" alt="image-20200327212957785"></p>
+<p>当用户从浏览器发送请求访问 <code>/hello</code> 接口时，服务端会返回 <code>302</code> 响应码，让客户端重定向到 <code>/login</code> 页面，用户在 <code>/login</code> 页面登录，登录成功之后，就会自动跳转到 <code>/hello</code> 接口</p>
+<p>另外，也可以使用 <code>POSTMAN</code> 来发送请求，使用 <code>POSTMAN</code> 发送请求时，可以将用户信息放在请求头中（这样可以避免重定向到登录页面）</p>
+<p>通过以上两种不同的登录方式，可以看出，SpringSecurity 支持两种不同的认证方式：</p>
+<ul>
+<li>可以通过 form 表单来认证</li>
+<li>可以通过 HttpBasic 来认证</li>
+</ul>
+<h2><span id="用户名配置">用户名配置</span></h2>
+<p>默认情况下，登录的用户名是 <code>user</code> ，密码则是项目启动时随机生成的字符串，可以从启动的控制台日志中看到默认密码：</p>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C113.png" alt="image-20200327213438451"></p>
+<p>这个随机生成的密码，每次启动时都会变。对登录的用户名/密码进行配置，有三种不同的方式：</p>
+<ul>
+<li>在 application.properties 中进行配置</li>
+<li>通过 Java 代码配置在内存中</li>
+<li>通过 Java 从数据库中加载</li>
+</ul>
+<h3><span id="配置文件配置用户名密码">配置文件配置用户名/密码</span></h3>
+<p>可以直接在 application.yml 文件中配置用户的基本信息：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 yml 中配置 security 的用户名和密码</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">security:</span></span><br><span class="line">    <span class="attr">user:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">user</span></span><br><span class="line">      <span class="attr">password:</span> <span class="number">123</span></span><br></pre></td></tr></table></figure>
+<h3><span id="java-配置用户名密码">Java 配置用户名/密码</span></h3>
+<p>也可以在 Java 代码中配置用户名密码，首先需要我们创建一个 Spring Security 的配置类，集成自 WebSecurityConfigurerAdapter 类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个重写方法主要配置用户名和密码</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    auth.inMemoryAuthentication()</span><br><span class="line">        .withUser(<span class="string">"javaboy"</span>).roles(<span class="string">"admin"</span>).password(<span class="string">"$2a$10$OR3VSksVAmCzc.7WeaRPR.t0wyCsIj24k0Bne8iKWV1o.V9wsP8Xe"</span>)</span><br><span class="line">        .and()</span><br><span class="line">        .withUser(<span class="string">"lisi"</span>).roles(<span class="string">"user"</span>).password(<span class="string">"$2a$10$p1H8iWa8I4.CA.7Z8bwLjes91ZpY.rYREGHQEInNtAp4NzL6PLKxi"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function">PasswordEncoder <span class="title">passwordEncoder</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> BCryptPasswordEncoder();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们在 configure 方法中配置了两个用户，用户的密码都是加密之后的字符串(明文是 123)，从 Spring5 开始，强制要求密码要加密，如果非不想加密，可以使用一个过期的 PasswordEncoder 的实例 NoOpPasswordEncoder，但是不建议这么做，毕竟不安全。</p>
+<p>Spring Security 中提供了 BCryptPasswordEncoder 密码编码工具，可以非常方便的实现密码的加密加盐，相同明文加密出来的结果总是不同，这样就不需要用户去额外保存 <code>盐</code>的字段了，这一点比 Shiro 要方便很多。</p>
+<h2><span id="登录配置">登录配置</span></h2>
+<p>对于登录接口，登录成功后的响应，登录失败后的响应，我们都可以在 WebSecurityConfigurerAdapter 的实现类中进行配置。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">VerifyCodeFilter verifyCodeFilter;</span><br><span class="line"></span><br><span class="line"><span class="comment">//此重写方法配置登录成功或者失败后的响应逻辑</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    http.addFilterBefore(verifyCodeFilter, UsernamePasswordAuthenticationFilter<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    http</span><br><span class="line">        .authorizeRequests()<span class="comment">//开启登录配置</span></span><br><span class="line">        .antMatchers(<span class="string">"/hello"</span>).hasRole(<span class="string">"admin"</span>)<span class="comment">//表示访问 /hello 这个接口，需要具备 admin 这个角色</span></span><br><span class="line">        .anyRequest().authenticated()<span class="comment">//表示剩余的其他接口，登录之后就能访问</span></span><br><span class="line">        .and()</span><br><span class="line">        .formLogin()</span><br><span class="line">        <span class="comment">//定义登录页面, 未登录时, 访问一个需要登录之后才能访问的接口，会自动跳转到该页面</span></span><br><span class="line">        .loginPage(<span class="string">"/login_p"</span>)</span><br><span class="line">        <span class="comment">//登录处理接口</span></span><br><span class="line">        .loginProcessingUrl(<span class="string">"/doLogin"</span>)</span><br><span class="line">        <span class="comment">//定义登录时，用户名的 key，默认为 uname</span></span><br><span class="line">        .usernameParameter(<span class="string">"uname"</span>)</span><br><span class="line">        <span class="comment">//定义登录时，用户密码的 key，默认为 password</span></span><br><span class="line">        .passwordParameter(<span class="string">"passwd"</span>)</span><br><span class="line">        <span class="comment">//登录成功的处理器</span></span><br><span class="line">        .successHandler(<span class="keyword">new</span> AuthenticationSuccessHandler() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAuthenticationSuccess</span><span class="params">(HttpServletRequest req, HttpServletResponse resp, Authentication authentication)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">                resp.setContentType(<span class="string">"application/json;charset=utf-8"</span>);</span><br><span class="line">                PrintWriter out = resp.getWriter();</span><br><span class="line">                out.write(<span class="string">"success"</span>);</span><br><span class="line">                out.flush();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .failureHandler(<span class="keyword">new</span> AuthenticationFailureHandler() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAuthenticationFailure</span><span class="params">(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">                resp.setContentType(<span class="string">"application/json;charset=utf-8"</span>);</span><br><span class="line">                PrintWriter out = resp.getWriter();</span><br><span class="line">                out.write(<span class="string">"fail"</span>);</span><br><span class="line">                out.flush();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .permitAll()<span class="comment">//和表单登录相关的接口统统都直接通过</span></span><br><span class="line">        .and()</span><br><span class="line">        .logout()</span><br><span class="line">        .logoutUrl(<span class="string">"/logout"</span>)</span><br><span class="line">        .logoutSuccessHandler(<span class="keyword">new</span> LogoutSuccessHandler() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLogoutSuccess</span><span class="params">(HttpServletRequest req, HttpServletResponse resp, Authentication authentication)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">                resp.setContentType(<span class="string">"application/json;charset=utf-8"</span>);</span><br><span class="line">                PrintWriter out = resp.getWriter();</span><br><span class="line">                out.write(<span class="string">"logout success"</span>);</span><br><span class="line">                out.flush();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .permitAll()</span><br><span class="line">        .and()</span><br><span class="line">        .httpBasic()</span><br><span class="line">        .and()</span><br><span class="line">        .csrf().disable();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 successHandler 方法中，配置登录成功的回调，如果是前后端分离开发的话，登录成功后返回 JSON 即可.</p>
+<p>failureHandler 方法中配置登录失败的回调.</p>
+<p>logoutSuccessHandler 中则配置注销成功的回调.</p>
+<h2><span id="忽略拦截">忽略拦截</span></h2>
+<p>如果某一个请求地址不需要拦截的话，有两种方式实现：</p>
+<ul>
+<li>设置该地址匿名访问</li>
+<li>直接过滤掉该地址，即该地址不走 Spring Security 过滤器链</li>
+</ul>
+<p>推荐使用第二种方案，配置如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//此重写方法配置忽略拦截的 URL</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(WebSecurity web)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    web.ignoring().antMatchers(<span class="string">"/vercode"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><span id="整合springsecurity及jwt"></span></h1>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>未完待续…</p>
 
     </div>
@@ -478,7 +518,7 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">授权和认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">3.1.</span> <span class="nav-text">¶定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组成"><span class="nav-number">3.2.</span> <span class="nav-text">¶组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number">3.3.</span> <span class="nav-text">¶实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现认证和授权的原理"><span class="nav-number">3.4.</span> <span class="nav-text">¶实现认证和授权的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程图"><span class="nav-number">3.5.</span> <span class="nav-text">¶流程图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">Session 和 Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务端如何识别特定的客户？"><span class="nav-number">4.1.</span> <span class="nav-text">¶服务端如何识别特定的客户？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-number">4.2.</span> <span class="nav-text">¶Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程图-v2"><span class="nav-number">4.3.</span> <span class="nav-text">¶流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.4.</span> <span class="nav-text">¶总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优劣势"><span class="nav-number">4.5.</span> <span class="nav-text">¶优劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">4.5.1.</span> <span class="nav-text">¶优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#劣势"><span class="nav-number">4.5.2.</span> <span class="nav-text">¶劣势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">整合SpringSecurity及JWT</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">授权和认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实现认证和授权的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Session 和 Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">服务端如何识别特定的客户？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">优劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">劣势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">入门 SpringSecurity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">用户名配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">配置文件配置用户名&#x2F;密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">Java 配置用户名&#x2F;密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">登录配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">忽略拦截</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text"></span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -494,20 +534,20 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -552,12 +592,12 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

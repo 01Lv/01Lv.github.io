@@ -280,46 +280,46 @@
 <p><a href="https://juejin.im/post/5a069b6d51882509e5432656" target="_blank" rel="noopener">一篇文章带你熟悉 TCP/IP 协议（网络协议篇二）</a></p>
 <p><a href="https://blog.csdn.net/zhshulin/article/details/62888061" target="_blank" rel="noopener">一张图了解TCP/IP五层网络模型</a></p>
 <a id="more"></a>
-<h1>OSI七层协议</h1>
+<h1><span id="osi七层协议">OSI七层协议</span></h1>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/21.png" alt="img"></p>
-<h2 id="物理层"><a class="header-anchor" href="#物理层">¶</a>物理层</h2>
+<h2><span id="物理层">物理层</span></h2>
 <blockquote>
 <p>利用传输介质为数据链路层提供物理连接，实现比特流的透明传输。</p>
 </blockquote>
-<h2 id="数据链路层"><a class="header-anchor" href="#数据链路层">¶</a>数据链路层</h2>
+<h2><span id="数据链路层">数据链路层</span></h2>
 <blockquote>
 <p>通过各种控制协议，将有差错的物理信道变为无差错的、能可靠传输数据帧的数据链路。</p>
 </blockquote>
 <p>该层通常又被分为介质访问控制（MAC）和逻辑链路控制（LLC）两个子层。</p>
-<h2 id="网络层"><a class="header-anchor" href="#网络层">¶</a>网络层</h2>
+<h2><span id="网络层">网络层</span></h2>
 <blockquote>
 <p>通过路由选择算法，为报文或分组通过通信子网选择最适当的路径。</p>
 </blockquote>
 <p>该层控制数据链路层与传输层之间的信息转发，建立、维持和终止网络的连接。具体地说，数据链路层的数据在这一层被转换为数据包，然后通过路径选择、分段组合、顺序、进/出路由等控制，将信息从一个网络设备传送到另一个网络设备。</p>
 <p>OSI下3层的主要任务是数据通信，上3层的任务是数据处理。</p>
-<h2 id="传输层"><a class="header-anchor" href="#传输层">¶</a>传输层</h2>
+<h2><span id="传输层">传输层</span></h2>
 <blockquote>
 <p>向用户提供可靠的端到端的差错和流量控制，保证报文的正确传输。</p>
 </blockquote>
 <p>传输层的作用是向高层屏蔽下层数据通信的细节，即向用户透明地传送报文。</p>
-<h2 id="会话层"><a class="header-anchor" href="#会话层">¶</a>会话层</h2>
+<h2><span id="会话层">会话层</span></h2>
 <blockquote>
 <p>向两个实体的表示层提供建立和使用连接的方法。</p>
 </blockquote>
-<h2 id="表示层"><a class="header-anchor" href="#表示层">¶</a><strong>表示层</strong></h2>
+<h2><span id="表示层"><strong>表示层</strong></span></h2>
 <blockquote>
 <p>处理用户信息的表示问题，如编码、数据格式转换和加密解密</p>
 </blockquote>
-<h2 id="应用层"><a class="header-anchor" href="#应用层">¶</a>应用层</h2>
+<h2><span id="应用层">应用层</span></h2>
 <blockquote>
 <p>直接向用户提供服务，完成用户希望在网络上完成的各种工作</p>
 </blockquote>
 <p>应用层（Application Layer）是OSI参考模型的最高层，它是计算机用户，以及各种应用程序和网络之间的接口，其功能是直接向用户提供服务，完成用户希望在网络上完成的各种工作。</p>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/22.png" alt="计算机网络体系结构分层"></p>
 <p><strong>OSI 参考模型注重“通信协议必要的功能是什么”，而 TCP/IP 则更强调“在计算机上实现协议应该开发哪种程序”。</strong></p>
-<h1>TCP/IP 五层协议</h1>
+<h1><span id="tcpip-五层协议">TCP/IP 五层协议</span></h1>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/24.png" alt="img"></p>
-<h1>数据处理流程</h1>
+<h1><span id="数据处理流程">数据处理流程</span></h1>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/23.png" alt="数据处理流程"></p>
 <p>① 应用程序处理<br>
 首先应用程序会进行编码处理，这些编码相当于 OSI 的表示层功能；<br>
@@ -444,7 +444,7 @@ IP 模块接收到 数据后也做类似的处理。从包首部中判断此 IP 
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">OSI七层协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理层"><span class="nav-number">1.1.</span> <span class="nav-text">¶物理层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据链路层"><span class="nav-number">1.2.</span> <span class="nav-text">¶数据链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层"><span class="nav-number">1.3.</span> <span class="nav-text">¶网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传输层"><span class="nav-number">1.4.</span> <span class="nav-text">¶传输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话层"><span class="nav-number">1.5.</span> <span class="nav-text">¶会话层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表示层"><span class="nav-number">1.6.</span> <span class="nav-text">¶表示层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用层"><span class="nav-number">1.7.</span> <span class="nav-text">¶应用层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">TCP&#x2F;IP 五层协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">数据处理流程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">OSI七层协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">物理层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">会话层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">表示层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">应用层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">TCP&#x2F;IP 五层协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">数据处理流程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -460,20 +460,20 @@ IP 模块接收到 数据后也做类似的处理。从包首部中判断此 IP 
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -518,12 +518,12 @@ IP 模块接收到 数据后也做类似的处理。从包首部中判断此 IP 
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

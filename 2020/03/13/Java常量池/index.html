@@ -274,7 +274,7 @@
 <p><a href="https://blog.csdn.net/zm13007310400/article/details/77534349" target="_blank" rel="noopener">Java中的常量池(字符串常量池、class常量池和运行时常量池)</a></p>
 <p><a href="https://www.jianshu.com/p/c7f47de2ee80" target="_blank" rel="noopener">Java常量池理解与总结</a></p>
 <p>Java 中的常量池主要分为 <strong>Class文件常量池</strong>，<strong>运行时常量池</strong>，<strong>全局字符串常量池</strong></p>
-<h1>Class 文件常量池</h1>
+<h1><span id="class-文件常量池">Class 文件常量池</span></h1>
 <p>class 文件是一组以字节为单位的二进制数据流，在 java 在java代码的编译期间，我们编写的java文件就被编译为.class文件格式的二进制数据存放在磁盘中，其中就包括class文件常量池。 class文件中存在常量池（非运行时常量池），其在编译阶段就已经确定。</p>
 <a id="more"></a>
 <p>通过一个简单的例子说明情况：</p>
@@ -314,7 +314,7 @@
 <li>字面量包括：1.文本字符串 2.八种基本类型的值 3.被声明为final的常量</li>
 <li>符号引用：1.类和方法的全限定名 2.字段的名称和描述符 3.方法的名称和描述符</li>
 </ul>
-<h1>运行时常量池</h1>
+<h1><span id="运行时常量池">运行时常量池</span></h1>
 <p>运行时常量池是方法区的一部分，所以也是全局贡献的，我们知道，jvm在执行某个类的时候，必须经过<strong>加载、链接（验证、准备、解析）、初始化</strong>，在第一步加载的时候需要完成：</p>
 <ul>
 <li>通过一个类的全限定名来获取此类的二进制字节流</li>
@@ -429,7 +429,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">Class 文件常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">运行时常量池</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Class 文件常量池</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">运行时常量池</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -445,20 +445,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -503,12 +503,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -274,7 +274,7 @@
       
         <p>参考：</p>
 <p><a href="https://juejin.im/post/5d1882b1f265da1ba84aa676" target="_blank" rel="noopener">面试必备：Java线程池解析</a></p>
-<h1>概念</h1>
+<h1><span id="概念">概念</span></h1>
 <p>简单理解，它就是一个管理线程的池子</p>
 <ul>
 <li>
@@ -288,7 +288,7 @@
 </li>
 </ul>
 <a id="more"></a>
-<h1>创建</h1>
+<h1><span id="创建">创建</span></h1>
 <p>线程池可以通过 ThreadPoolExecutor 来创建</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize, <span class="keyword">int</span> maximumPoolSize,<span class="keyword">long</span> keepAliveTime,TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
 <p>几个核心参数的作用：</p>
@@ -315,7 +315,7 @@
 <p><strong>handler：</strong>  线城池的饱和策略事件，主要有四种类型。</p>
 </li>
 </ul>
-<h1>任务执行</h1>
+<h1><span id="任务执行">任务执行</span></h1>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/27.png" alt="img"></p>
 <ul>
 <li>
@@ -331,7 +331,7 @@
 <p>如果当前的线程数达到了maximumPoolSize，还有新的任务过来的话，直接采用拒绝策略处理。</p>
 </li>
 </ul>
-<h2 id="四种拒绝策略"><a class="header-anchor" href="#四种拒绝策略">¶</a>四种拒绝策略</h2>
+<h2><span id="四种拒绝策略">四种拒绝策略</span></h2>
 <ul>
 <li>
 <p>AbortPolicy(抛出一个异常，默认的)</p>
@@ -481,7 +481,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">任务执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#四种拒绝策略"><span class="nav-number">3.1.</span> <span class="nav-text">¶四种拒绝策略</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">创建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">任务执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">四种拒绝策略</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -497,20 +497,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -555,12 +555,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

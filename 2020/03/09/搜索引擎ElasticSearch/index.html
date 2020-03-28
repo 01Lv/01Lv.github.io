@@ -280,8 +280,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1>ElasticSearch</h1>
-<h2 id="知识点"><a class="header-anchor" href="#知识点">¶</a>知识点</h2>
+        <h1><span id="elasticsearch">ElasticSearch</span></h1>
+<h2><span id="知识点">知识点</span></h2>
 <p>参考：<a href="https://mp.weixin.qq.com/s/stC_xMP1n3aQ-0ZNAc3eQA" target="_blank" rel="noopener">elasticsearch基础</a></p>
 <blockquote>
 <p>Elasticsearch 为开源的、分布式、基于 Restful API、支持 PB 甚至更高数量级的搜索引擎工具。</p>
@@ -341,7 +341,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/1</span><br></pre></td></tr></table></figure>
 <p>语法：GET /index/type/id</p>
 <p>其实还有许多更复杂的搜索，例如：轻量搜索，高亮搜索，全文搜索等等。</p>
-<h3 id="bulk增删改操作"><a class="header-anchor" href="#bulk增删改操作">¶</a>bulk增删改操作</h3>
+<h3><span id="bulk增删改操作">bulk增删改操作</span></h3>
 <blockquote>
 <p>bulk api 对 json 的语法，有严格的要求，每个 json 串不能换行，只能放一行，同时一个 json 串和一个 json 串之间，必须有一个换行</p>
 </blockquote>
@@ -350,16 +350,16 @@
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"action"</span>:<span class="string">"&#123;metadata&#125;"</span>&#125;</span><br><span class="line">&#123;<span class="attr">"data"</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>示例：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"index"</span>:&#123;<span class="attr">"_index"</span>:<span class="string">"jluzh"</span>,<span class="attr">"_type"</span>:<span class="string">"person"</span>&#125;&#125;</span><br><span class="line">&#123;<span class="attr">"name"</span>:<span class="string">"张三"</span>,<span class="attr">"age"</span>:<span class="number">20</span>,<span class="attr">"mail"</span>:<span class="string">"111@qq.com"</span>,<span class="attr">"hobby"</span>:<span class="string">"羽毛球，兵乓球，足球"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="组合查询"><a class="header-anchor" href="#组合查询">¶</a>组合查询</h3>
+<h3><span id="组合查询">组合查询</span></h3>
 <p>如果查询的结果中有 should 字段，则得分会更加高，也就是相似度更高。</p>
 <blockquote>
 <p>bool 查询会为每个文档计算相关度评分 _score, 再将所有匹配的 must 和 should 语句的分数 _score 求和，最后除以 must 和 should 语句的总数</p>
 <p>must_not 语句不会影响评分；它的作用只是将不相关的文档排除</p>
 </blockquote>
-<h2 id="入门示例"><a class="header-anchor" href="#入门示例">¶</a>入门示例</h2>
+<h2><span id="入门示例">入门示例</span></h2>
 <p>参考：<a href="http://www.macrozheng.com/#/architect/mall_arch_07?id=mall%E6%95%B4%E5%90%88elasticsearch%E5%AE%9E%E7%8E%B0%E5%95%86%E5%93%81%E6%90%9C%E7%B4%A2" target="_blank" rel="noopener">mall整合Elasticsearch实现商品搜索</a></p>
 <p>示例出自上面这位大神</p>
-<h3 id="知识点铺垫"><a class="header-anchor" href="#知识点铺垫">¶</a>知识点铺垫</h3>
+<h3><span id="知识点铺垫">知识点铺垫</span></h3>
 <p>由于SpringBoot 与 elasticsearch 需进行整合，所以不得不提到 Spring Data Elasticsearch</p>
 <blockquote>
 <p>Spring Data Elasticsearch是Spring提供的一种以Spring Data风格来操作数据存储的方式，它可以避免编写大量的样板代码。</p>
@@ -382,7 +382,7 @@
 <p>在idea中直接会提示对应字段</p>
 </blockquote>
 <p><img src="http://www.macrozheng.com/images/arch_screen_32.png" alt="img"></p>
-<h3 id="开始"><a class="header-anchor" href="#开始">¶</a>开始</h3>
+<h3><span id="开始">开始</span></h3>
 <p>引入相关的依赖</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--Elasticsearch相关依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-elasticsearch<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        </span><br><span class="line"><span class="comment">&lt;!--Swagger-UI API文档生产工具--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger-ui<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--分页插件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.pagehelper<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>pagehelper<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        </span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>配置文件</p>
@@ -400,7 +400,7 @@
 <p>其它请参照大神的项目：<a href="https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-06" target="_blank" rel="noopener">https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-06</a></p>
 <p>具体流程：</p>
 <p>模拟搜索商品的业务流程，先将数据库中所有的商品信息导入到es中，再通过es的分词方法，通过keyword 快速找到商品的相应的信息。</p>
-<h1>Logstash</h1>
+<h1><span id="logstash">Logstash</span></h1>
 <p>可以把 Logstash 理解成流入，流出 Elasticsearch 的传送带</p>
 <p>支持：不同类型的数据或实施数据流经过 Logstash 写入 ES 或者从 ES 中读出写入文件或对应的实施数据流。</p>
 <p>包括但不限于：</p>
@@ -412,11 +412,11 @@
 <li>Redis 数据流；</li>
 <li>……</li>
 </ul>
-<h1>Kibana 认知</h1>
+<h1><span id="kibana-认知">Kibana 认知</span></h1>
 <blockquote>
 <p>Kibana 是 ES 大数据的图形化展示工具。集成了 DSL 命令行查看、数据处理插件、继承了 x-pack（收费）安全管理插件等。</p>
 </blockquote>
-<h1>Beats(轻量型数据采集器)</h1>
+<h1><span id="beats轻量型数据采集器">Beats(轻量型数据采集器)</span></h1>
 <blockquote>
 <p>Beats 平台集合了多种单一用途采集器，它们从成百上千台机器和系统向 Logstash 或 Elasticsearch 发送数据</p>
 </blockquote>
@@ -424,7 +424,7 @@
 <p><img src="https://images2018.cnblogs.com/blog/874963/201808/874963-20180808170444229-5723261.png" alt="img"></p>
 <p>Beats 的组件</p>
 <p><img src="D:%5Ctypora%5Cnotes%5Casset%5Cimage-20200309215925095.png" alt="image-20200309215925095"></p>
-<h2 id="FileBeat"><a class="header-anchor" href="#FileBeat">¶</a>FileBeat</h2>
+<h2><span id="filebeat">FileBeat</span></h2>
 <p>轻量型日志采集器</p>
 
     </div>
@@ -528,7 +528,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#知识点"><span class="nav-number">1.1.</span> <span class="nav-text">¶知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bulk增删改操作"><span class="nav-number">1.1.1.</span> <span class="nav-text">¶bulk增删改操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合查询"><span class="nav-number">1.1.2.</span> <span class="nav-text">¶组合查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#入门示例"><span class="nav-number">1.2.</span> <span class="nav-text">¶入门示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点铺垫"><span class="nav-number">1.2.1.</span> <span class="nav-text">¶知识点铺垫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始"><span class="nav-number">1.2.2.</span> <span class="nav-text">¶开始</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">Kibana 认知</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">Beats(轻量型数据采集器)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FileBeat"><span class="nav-number">4.1.</span> <span class="nav-text">¶FileBeat</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">bulk增删改操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">组合查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">入门示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">知识点铺垫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">开始</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Kibana 认知</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Beats(轻量型数据采集器)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">FileBeat</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -544,20 +544,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -602,12 +602,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -281,14 +281,14 @@
       
         <p>转载自：</p>
 <p><a href="https://lotabout.me/2018/kafka-introduction/" target="_blank" rel="noopener">Kafka 入门介绍</a></p>
-<h1>概述</h1>
+<h1><span id="概述">概述</span></h1>
 <blockquote>
 <p>kafka 是一个 <strong>分布式</strong> 的基于 <strong>发布/订阅模式</strong> 的 <strong>消息队列</strong>, 主要应用于大数据实时处理领域</p>
 </blockquote>
 <a id="more"></a>
-<h1>MQ传统应用场景之异步处理</h1>
+<h1><span id="mq传统应用场景之异步处理">MQ传统应用场景之异步处理</span></h1>
 <p><img src="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200322162858699"></p>
-<h1>使用消息队列的好处</h1>
+<h1><span id="使用消息队列的好处">使用消息队列的好处</span></h1>
 <ul>
 <li>解耦</li>
 </ul>
@@ -305,16 +305,16 @@
 <li>灵活性 &amp;  峰值处理能力</li>
 </ul>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在访问量剧增的情况下, 应用仍然需要继续发挥作用，但是这样的突发流量并不常见。使用消息队列能够使关键组件顶住突发的访问压力,而不会因为突发的超负荷的请求而完全崩溃.</span><br></pre></td></tr></table></figure>
-<h1>消息队列的两种模式</h1>
-<h2 id="点对点模式"><a class="header-anchor" href="#点对点模式">¶</a>点对点模式</h2>
+<h1><span id="消息队列的两种模式">消息队列的两种模式</span></h1>
+<h2><span id="点对点模式">点对点模式</span></h2>
 <p>一对一，消费者主动拉取数据，消息收到后消息清除</p>
 <p>消息生产者生产消息发送到 Queue 种，然后消息消费者从 Queue 中取出并且消费消息。消息被消费后，queue 中不再有存储，所以消息消费者不可能消费到已经被消费的消息。Queue 支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
 <p><img src="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center" alt="image-20200323212356791"></p>
-<h2 id="发布订阅模式"><a class="header-anchor" href="#发布订阅模式">¶</a>发布订阅模式</h2>
+<h2><span id="发布订阅模式">发布订阅模式</span></h2>
 <p>一对多，消费者消费数据之后不会清除消息</p>
 <p>消息生产者 (发布) 将消息发布到 topic 中，同时有多个消息消费者 (订阅) 消费该消息。和点对点方式不同，发布到 topic 的消息会被所有订阅者消费</p>
 <p><img src="https://img-blog.csdnimg.cn/20200324163834909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200323212620425"></p>
-<h1>Kafka 工作流程及文件存储机制</h1>
+<h1><span id="kafka-工作流程及文件存储机制">Kafka 工作流程及文件存储机制</span></h1>
 <p><img src="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200324110116815"></p>
 <p>在图中，各个名词的解释：</p>
 <ul>
@@ -426,7 +426,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">2.</span> <span class="nav-text">MQ传统应用场景之异步处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">3.</span> <span class="nav-text">使用消息队列的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">4.</span> <span class="nav-text">消息队列的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#点对点模式"><span class="nav-number">4.1.</span> <span class="nav-text">¶点对点模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布订阅模式"><span class="nav-number">4.2.</span> <span class="nav-text">¶发布订阅模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-number">5.</span> <span class="nav-text">Kafka 工作流程及文件存储机制</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">MQ传统应用场景之异步处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">使用消息队列的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">消息队列的两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">点对点模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">发布订阅模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Kafka 工作流程及文件存储机制</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -442,20 +442,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">51</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">60</span>
+        <span class="site-state-item-count">62</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -500,12 +500,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">272k</span>
+    <span title="站点总字数">277k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:12</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
