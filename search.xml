@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot之JPA</title>
+    <url>/2020/03/29/SpringBoot%E4%B9%8BJPA/</url>
+    <content><![CDATA[<p>参考：</p>
+<p><a href="https://blog.csdn.net/zhangtongpeng/article/details/79609942" target="_blank" rel="noopener">spring-boot工程中，jpa下hibernate的ddl-auto的各种属性</a></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jpa:</span></span><br><span class="line">  <span class="attr">hibernate:</span></span><br><span class="line">    <span class="attr">ddl-auto:</span> <span class="string">create</span></span><br></pre></td></tr></table></figure>
+<p>ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空</p>
+<p>ddl-auto:create-drop----每次程序结束的时候会清空表</p>
+<p>ddl-auto:update----每次运行程序，没有表格会新建表格，表内有数据不会清空，只会更新</p>
+<p>ddl-auto:validate----运行程序会校验数据与数据库的字段类型是否相同，不同会报错</p>
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>JPA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据库三大范式</title>
     <url>/2020/03/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E5%A4%A7%E8%8C%83%E5%BC%8F/</url>
     <content><![CDATA[<p>转载自：</p>
@@ -172,6 +191,8 @@
 <p><a href="https://www.zhihu.com/question/19786827" target="_blank" rel="noopener">COOKIE和SESSION有什么区别？</a></p>
 <p><a href="https://juejin.im/post/5a437441f265da43294e54c3" target="_blank" rel="noopener">聊一聊JWT与session</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&amp;mid=2247486003&amp;idx=1&amp;sn=7cea98049764fa7d8f7dbe05472d2e02&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">手把手带你入门 Spring Security！</a></p>
+<p><a href="https://segmentfault.com/a/1190000012557493" target="_blank" rel="noopener">spring security系列一：架构概述</a></p>
+<p><a href="https://segmentfault.com/a/1190000012668936" target="_blank" rel="noopener">spring security系列二：过滤器机制</a></p>
 <h1><span id="定义">定义</span></h1>
 <blockquote>
 <p>SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能，像所有的Spring项目一样，它对自定义需求具有强大的扩展性。</p>
@@ -216,6 +237,14 @@
 </ol>
 <h2><span id="流程图">流程图</span></h2>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/109.png" alt="109"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GvtDGKK4uYmlia5c0C2UIHGrU7AZ0xMUlpaLHcjYicgIPHmYAWWDQZAZYntjQEdHmQbAxZnJEJ1SyPypsRR65FIg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<h2><span id="jwt-存在的问题">JWT 存在的问题</span></h2>
+<ol>
+<li>续签问题，这是被很多人诟病的问题之一，传统的cookie+session的方案天然的支持续签，但是jwt由于服务端不保存用户状态，因此很难完美解决续签问题，如果引入redis，虽然可以解决问题，但是jwt也变得不伦不类了。</li>
+<li>注销问题，由于服务端不再保存用户信息，所以一般可以通过修改secret来实现注销，服务端secret修改后，已经颁发的未过期的token就会认证失败，进而实现注销，不过毕竟没有传统的注销方便。</li>
+<li>密码重置，密码重置后，原本的token依然可以访问系统，这时候也需要强制修改secret。</li>
+<li>基于第2点和第3点，一般建议不同用户取不同secret。</li>
+</ol>
 <h1><span id="session-和-cookie">Session 和 Cookie</span></h1>
 <blockquote>
 <p>Session 是服务端用来记录用户的状态的一种机制。</p>
@@ -252,6 +281,15 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <li>基于 cookie 的机制很容易被 CSRF</li>
 <li>查询session信息可能会有数据库查询操作</li>
 </ul>
+<h1><span id="核心组件">核心组件</span></h1>
+<h2><span id="securitycontextholder">SecurityContextHolder</span></h2>
+<blockquote>
+<p>SecurityContextHolder 它持有的是安全上下文( security context ) 的信息。当前操作的用户是谁，该用户是否已经被认证，他拥有哪些角色权限等等，这些都被保存在 SecurityContextHolder 中。SecurityContextHolder 默认使用 ThreadLocal 策略来存储认证信息。看到ThreadLocal 也就意味着，这是一种与线程绑定的策略。在web环境下，Spring Security在用户登录时自动绑定认证信息到当前线程，在用户退出时，自动清除当前线程的认证信息。</p>
+</blockquote>
+<p><strong>获取当前用户信息</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Object principal =SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span><br><span class="line"><span class="keyword">if</span> (principal <span class="keyword">instanceof</span> UserDetails) &#123;</span><br><span class="line">    String username = ((UserDetails)principal).getUsername();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    String username = principal.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getAuthentication() 返回认证信息，getPrincipal() 返回身份信息，UserDetails 便是 Spring 对身份信息封装的一个接口</p>
+<h2><span id="securitycontext">SecurityContext</span></h2>
 <h1><span id="入门-springsecurity">入门 SpringSecurity</span></h1>
 <p>依赖</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -2841,6 +2879,12 @@ Content-Type: text/html; charset=utf-8</p>
 <p>参考：</p>
 <p><a href="https://www.jianshu.com/p/84568e364ee8" target="_blank" rel="noopener">深入理解什么是RESTful API ？</a></p>
 <p>REST 全称是 Representational State Transfer (表现层状态转移)</p>
+<p>微服务集群中的每个服务，对外提供的都使用RESTful风格的接口。</p>
+<p>RESTful 风格的一个最重要的规范就是：<em><strong>服务的无状态性</strong></em></p>
+<ul>
+<li>[x] 服务端不保存任何客户端请求者信息</li>
+<li>[x] 客户端的每次请求必须具备自描述信息，通过这些信息识别客户端身份</li>
+</ul>
 <blockquote>
 <p>URL 定位资源，用 HTTP 动词 (GET,POST,DELETE,PUT) 描述操作</p>
 </blockquote>
@@ -2877,6 +2921,13 @@ Content-Type: text/html; charset=utf-8</p>
 <blockquote>
 <p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
 </blockquote>
+<h2><span id="无状态有哪些好处">无状态有哪些好处</span></h2>
+<ul>
+<li>[x] 客户端请求不依赖服务端的信息，多次请求不需要必须访问到同一台服务器</li>
+<li>[x] 服务端的集群和状态对客户端透明</li>
+<li>[x] 服务端可以任意的迁移和伸缩（可以方便的进行集群化部署）</li>
+<li>[x] 减小服务端存储压力</li>
+</ul>
 <h2><span id="总结">总结：</span></h2>
 <ul>
 <li>每个 URI 代表一个资源</li>
@@ -3051,6 +3102,8 @@ Content-Type: text/html; charset=utf-8</p>
 <p><strong>sleep</strong> 是线程类 (<em><strong>Thread</strong></em>) 的方法，导致此线程暂停执行指定时间，给执行机会给其它线程，但是监控状态依然保持，到时后会自动恢复，<strong>调用 sleep 不会释放对象锁</strong>。由于没有释放对象锁，所以不能调用里面的同步方法</p>
 <p><strong>wait</strong> 方法是 (<em><strong>Object</strong></em>) 类里的方法；当一个线程执行到wait()方法时，它就进入到一个和该对象相关的等待池中，同时失去（释放）了对象的机锁（暂时失去机锁，wait(long timeout)超时时间到后还需要返还对象锁）；可以调用里面的同步方法，其他线程可以访问；wait()使用notify或者notifyAlll或者指定睡眠时间来唤醒当前等待池中的线程。<br>
 wiat()必须放在synchronized block中，否则会在program runtime时扔出”java.lang.IllegalMonitorStateException“异常。</p>
+<h1><span id="17类初始化顺序">17.类初始化顺序</span></h1>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C118.png" alt="118.png"></p>
 ]]></content>
       <categories>
         <category>日常</category>
@@ -4312,11 +4365,6 @@ wiat()必须放在synchronized block中，否则会在program runtime时扔出�
     <url>/2020/03/03/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h1><span id="2020-03-03-2217">2020-03-03 22:17</span></h1>
 <p>我的博客系统上线啦！</p>
-<h1><span id="test">test</span></h1>
-<h2><span id="xxx">xxx</span></h2>
-<h1><span id="wwww">wwww</span></h1>
-<h2><span id="ww2">ww2</span></h2>
-<h3><span id="ww3">ww3</span></h3>
 ]]></content>
       <categories>
         <category>日常</category>

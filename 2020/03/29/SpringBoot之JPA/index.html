@@ -20,26 +20,21 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="2020 年伊始，新冠肺炎的汹涌来袭，我相信对于很多人来说的都是触不及防。 不出意外，我也成了这次疫情的 “受害者”。 2020农历新年才过几天，我就收到了前公司的主管的电话，当时兴奋的以为是转正的事宜，没想到的是解聘的通知…,在电话里，公司以 “莫须有” 的罪名把我裁了。很不幸，刚出社会就体验到了生活的冷暖，还记得那天是艳阳高照，春天还未到来，寒风依然猖獗，温暖的阳光照在身上，可是我却感受不到任">
+  <meta name="description" content="参考： spring-boot工程中，jpa下hibernate的ddl-auto的各种属性 123jpa:  hibernate:    ddl-auto: create ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空 ddl-auto:create-drop----每次程序结束的时候会清空表 ddl-auto:update----每次运行程序，没有表">
 <meta property="og:type" content="article">
-<meta property="og:title" content="疫情下的影响">
-<meta property="og:url" content="https://01lv.github.io/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/index.html">
+<meta property="og:title" content="SpringBoot之JPA">
+<meta property="og:url" content="https://01lv.github.io/2020/03/29/SpringBoot%E4%B9%8BJPA/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="2020 年伊始，新冠肺炎的汹涌来袭，我相信对于很多人来说的都是触不及防。 不出意外，我也成了这次疫情的 “受害者”。 2020农历新年才过几天，我就收到了前公司的主管的电话，当时兴奋的以为是转正的事宜，没想到的是解聘的通知…,在电话里，公司以 “莫须有” 的罪名把我裁了。很不幸，刚出社会就体验到了生活的冷暖，还记得那天是艳阳高照，春天还未到来，寒风依然猖獗，温暖的阳光照在身上，可是我却感受不到任">
+<meta property="og:description" content="参考： spring-boot工程中，jpa下hibernate的ddl-auto的各种属性 123jpa:  hibernate:    ddl-auto: create ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空 ddl-auto:create-drop----每次程序结束的时候会清空表 ddl-auto:update----每次运行程序，没有表">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192432.jpg">
-<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192445.jpg">
-<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192449.jpg">
-<meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192453.jpg">
-<meta property="article:published_time" content="2020-03-10T10:18:10.000Z">
-<meta property="article:modified_time" content="2020-03-10T16:50:40.305Z">
+<meta property="article:published_time" content="2020-03-29T14:30:38.000Z">
+<meta property="article:modified_time" content="2020-03-29T15:13:18.181Z">
 <meta property="article:author" content="mikelv">
-<meta property="article:tag" content="生活">
-<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="JPA">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192432.jpg">
 
-<link rel="canonical" href="https://01lv.github.io/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/">
+<link rel="canonical" href="https://01lv.github.io/2020/03/29/SpringBoot%E4%B9%8BJPA/">
 
 
 <script id="page-configurations">
@@ -51,7 +46,7 @@
   };
 </script>
 
-  <title>疫情下的影响 | 追风的少年</title>
+  <title>SpringBoot之JPA | 追风的少年</title>
   
 
 
@@ -199,7 +194,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/29/SpringBoot%E4%B9%8BJPA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -212,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          疫情下的影响
+          SpringBoot之JPA
         </h1>
 
         <div class="post-meta">
@@ -221,23 +216,17 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-03-10 18:18:10" itemprop="dateCreated datePublished" datetime="2020-03-10T18:18:10+08:00">2020-03-10</time>
+              <time title="创建时间：2020-03-29 22:30:38 / 修改时间：23:13:18" itemprop="dateCreated datePublished" datetime="2020-03-29T22:30:38+08:00">2020-03-29</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-11 00:50:40" itemprop="dateModified" datetime="2020-03-11T00:50:40+08:00">2020-03-11</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%97%A5%E5%B8%B8/" itemprop="url" rel="index"><span itemprop="name">日常</span></a>
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a>
                 </span>
             </span>
 
@@ -250,8 +239,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/03/29/SpringBoot%E4%B9%8BJPA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/29/SpringBoot%E4%B9%8BJPA/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -261,7 +250,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>304</span>
+              <span>258</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -280,26 +269,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>2020 年伊始，新冠肺炎的汹涌来袭，我相信对于很多人来说的都是触不及防。</p>
-<p>不出意外，我也成了这次疫情的 “受害者”。</p>
-<p>2020农历新年才过几天，我就收到了前公司的主管的电话，当时兴奋的以为是转正的事宜，没想到的是解聘的通知…,在电话里，公司以 “莫须有” 的罪名把我裁了。很不幸，刚出社会就体验到了生活的冷暖，还记得那天是艳阳高照，春天还未到来，寒风依然猖獗，温暖的阳光照在身上，可是我却感受不到任何温度。</p>
-<p>同样的我对几个朋友和同事也进行了交流，以下是他们对这次疫情的反映。</p>
-<a id="more"></a>
-<ul>
-<li>朋友A</li>
-</ul>
-<p><img src="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192432.jpg" alt="image"></p>
-<ul>
-<li>朋友B</li>
-</ul>
-<p><img src="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192445.jpg" alt="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192445.jpg"></p>
-<p><img src="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192449.jpg" alt="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192449.jpg"></p>
-<ul>
-<li>朋友C</li>
-</ul>
-<p><img src="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192453.jpg" alt="http://q6s1x2hw2.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200310192453.jpg"></p>
-<p>其实每个人的境遇差不多，在疫情面前，大家都是平等的，只有严守才能最终战胜疫情。</p>
-<p>希望等到夏日炎炎的时候，大家都可以约好一起吃雪糕！</p>
+        <p>参考：</p>
+<p><a href="https://blog.csdn.net/zhangtongpeng/article/details/79609942" target="_blank" rel="noopener">spring-boot工程中，jpa下hibernate的ddl-auto的各种属性</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jpa:</span></span><br><span class="line">  <span class="attr">hibernate:</span></span><br><span class="line">    <span class="attr">ddl-auto:</span> <span class="string">create</span></span><br></pre></td></tr></table></figure>
+<p>ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空</p>
+<p>ddl-auto:create-drop----每次程序结束的时候会清空表</p>
+<p>ddl-auto:update----每次运行程序，没有表格会新建表格，表内有数据不会清空，只会更新</p>
+<p>ddl-auto:validate----运行程序会校验数据与数据库的字段类型是否相同，不同会报错</p>
 
     </div>
 
@@ -315,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://01lv.github.io/2020/03/10/%E7%96%AB%E6%83%85%E4%B8%8B%E7%9A%84%E5%BD%B1%E5%93%8D/" title="疫情下的影响">https://01lv.github.io/2020/03/10/疫情下的影响/</a>
+    <a href="https://01lv.github.io/2020/03/29/SpringBoot%E4%B9%8BJPA/" title="SpringBoot之JPA">https://01lv.github.io/2020/03/29/SpringBoot之JPA/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -326,8 +302,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag"># 生活</a>
-              <a href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag"># 随笔</a>
+              <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+              <a href="/tags/JPA/" rel="tag"># JPA</a>
           </div>
 
         
@@ -336,13 +312,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/09/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8EElasticSearch/" rel="prev" title="搜索引擎ElasticSearch">
-      <i class="fa fa-chevron-left"></i> 搜索引擎ElasticSearch
+    <a href="/2020/03/28/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%89%E5%A4%A7%E8%8C%83%E5%BC%8F/" rel="prev" title="数据库三大范式">
+      <i class="fa fa-chevron-left"></i> 数据库三大范式
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/03/10/h-g%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="next" title="h-g源码解析">
-      h-g源码解析 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

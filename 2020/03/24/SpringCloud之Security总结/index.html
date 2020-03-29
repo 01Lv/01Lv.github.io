@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSe">
+  <meta name="description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ spring security系列一：架构概述 spring security系列二：过滤器机制 定义  SpringSecurity是一个">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringCloud之Security总结">
 <meta property="og:url" content="https://01lv.github.io/2020/03/24/SpringCloud%E4%B9%8BSecurity%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ 定义  SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSe">
+<meta property="og:description" content="参考： 官网 Spring Security参考，中文文档值得关注 mall整合SpringSecurity和JWT实现认证和授权（一） COOKIE和SESSION有什么区别？ 聊一聊JWT与session 手把手带你入门 Spring Security！ spring security系列一：架构概述 spring security系列二：过滤器机制 定义  SpringSecurity是一个">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/109.png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/GvtDGKK4uYmlia5c0C2UIHGrU7AZ0xMUlpaLHcjYicgIPHmYAWWDQZAZYntjQEdHmQbAxZnJEJ1SyPypsRR65FIg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1">
 <meta property="og:image" content="http://q6s1x2hw2.bkt.clouddn.com/110.png">
 <meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C112.png">
 <meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C113.png">
 <meta property="article:published_time" content="2020-03-24T15:05:59.000Z">
-<meta property="article:modified_time" content="2020-03-27T14:37:44.056Z">
+<meta property="article:modified_time" content="2020-03-29T15:33:22.078Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="SpringCloud">
 <meta property="article:tag" content="Security">
@@ -229,7 +230,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-27 22:37:44" itemprop="dateModified" datetime="2020-03-27T22:37:44+08:00">2020-03-27</time>
+                <time title="修改时间：2020-03-29 23:33:22" itemprop="dateModified" datetime="2020-03-29T23:33:22+08:00">2020-03-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,14 +262,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>6.4k</span>
+              <span>7.4k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>6 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -287,6 +288,8 @@
 <p><a href="https://www.zhihu.com/question/19786827" target="_blank" rel="noopener">COOKIE和SESSION有什么区别？</a></p>
 <p><a href="https://juejin.im/post/5a437441f265da43294e54c3" target="_blank" rel="noopener">聊一聊JWT与session</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&amp;mid=2247486003&amp;idx=1&amp;sn=7cea98049764fa7d8f7dbe05472d2e02&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">手把手带你入门 Spring Security！</a></p>
+<p><a href="https://segmentfault.com/a/1190000012557493" target="_blank" rel="noopener">spring security系列一：架构概述</a></p>
+<p><a href="https://segmentfault.com/a/1190000012668936" target="_blank" rel="noopener">spring security系列二：过滤器机制</a></p>
 <h1><span id="定义">定义</span></h1>
 <blockquote>
 <p>SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能，像所有的Spring项目一样，它对自定义需求具有强大的扩展性。</p>
@@ -331,6 +334,14 @@
 </ol>
 <h2><span id="流程图">流程图</span></h2>
 <p><img src="http://q6s1x2hw2.bkt.clouddn.com/109.png" alt="109"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/GvtDGKK4uYmlia5c0C2UIHGrU7AZ0xMUlpaLHcjYicgIPHmYAWWDQZAZYntjQEdHmQbAxZnJEJ1SyPypsRR65FIg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<h2><span id="jwt-存在的问题">JWT 存在的问题</span></h2>
+<ol>
+<li>续签问题，这是被很多人诟病的问题之一，传统的cookie+session的方案天然的支持续签，但是jwt由于服务端不保存用户状态，因此很难完美解决续签问题，如果引入redis，虽然可以解决问题，但是jwt也变得不伦不类了。</li>
+<li>注销问题，由于服务端不再保存用户信息，所以一般可以通过修改secret来实现注销，服务端secret修改后，已经颁发的未过期的token就会认证失败，进而实现注销，不过毕竟没有传统的注销方便。</li>
+<li>密码重置，密码重置后，原本的token依然可以访问系统，这时候也需要强制修改secret。</li>
+<li>基于第2点和第3点，一般建议不同用户取不同secret。</li>
+</ol>
 <h1><span id="session-和-cookie">Session 和 Cookie</span></h1>
 <blockquote>
 <p>Session 是服务端用来记录用户的状态的一种机制。</p>
@@ -367,6 +378,15 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <li>基于 cookie 的机制很容易被 CSRF</li>
 <li>查询session信息可能会有数据库查询操作</li>
 </ul>
+<h1><span id="核心组件">核心组件</span></h1>
+<h2><span id="securitycontextholder">SecurityContextHolder</span></h2>
+<blockquote>
+<p>SecurityContextHolder 它持有的是安全上下文( security context ) 的信息。当前操作的用户是谁，该用户是否已经被认证，他拥有哪些角色权限等等，这些都被保存在 SecurityContextHolder 中。SecurityContextHolder 默认使用 ThreadLocal 策略来存储认证信息。看到ThreadLocal 也就意味着，这是一种与线程绑定的策略。在web环境下，Spring Security在用户登录时自动绑定认证信息到当前线程，在用户退出时，自动清除当前线程的认证信息。</p>
+</blockquote>
+<p><strong>获取当前用户信息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Object principal =SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span><br><span class="line"><span class="keyword">if</span> (principal <span class="keyword">instanceof</span> UserDetails) &#123;</span><br><span class="line">    String username = ((UserDetails)principal).getUsername();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    String username = principal.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getAuthentication() 返回认证信息，getPrincipal() 返回身份信息，UserDetails 便是 Spring 对身份信息封装的一个接口</p>
+<h2><span id="securitycontext">SecurityContext</span></h2>
 <h1><span id="入门-springsecurity">入门 SpringSecurity</span></h1>
 <p>依赖</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--SpringSecurity依赖配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -518,7 +538,7 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">授权和认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实现认证和授权的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Session 和 Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">服务端如何识别特定的客户？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">优劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">劣势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">入门 SpringSecurity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">用户名配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">配置文件配置用户名&#x2F;密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">Java 配置用户名&#x2F;密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">登录配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">忽略拦截</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text"></span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">授权和认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">实现认证和授权的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">JWT 存在的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Session 和 Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">服务端如何识别特定的客户？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">优劣势</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">劣势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">核心组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">SecurityContextHolder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">SecurityContext</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">入门 SpringSecurity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">用户名配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">配置文件配置用户名&#x2F;密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">Java 配置用户名&#x2F;密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">登录配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">忽略拦截</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text"></span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -534,7 +554,7 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -547,7 +567,7 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">62</span>
+        <span class="site-state-item-count">63</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -592,12 +612,12 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">277k</span>
+    <span title="站点总字数">278k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:12</span>
+    <span title="站点阅读时长">4:13</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
