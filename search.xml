@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>test</title>
+    <url>/2020/03/31/test/</url>
+    <content><![CDATA[<h3><span id="qqqq">qqqq</span></h3>
+<a id="more"></a>
+<h3><span id="www">www</span></h3>
+<h3><span id="eee">eee</span></h3>
+<h4><span id="rrr">rrr</span></h4>
+<h4><span id="tttt">tttt</span></h4>
+<p>asdfsadfsk;lfjlks;f\</p>
+<p>dsf</p>
+<p>dasf</p>
+<p>sd</p>
+<p>fds</p>
+<p>f</p>
+<p>das</p>
+<p>f</p>
+<p>sdf</p>
+<p>sda</p>
+<p>f</p>
+<p>sadf</p>
+<p>sd</p>
+<p>fsa</p>
+<p>f</p>
+<p>dsaf</p>
+<p>as</p>
+<p>df</p>
+<p>adsf</p>
+<p>sa</p>
+<p>dfas</p>
+<h3><span id="yyy">yyy</span></h3>
+]]></content>
+  </entry>
+  <entry>
     <title>Web安全之CSRF(跨站请求伪造)</title>
     <url>/2020/03/30/Web%E5%AE%89%E5%85%A8%E4%B9%8BCSRF-%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</url>
     <content><![CDATA[<p>CSRF(Cross Site Request Forgery)，跨站请求伪造</p>
@@ -72,6 +105,7 @@
     <url>/2020/03/29/SpringBoot%E4%B9%8BJPA/</url>
     <content><![CDATA[<p>参考：</p>
 <p><a href="https://blog.csdn.net/zhangtongpeng/article/details/79609942" target="_blank" rel="noopener">spring-boot工程中，jpa下hibernate的ddl-auto的各种属性</a></p>
+<a id="more"></a>
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">jpa:</span></span><br><span class="line">  <span class="attr">hibernate:</span></span><br><span class="line">    <span class="attr">ddl-auto:</span> <span class="string">create</span></span><br></pre></td></tr></table></figure>
 <p>ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空</p>
 <p>ddl-auto:create-drop----每次程序结束的时候会清空表</p>
@@ -3360,6 +3394,28 @@ wiat()必须放在synchronized block中，否则会在program runtime时扔出�
 <p>这句new 了一个派生类，赋值给基类，所以下面的操作编译器认为base对象就是Base类型的。Base类中不存在methodB()方法，所以编译不通过。</p>
 <p>这类多态问题中，无论向上或向下转型，都记住一句话就可以了。</p>
 <p>**编译看左边，运行看右边。**意思编译时候，看左边有没有该方法，运行的时候结果看 <strong>new</strong> 的对象是谁，就调用的谁。</p>
+<h1><span id="19如何保证缓存与数据库双写一致性">19.如何保证缓存与数据库双写一致性？</span></h1>
+<p>转载自：<a href="https://mp.weixin.qq.com/s/kTtL74zfoK43GRQkhFVAmQ" target="_blank" rel="noopener">高频面试题：如何保证缓存与数据库的双写一致性？</a></p>
+<p>分布式缓存是现在很多分布式应用中必不可少的组件，但是用到了分布式缓存，就可能会涉及到缓存与数据库双存储双写，只要是双写，就一定会有数据一致性的问题，那么该如何解决一致性问题？</p>
+<h2><span id="cache-aside-pattern">Cache Aside Pattern</span></h2>
+<p>最经典的缓存+数据库读写模式，就是 <em><strong>Cache Aside Pattern</strong></em>。</p>
+<p><strong>读</strong> 的时候，先读缓存，缓存没有的话，就读数据库，然后取出数据后放入缓存，同时返回响应。</p>
+<p><strong>更新</strong> 的时候，先更新数据库，然后再删除缓存。</p>
+<h3><span id="为什么是删除缓存而不是更新缓存">为什么是删除缓存，而不是更新缓存？</span></h3>
+<p>原因很简单，很多时候，在复杂的缓存场景，缓存不单单是数据库中直接取出来的值。</p>
+<p>比如可能更新了某个表的一个字段，然后其对应的缓存，是需要查询另外两个表的数据并进行计算，才能计算出缓存最新的值的。</p>
+<p>另外更新缓存的代价有时候是很高的。是不是说，每次修改数据库的时候，都一定要将其对应的缓存更新一份？</p>
+<p>也许有的场景是这样，但是对于比较复杂的缓存数据计算的场景，就不是这样了。</p>
+<p>如果你频繁修改一个缓存涉及的多个表，缓存也频繁更新。但是问题在于，这个缓存到底会不会被频繁访问到？</p>
+<p>举个栗子，一个缓存涉及的表的字段，在 1 分钟内就修改了 20 次，或者是 100 次，那么缓存更新 20 次、100 次；但是这个缓存在 1 分钟内只被读取了 1 次，有大量的冷数据。</p>
+<p>实际上，如果你只是删除缓存的话，那么在 1 分钟内，这个缓存不过就重新计算一次而已，开销大幅度降低，用到缓存才去算缓存。</p>
+<p>其实删除缓存，而不是更新缓存，就是一个 <em><strong>lazy(懒加载)</strong></em> 计算的思想，不要每次都重新做复杂的计算，不管它会不会用到，而是让它到需要被使用的时候再重新计算。</p>
+<p>像 mybatis，hibernate，都有<u>懒加载</u>思想。查询一个部门，部门带了一个员工的 list，没有必要说每次查询部门，都把里面的 1000 个员工的数据也同时查出来。</p>
+<p>80% 的情况，查这个部门，就只是要访问这个部门的信息就可以了。先查部门，同时要访问里面的员工，那么这个时候只有在你要访问里面的员工的时候，才会去数据库里面查询 1000 个员工。</p>
+<h2><span id="最初级的缓存不一致问题及解决方案">最初级的缓存不一致问题及解决方案</span></h2>
+<p>**问题：**先修改数据库，再删除缓存。如果删除缓存失败了，那么会导致数据库中是新数据，缓存中是旧数据，数据就出现了不一致。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/JdLkEI9sZfeoyd3H8CCETFgcdAU1AWvN9Zoz5cFzMJEfD36zwfXteNoC1CYC68bFicI1RpwcwicmjAl9GwgLLuWg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img"></p>
+<p>**解决思路：**先删除缓存，再修改数据库。如果数据库修改失败了，那么数据库中是旧数据，缓存中是空的，那么数据不会不一致。因为读的时候缓存没有，则读数据库中旧数据，然后更新到缓存中。</p>
 ]]></content>
       <categories>
         <category>日常</category>
