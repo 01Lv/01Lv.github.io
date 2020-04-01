@@ -1,37 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>test</title>
-    <url>/2020/03/31/test/</url>
-    <content><![CDATA[<h3><span id="qqqq">qqqq</span></h3>
+    <title>SpringBoot之Filter</title>
+    <url>/2020/04/01/SpringBoot%E4%B9%8BFilter/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/basis/springboot-filter.md" target="_blank" rel="noopener">Filter介绍</a></p>
+<blockquote>
+<p>Filter 过滤器主要是用来过滤用户请求的，它允许我们对用户请求进行前置处理和后置处理，比如实现 URL 级别的权限控制，过滤非法请求等等。Filter 过滤器是面向切面编程 — AOP具体实现</p>
+</blockquote>
 <a id="more"></a>
-<h3><span id="www">www</span></h3>
-<h3><span id="eee">eee</span></h3>
-<h4><span id="rrr">rrr</span></h4>
-<h4><span id="tttt">tttt</span></h4>
-<p>asdfsadfsk;lfjlks;f\</p>
-<p>dsf</p>
-<p>dasf</p>
-<p>sd</p>
-<p>fds</p>
-<p>f</p>
-<p>das</p>
-<p>f</p>
-<p>sdf</p>
-<p>sda</p>
-<p>f</p>
-<p>sadf</p>
-<p>sd</p>
-<p>fsa</p>
-<p>f</p>
-<p>dsaf</p>
-<p>as</p>
-<p>df</p>
-<p>adsf</p>
-<p>sa</p>
-<p>dfas</p>
-<h3><span id="yyy">yyy</span></h3>
+<p>Filter 是依赖于 Servlet 容器，<code>Filter</code> 接口就在 Servlet 包下面，属于 Servlet 规范的一部分。所以，很多时候我们也称其为“增强版 Servlet”。</p>
+<p>如果我们需要自定义 Filter 的话非常简单，只需要实现 <code>javax.Servlet.Filter</code> 接口，然后重写里面的三个方法即可！</p>
+<p>Filter.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.servlet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">   <span class="comment">//初始化过滤器后执行的操作</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="comment">// 对请求进行过滤</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest var1, ServletResponse var2, FilterChain var3)</span> <span class="keyword">throws</span> IOException, ServletException</span>;</span><br><span class="line">   <span class="comment">// 销毁过滤器后执行的操作，主要用户对某些资源的回收</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>todo：2. Filter是如何实现拦截的？</p>
 ]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>Filter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Web安全之跨域请求</title>
+    <url>/2020/04/01/Web%E5%AE%89%E5%85%A8%E4%B9%8B%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://www.jianshu.com/p/f880878c1398" target="_blank" rel="noopener">什么是跨域请求以及实现跨域的方案</a></p>
+<h1><span id="什么是跨域请求">什么是跨域请求</span></h1>
+<h2><span id="概述">概述</span></h2>
+<p>在 Html 中，<code>&lt;a&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;img&gt;</code>,  <code>&lt;script&gt;</code>,  <code>&lt;iframe&gt;</code>,  <code>&lt;link&gt;</code>  等标签以及 Ajax 都可以指向一个资源地址，而所谓的跨域请求就是指：当前发起请求的域与该请求指向的资源所在的域不一样。这里的域指的是这样的一个概念：我们认为若协议 + 域名 + 端口号均相同，那么就是同域。</p>
+<p>举个例子：假如一个域名为<code>aaa.cn</code>的网站，它发起一个资源路径为<code>aaa.cn/books/getBookInfo</code>的 Ajax 请求，那么这个请求是同域的，因为资源路径的协议、域名以及端口号与当前域一致（例子中协议名默认为http，端口号默认为80）。但是，如果发起一个资源路径为<code>bbb.com/pay/purchase</code>的 Ajax 请求，那么这个请求就是跨域请求，因为域不一致，与此同时由于安全问题，这种请求会受到同源策略限制。</p>
+<a id="more"></a>
+<h2><span id="跨域请求的安全问题">跨域请求的安全问题</span></h2>
+<p>通常，浏览器会对上面提到的跨域请求作出限制。浏览器之所以要对跨域请求作出限制，是出于安全方面的考虑，因为跨域请求有可能被不法分子利用来发动 <strong>CSRF</strong>攻击。</p>
+<h3><span id="csrf">CSRF</span></h3>
+<p>CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF。CSRF攻击者在用户已经登录目标网站之后，诱使用户访问一个攻击页面，利用目标网站对用户的信任，以用户身份在攻击页面对目标网站发起伪造用户操作的请求，达到攻击目的。</p>
+<p>CSRF 攻击的原理大致描述如下：有两个网站，其中A网站是真实受信任的网站，而B网站是危险网站。在用户登陆了受信任的A网站是，本地会存储A网站相关的Cookie，并且浏览器也维护这一个Session会话。这时，如果用户在没有登出A网站的情况下访问危险网站B，那么危险网站B就可以模拟发出一个对A网站的请求（跨域请求）对A网站进行操作，而在A网站的角度来看是并不知道请求是由B网站发出来的（Session和Cookie均为A网站的），这时便成功发动一次CSRF 攻击。</p>
+<p>因而 CSRF 攻击可以简单理解为：攻击者盗用了你的身份，以你的名义发送而已请求。CSRF能够做的事情包括：以你名义发送邮件，发消息，盗取你的账号，甚至于购买商品，虚拟货币转账…造成的问题包括：个人隐私泄露以及财产安全。</p>
+<p>因此，大多数浏览器都会跨域请求作出限制，这是从浏览器层面上的对 CSRF 攻击的一种防御，但是需要注意的是在复杂的网络环境中借助浏览器来防御 CSRF 攻击并不足够，还需要从服务端或者客户端方面入手防御。详细可以参考这篇文章<a href="https://link.jianshu.com?t=http://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html" target="_blank" rel="noopener">浅谈CSRF攻击方式</a></p>
+<h2><span id="同源策略sample-origin-policy">同源策略(Sample-Origin Policy)</span></h2>
+<h3><span id="概述">概述</span></h3>
+<ul>
+<li>
+<p>同源策略是 Netscape 提出的一个著名的安全策略</p>
+</li>
+<li>
+<p>同源策略是浏览器最核心最基础的安全策略</p>
+</li>
+<li>
+<p>现在所有的可支持 Javascript 的浏览器都会使用这个策略</p>
+</li>
+<li>
+<p>web构建在同源策略基础之上，浏览器对非同源脚本的限制措施是对同源策略的具体实现</p>
+</li>
+</ul>
+<h3><span id="同源策略的含义">同源策略的含义</span></h3>
+<ul>
+<li>
+<p>DOM 层面的同源策略：限制了来自不同源的”Document”对象或 JS 脚本，对当前“document”对象的读取或设置某些属性</p>
+</li>
+<li>
+<p>Cookie和XMLHttprequest层面的同源策略：禁止 Ajax 直接发起跨域HTTP请求（其实可以发送请求，结果被浏览器拦截，不展示），同时 Ajax 请求不能携带与本网站不同源的 Cookie。</p>
+</li>
+<li>
+<p>同源策略的非绝对性：<code>&lt;img&gt;&lt;iframe&gt;&lt;link&gt;&lt;video&gt;&lt;audio&gt;</code>等带有src属性的标签可以从不同的域加载和执行资源。</p>
+</li>
+<li>
+<p>其他插件的同源策略：<code>flash、java applet、silverlight、googlegears</code>等浏览器加载的第三方插件也有各自的同源策略，只是这些同源策略不属于浏览器原生的同源策略，如果有漏洞则可能被黑客利用，从而留下XSS攻击的后患</p>
+</li>
+</ul>
+<h3><span id="同源的具体含义">同源的具体含义</span></h3>
+<p><strong>域名</strong>，<strong>协议</strong>，<strong>端口</strong> 有一个不同就不是同源，三者均相同，这两个网站才是同源</p>
+<h2><span id="跨域解决方法">跨域解决方法</span></h2>
+<p>虽然在安全层面上同源限制是必要的，但有时同源策略会对我们的合理用途造成影响，为了避免开发的应用受到限制，有多种方式可以绕开同源策略，下面介绍的是经常使用的 JSONP, CORS 方法。</p>
+<h3><span id="jsonp">JSONP</span></h3>
+<h4><span id="原理">原理</span></h4>
+<ul>
+<li>JSONP 是一种非官方的跨域数据交互协议</li>
+<li>JSONP 本质上是利用 <code>&lt;script&gt;&lt;img&gt;&lt;iframe&gt;</code> 等标签不受同源策略限制，可以从不同域加载并执行资源的特性，来实现数据跨域传输</li>
+<li>JSONP由两部分组成：回调函数和数据。回调函数是当响应到来时应该在页面中调用的函数，而数据就是传入回调函数中的JSON数据。</li>
+<li>JSONP 的理念就是，与服务端约定好一个回调函数名，服务端接收到请求后，将返回一段 Javascript，在这段  Javascript 代码中调用了约定好的回调函数，并且将数据作为参数进行传递。当网页接收到这段 Javascript 代码后，就会执行这个回调函数，这时数据已经成功传输到客户端了。</li>
+</ul>
+<h4><span id="示例">示例</span></h4>
+<p>首先当前页面中声明有这样的一个函数，它将作为 JSONP 的回调函数处理作为函数参数传入的数据</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span></span><br><span class="line"><span class="actionscript">    <span class="function"><span class="keyword">function</span> <span class="title">dosomething</span><span class="params">(jsondata)</span></span>&#123;</span></span><br><span class="line"><span class="actionscript">        <span class="comment">//处理获得的json数据</span></span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后，我们就可以借助 <code>&lt;img&gt;&lt;iframe&gt;</code> 等标签可以引入不同域资源的特性，将需要发送的请求的路径作为src参数，其中需要注意的是：需要告知服务端回调函数的函数名。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://example.com/data.php?callback=dosomething"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这时服务端在返回数据的时候，就会返回一端 Javascript 代码，在 Javascript代码中调用了回调函数，并且需要返回的数据作为回调函数的参数</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">dosomething([<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]);</span><br></pre></td></tr></table></figure>
+<p>最后页面成功加载了刚才指定路径的资源后，将会执行该 Javascript 代码，<code>dosomething</code>函数将执行，这时一次跨域请求完成。</p>
+<p>另外，如果页面引入了 jQuery，那么可以通过它封装的方法很方便的实现JSONP操作了</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Using YQL and JSONP</span></span><br><span class="line">$.ajax(&#123;</span><br><span class="line">    url: <span class="string">"http://query.yahooapis.com/v1/public/yql"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The name of the callback parameter, as specified by the YQL service</span></span><br><span class="line">    jsonp: <span class="string">"callback"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tell jQuery we're expecting JSONP</span></span><br><span class="line">    dataType: <span class="string">"jsonp"</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Tell YQL what we want and that we want JSON</span></span><br><span class="line">    data: &#123;</span><br><span class="line">        q: <span class="string">"select title,abstract,url from search.news where query=\"cat\""</span>,</span><br><span class="line">        format: <span class="string">"json"</span></span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Work with the response</span></span><br><span class="line">    success: <span class="function"><span class="keyword">function</span>(<span class="params"> response </span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log( response ); <span class="comment">// server response</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4><span id="优缺点">优缺点</span></h4>
+<p>JSONP 的优点是：它不像<code>XMLHttpRequest</code>对象实现的Ajax请求那样受到同源策略的限制；它的兼容性更好，在更加古老的浏览器中都可以运行。</p>
+<p>JSONP 的缺点是：它只支持 GET 请求，而不支持 POST 请求等其他类型的 HTTP 请求</p>
+<h3><span id="cors">CORS</span></h3>
+<h4><span id="介绍">介绍</span></h4>
+<p>跨源资源共享 <strong>Cross-Origin Resource Sharing(CORS)</strong> 是一个新的 W3C 标准，它新增的一组HTTP首部字段，允许服务端其声明哪些源站有权限访问哪些资源。换言之，它允许浏览器向声明了 CORS 的跨域服务器，发出 XMLHttpReuest 请求，从而克服 Ajax 只能同源使用的限制。</p>
+<p>另外，规范也要求对于非简单请求，浏览器必须首先使用 OPTION 方法发起一个预检请求(preflight request)，从而获知服务端是否允许该跨域请求，在服务器确定允许后，才发起实际的HTTP请求。对于简单请求、非简单请求以及预检请求的详细资料可以阅读<a href="https://link.jianshu.com?t=https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">HTTP访问控制（CORS）</a> 。</p>
+<h4><span id="http-协议-header-简析">HTTP 协议 Header 简析</span></h4>
+<p>下面对 CORS 中新增的 HTTP 首部字段进行简析：</p>
+<ul>
+<li>
+<p>Access-Control-Allow-Origin</p>
+<p>响应首部中可以携带这个头部表示服务器允许哪些域可以访问该资源，其语法如下：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: <span class="xml"><span class="tag">&lt;<span class="name">origin</span>&gt;</span> | *</span></span><br></pre></td></tr></table></figure>
+<p>其中，origin 参数的值指定了允许访问该资源的外域 URI。对于不需要携带身份凭证的请求，服务器可以指定该字段的值为通配符，表示允许来自所有域的请求。</p>
+</li>
+<li>
+<p>Access-Control-Allow-Methods</p>
+<p>该首部字段用于预检请求的响应，指明实际请求所允许使用的HTTP方法。其语法如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Methods: <span class="tag">&lt;<span class="name">method</span>&gt;</span>[, <span class="tag">&lt;<span class="name">method</span>&gt;</span>]*</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Access-Control-Allow-Headers</p>
+<p>该首部字段用于预检请求的响应。指明了实际请求中允许携带的首部字段。其语法如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Headers: <span class="tag">&lt;<span class="name">field-name</span>&gt;</span>[, <span class="tag">&lt;<span class="name">field-name</span>&gt;</span>]*</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Access-Control-Max-Age</p>
+<p>该首部字段用于预检请求的响应，指定了预检请求能够被缓存多久，其语法如下：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">Access-Control-Max-Age: <span class="xml"><span class="tag">&lt;<span class="name">delta-seconds</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Access-Control-Allow-Credentials</p>
+<p>该字段可选。它的值是一个布尔值，表示是否允许发送Cookie。默认情况下，Cookie不包括在CORS请求之中。设为<code>true</code>，即表示服务器明确许可，Cookie可以包含在请求中，一起发给服务器。其语法如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>另外，如果要把 Cookie 发送到服务器，除了服务端要带上<code>Access-Control-Allow-Credentials</code>首部字段外，另一方面请求中也要带上<code>withCredentials</code>属性。</p>
+<p>但是需要注意的是：如果需要在 Ajax 中设置和获取 Cookie，那么<code>Access-Control-Allow-Origin</code>首部字段不能设置为<code>*</code> ，必须设置为具体的 origin 源站。详细可阅读文章<a href="https://www.jianshu.com/p/13d53acc124f" target="_blank" rel="noopener">CORS 跨域 Cookie 的设置与获取</a></p>
+</li>
+<li>
+<p>Origin</p>
+<p>该首部字段表明预检请求或实际请求的源站。不管是否为跨域请求，Origin字段总是被发送。其语法如下：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">Origin: <span class="xml"><span class="tag">&lt;<span class="name">origin</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Access-Control-Request-Method</p>
+<p>该首部字段用于预检请求。其作用是，将实际请求所使用的 HTTP 方法告诉服务器。其语法如下：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">Access-Control-Request-Method: <span class="xml"><span class="tag">&lt;<span class="name">method</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Access-Control-Request-Headers</p>
+<p>该首部字段用于预检请求。其作用是，将实际请求所携带的首部字段告诉服务器。其语法如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">Access-Control-Request-Headers: <span class="tag">&lt;<span class="name">field-name</span>&gt;</span>[, <span class="tag">&lt;<span class="name">field-name</span>&gt;</span>]*</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4><span id="示例">示例</span></h4>
+<p>假设我们在 <a href="http://bbb.cn" target="_blank" rel="noopener">bbb.cn</a> 域名下，发送一个 Ajax 请求到 <a href="http://aaa.cn" target="_blank" rel="noopener">aaa.cn</a> 域名，其路径如下：<code>http://aaa.cn/localserver/api/corsTest</code> 。由于同源策略，这样的 Ajax 请求将会被浏览器所拦截，得到下面的信息：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200401194516318.png#pic_center" alt="145"></p>
+<p>若想能够发送跨域请求，我们只需要在服务器的响应中配置适当的CORS HTTP 首部字段就可以了，例如可以加入以下的首部字段：</p>
+<figure class="highlight jsx"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Methods：*</span><br></pre></td></tr></table></figure>
+<p>此时，Ajax请求就可以顺利的发送和接收了，对应的请求和响应头部如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200401194530479.png#pic_center" alt="146"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200401194541400.png#pic_center" alt="147"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+      </categories>
+      <tags>
+        <tag>Web安全</tag>
+        <tag>跨域</tag>
+      </tags>
   </entry>
   <entry>
     <title>Web安全之CSRF(跨站请求伪造)</title>
@@ -434,7 +565,7 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/135.png" alt="135.png"></p>
 <h1><span id="spring-security-是如何完成身份认证的">Spring Security 是如何完成身份认证的？</span></h1>
 <ol>
-<li>用户名和密码被过滤器获取到，封装成 Authentication，通常情况下时 <em><strong>UsernamePasswordAuthenticationToken</strong></em> 这个实现类</li>
+<li>用户名和密码被过滤器获取到，封装成 Authentication，通常情况下是<em><strong>UsernamePasswordAuthenticationToken</strong></em> 这个实现类</li>
 <li>AuthenticationManager 身份管理器负责验证这个 Authentication</li>
 <li>认证成功后，<em><strong>AuthenticationManager</strong></em> 身份管理器返回一个被填满了信息的（包括上面提到的权限信息，身份信息，细节信息，但密码通常会被移除）Authentication 实例</li>
 <li><em><strong>SecurityContextHolder</strong></em>安全上下文容器将第3步填充了信息的Authentication，通过SecurityContextHolder.getContext().setAuthentication()方法，设置到其中。</li>
@@ -3387,6 +3518,22 @@ wiat()必须放在synchronized block中，否则会在program runtime时扔出�
 <h2><span id="初始化">初始化</span></h2>
 <p>类初始化阶段是类加载过程的最后一步，到了初始化阶段，才真正开始执行类中定义的 java 程序代码。在准备阶段，变量已经赋值归一次系统要求的初始值，而在初始化阶段，则根据程序员通过程序指定的计划去初始化类变量和其他资源，或者说：初始化阶段是执行类构造器&lt;clinit&gt;() 方法的过程。</p>
 <p><strong>&lt;clinit&gt;()</strong> 方法是由编译器自动收集类中的所有类变量的赋值动作和静态语句块 static{} 中的语句合并产生的，编译器收集的顺序是由语句在源文件中出现的顺序所决定的，静态语句块只能访问到定义在静态语句块之前的变量，定义在它之后的变量，在前面的静态语句块可以赋值，但是不能访问</p>
+<h2><span id="例题">例题</span></h2>
+<h3><span id="1">1.</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> </span>&#123;</span><br><span class="line">    C() &#123;</span><br><span class="line">        System.out.print(<span class="string">"C"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    C c = <span class="keyword">new</span> C();</span><br><span class="line"></span><br><span class="line">    A() &#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="string">"A"</span>);</span><br><span class="line">        System.out.print(<span class="string">"A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    A(String s) &#123;</span><br><span class="line">        System.out.print(s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    Test() &#123;</span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"B"</span>);</span><br><span class="line">        System.out.print(<span class="string">"B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Test();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化过程是这样的：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span> 首先，初始化父类中的静态成员变量和静态代码块，按照在程序中出现的顺序初始化</span><br><span class="line"><span class="number">2.</span> 然后，初始化子类的静态成员变量和静态代码块，按照在程序中出现的顺序初始化</span><br><span class="line"><span class="number">3.</span> 其次，初始化父类的普通成员变量和代码块，再执行父类的构造方法</span><br><span class="line"><span class="number">4.</span> 最后，初始化子类的普通成员变量和代码块，再执行子类的构造方法</span><br></pre></td></tr></table></figure>
+<p>题解：</p>
+<ol>
+<li>初始化父类的普通成员变量和代码块，执行 C c = new C(); 输出 C</li>
+<li>super(“B”)，表示调用父类的构造方法，不调用父类的无参构造函数，输出 B</li>
+<li>System.out.print(“B”)</li>
+</ol>
+<h3><span id="2">2.</span></h3>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String baseName = <span class="string">"base"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Base</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        callName();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System. out. println(baseName);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Sub</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String baseName = <span class="string">"sub"</span>;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">callName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            System. out. println (baseName) ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Base b = <span class="keyword">new</span> Sub();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>题解：</p>
+<p>new Sub(); 在创造派生类的过程中首先创建基类对象，然后才能创建派生类。</p>
+<p>创建基类即默认调用 Base() 方法，在方法中调用 callName() 方法，由于派生类中存在此方法，则被调用的 callName() 方法是派生类中的方法，此时派生类还未构造，所以变量 baseName 的值为 null</p>
 <h1><span id="18多态问题">18.多态问题</span></h1>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> Wangyi;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Base"</span>);</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Son"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodB</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"SonB"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test01</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Base base = <span class="keyword">new</span> Son();</span><br><span class="line">        base.method();</span><br><span class="line">        base.methodB();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>问这个程序的输出结果。<strong>编译不通过</strong></p>
