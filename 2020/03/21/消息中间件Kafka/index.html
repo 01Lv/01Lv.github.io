@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="转载自： Kafka 入门介绍 概述  kafka 是一个 分布式 的基于 发布&#x2F;订阅模式 的 消息队列, 主要应用于大数据实时处理领域">
+  <meta name="description" content="转载自： Kafka 入门介绍 概述 kafka 是一个 分布式 的基于 发布&#x2F;订阅模式 的 消息队列, 主要应用于大数据实时处理领域">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消息中间件Kafka">
 <meta property="og:url" content="https://01lv.github.io/2020/03/21/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6Kafka/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="转载自： Kafka 入门介绍 概述  kafka 是一个 分布式 的基于 发布&#x2F;订阅模式 的 消息队列, 主要应用于大数据实时处理领域">
+<meta property="og:description" content="转载自： Kafka 入门介绍 概述 kafka 是一个 分布式 的基于 发布&#x2F;订阅模式 的 消息队列, 主要应用于大数据实时处理领域">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center">
@@ -260,7 +260,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -281,47 +281,45 @@
       
         <p>转载自：</p>
 <p><a href="https://lotabout.me/2018/kafka-introduction/" target="_blank" rel="noopener">Kafka 入门介绍</a></p>
-<h1><span id="概述">概述</span></h1>
-<blockquote>
+<h1><span id="概述">概述</span></h1><blockquote>
 <p>kafka 是一个 <strong>分布式</strong> 的基于 <strong>发布/订阅模式</strong> 的 <strong>消息队列</strong>, 主要应用于大数据实时处理领域</p>
 </blockquote>
 <a id="more"></a>
-<h1><span id="mq传统应用场景之异步处理">MQ传统应用场景之异步处理</span></h1>
-<p><img src="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200322162858699"></p>
-<h1><span id="使用消息队列的好处">使用消息队列的好处</span></h1>
-<ul>
+
+<h1><span id="mq传统应用场景之异步处理">MQ传统应用场景之异步处理</span></h1><p><img src="https://img-blog.csdnimg.cn/20200322221342646.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200322162858699"></p>
+<h1><span id="使用消息队列的好处">使用消息队列的好处</span></h1><ul>
 <li>解耦</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">允许你独立的扩展或修改两边的处理过程,只要确保它们遵守同样的接口约束</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>可恢复性</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">系统的一部分组件失效时, 不会影响到整个系统。消息队列降低了进程间的耦合度,所以即使一个处理消息的进程挂掉,加入队列中的消息仍然可以在系统恢复后被处理</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>缓冲</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有助于控制和优化数据流经过系统的速度,解决生产消息和消费消息的处理速度不一致的情况</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>灵活性 &amp;  峰值处理能力</li>
 </ul>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在访问量剧增的情况下, 应用仍然需要继续发挥作用，但是这样的突发流量并不常见。使用消息队列能够使关键组件顶住突发的访问压力,而不会因为突发的超负荷的请求而完全崩溃.</span><br></pre></td></tr></table></figure>
-<h1><span id="消息队列的两种模式">消息队列的两种模式</span></h1>
-<h2><span id="点对点模式">点对点模式</span></h2>
-<p>一对一，消费者主动拉取数据，消息收到后消息清除</p>
+
+<h1><span id="消息队列的两种模式">消息队列的两种模式</span></h1><h2><span id="点对点模式">点对点模式</span></h2><p>一对一，消费者主动拉取数据，消息收到后消息清除</p>
 <p>消息生产者生产消息发送到 Queue 种，然后消息消费者从 Queue 中取出并且消费消息。消息被消费后，queue 中不再有存储，所以消息消费者不可能消费到已经被消费的消息。Queue 支持存在多个消费者，但是对一个消息而言，只会有一个消费者可以消费。</p>
 <p><img src="https://img-blog.csdnimg.cn/20200324163814977.png#pic_center" alt="image-20200323212356791"></p>
-<h2><span id="发布订阅模式">发布订阅模式</span></h2>
-<p>一对多，消费者消费数据之后不会清除消息</p>
+<h2><span id="发布订阅模式">发布订阅模式</span></h2><p>一对多，消费者消费数据之后不会清除消息</p>
 <p>消息生产者 (发布) 将消息发布到 topic 中，同时有多个消息消费者 (订阅) 消费该消息。和点对点方式不同，发布到 topic 的消息会被所有订阅者消费</p>
 <p><img src="https://img-blog.csdnimg.cn/20200324163834909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200323212620425"></p>
-<h1><span id="kafka-工作流程及文件存储机制">Kafka 工作流程及文件存储机制</span></h1>
-<p><img src="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200324110116815"></p>
+<h1><span id="kafka-工作流程及文件存储机制">Kafka 工作流程及文件存储机制</span></h1><p><img src="https://img-blog.csdnimg.cn/2020032416384885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="image-20200324110116815"></p>
 <p>在图中，各个名词的解释：</p>
 <ul>
-<li>**broker：**一个broker就是一个节点，由众多的节点构成一个 Kafka 集群</li>
-<li>**Topic：**直译为 <strong>主题</strong>。生产者与消费者交互数据的地方</li>
-<li>**leader 和 follower：**在每个节点中都有两个 <strong>replication(即副本)</strong>，每个leader 的 follower 都不在同一个节点中，为了防止某个节点 down 机，导致这个 topic 所有数据丢失。follower 的主要作用是为了备份 leader 的数据。</li>
-<li>**offset：**偏移量，记录数据保存的下标。consumer 每次消费完数据后都会记录 offset</li>
+<li><strong>broker：</strong>一个broker就是一个节点，由众多的节点构成一个 Kafka 集群</li>
+<li><strong>Topic：</strong>直译为 <strong>主题</strong>。生产者与消费者交互数据的地方</li>
+<li><strong>leader 和 follower：</strong>在每个节点中都有两个 <strong>replication(即副本)</strong>，每个leader 的 follower 都不在同一个节点中，为了防止某个节点 down 机，导致这个 topic 所有数据丢失。follower 的主要作用是为了备份 leader 的数据。</li>
+<li><strong>offset：</strong>偏移量，记录数据保存的下标。consumer 每次消费完数据后都会记录 offset</li>
 </ul>
 <p><strong>topic</strong> 是逻辑上的概念，而 <strong>partition</strong> 是物理上的概念，每个 partition 对应于一个 <strong>log</strong> 文件，该 log 文件中存储的就是 producer 生产的数据。Producer 生产的数据会被不断追加到该 log <strong>文件末端</strong>，且每条数据都有自己的 offset。消费者组中的每个消费者，都会实时记录自己消费到哪个 offset。以便出错恢复时，从上次的位置继续消费。</p>
 
@@ -442,7 +440,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -455,7 +453,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -500,12 +498,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

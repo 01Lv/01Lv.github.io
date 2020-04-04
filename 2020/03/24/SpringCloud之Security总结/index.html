@@ -291,164 +291,140 @@
         <p>参考：</p>
 <p><a href="https://docs.spring.io/spring-security/site/docs/5.3.1.BUILD-SNAPSHOT/reference/html5/#preface" target="_blank" rel="noopener">官网</a></p>
 <p><a href="https://www.springcloud.cc/spring-security.html#jc-form" target="_blank" rel="noopener">Spring Security参考，中文文档值得关注</a></p>
-<p><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=mall%E6%95%B4%E5%90%88springsecurity%E5%92%8Cjwt%E5%AE%9E%E7%8E%B0%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83%EF%BC%88%E4%B8%80%EF%BC%89" target="_blank" rel="noopener">mall整合SpringSecurity和JWT实现认证和授权（一）</a></p>
+<p><a href="http://www.macrozheng.com/#/architect/mall_arch_04?id=mall整合springsecurity和jwt实现认证和授权（一）" target="_blank" rel="noopener">mall整合SpringSecurity和JWT实现认证和授权（一）</a></p>
 <p><a href="https://www.zhihu.com/question/19786827" target="_blank" rel="noopener">COOKIE和SESSION有什么区别？</a></p>
 <p><a href="https://juejin.im/post/5a437441f265da43294e54c3" target="_blank" rel="noopener">聊一聊JWT与session</a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&amp;mid=2247486003&amp;idx=1&amp;sn=7cea98049764fa7d8f7dbe05472d2e02&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">手把手带你入门 Spring Security！</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI1NDY0MTkzNQ==&mid=2247486003&idx=1&sn=7cea98049764fa7d8f7dbe05472d2e02&scene=21#wechat_redirect" target="_blank" rel="noopener">手把手带你入门 Spring Security！</a></p>
 <p><a href="https://segmentfault.com/a/1190000012557493" target="_blank" rel="noopener">spring security系列一：架构概述</a></p>
 <p><a href="https://segmentfault.com/a/1190000012668936" target="_blank" rel="noopener">spring security系列二：过滤器机制</a></p>
 <p><a href="https://blog.csdn.net/zhoucheng05_13/article/details/60466980" target="_blank" rel="noopener">SpringSecurity学习笔记之二：SpringSecurity结构及基本配置</a></p>
 <p><a href="https://blog.csdn.net/zhoucheng05_13/article/details/60467089" target="_blank" rel="noopener">SpringSecurity学习笔记之三：配置用户存储</a></p>
 <p><a href="https://blog.csdn.net/zhoucheng05_13/article/details/60467234" target="_blank" rel="noopener">SpringSecurity学习笔记之四：拦截请求</a></p>
-<h1><span id="定义">定义</span></h1>
-<blockquote>
+<h1><span id="定义">定义</span></h1><blockquote>
 <p>SpringSecurity是一个强大的可高度定制的认证和授权框架，对于Spring应用来说它是一套Web安全标准。SpringSecurity注重于为Java应用提供认证和授权功能，像所有的Spring项目一样，它对自定义需求具有强大的扩展性。</p>
 </blockquote>
-<p>一般会结合 <em><strong>JWT</strong></em> 进行使用</p>
+<p>一般会结合 <strong><em>JWT</em></strong> 进行使用</p>
 <blockquote>
 <p>JWT是JSON WEB TOKEN的缩写，它是基于 RFC 7519 标准定义的一种可以安全传输的的JSON对象，由于使用了数字签名，所以是可信任和安全的。</p>
 </blockquote>
 <a id="more"></a>
-<h1><span id="授权和认证">授权和认证</span></h1>
-<p>认证就是让服务器知道你是谁；授权就是服务器让你知道你什么能干，什么不能干</p>
-<h1><span id="jwt">JWT</span></h1>
-<h2><span id="定义">定义</span></h2>
-<p>JSON Web Token（JWT）是一种开放标准（RFC 7519），它定义了一种紧凑且独立的方式，可以将各方之间的信息作为JSON对象进行安全传输。该信息可以验证和信任，因为是经过数字签名的。</p>
-<h2><span id="组成">组成</span></h2>
-<p>JWT token 的格式：<strong>header</strong>.<strong>payload</strong>.<strong>signature</strong></p>
+
+<h1><span id="授权和认证">授权和认证</span></h1><p>认证就是让服务器知道你是谁；授权就是服务器让你知道你什么能干，什么不能干</p>
+<h1><span id="jwt">JWT</span></h1><h2><span id="定义">定义</span></h2><p>JSON Web Token（JWT）是一种开放标准（RFC 7519），它定义了一种紧凑且独立的方式，可以将各方之间的信息作为JSON对象进行安全传输。该信息可以验证和信任，因为是经过数字签名的。</p>
+<h2><span id="组成">组成</span></h2><p>JWT token 的格式：<strong>header</strong>.<strong>payload</strong>.<strong>signature</strong></p>
 <ul>
-<li><em><strong>header</strong></em> 中用于存放签名的生成算法。通常包含两个字段，分别是 <u>typ(type)</u> 和 <u>alg(algorithm)</u>
-<ul>
+<li><strong><em>header</em></strong> 中用于存放签名的生成算法。通常包含两个字段，分别是 <u>typ(type)</u> 和 <u>alg(algorithm)</u><ul>
 <li>typ：token的类型，这里固定为 JWT</li>
 <li>alg：使用的 hash 算法，例如：HMAC SHA256 或者 RSA</li>
 </ul>
 </li>
 </ul>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"alg"</span>: <span class="string">"HS256"</span>,</span><br><span class="line">    <span class="attr">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><em><strong>payload</strong></em> 存储我们需要传递的信息的部分，存放用户名，token的生成时间和过期时间，</li>
+<li><strong><em>payload</em></strong> 存储我们需要传递的信息的部分，存放用户名，token的生成时间和过期时间，</li>
 </ul>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="attr">"sub"</span>:<span class="string">"admin"</span>,<span class="attr">"created"</span>:<span class="number">1489079981393</span>,<span class="attr">"exp"</span>:<span class="number">1489684781</span>&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><em><strong>signature</strong></em> 以 header 和 payload 生成的签名，一旦 header 和 payload 被篡改，验证将失败</li>
+<li><strong><em>signature</em></strong> 以 header 和 payload 生成的签名，一旦 header 和 payload 被篡改，验证将失败</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//secret为加密算法的密钥</span></span><br><span class="line">String signature = HMACSHA512(base64UrlEncode(header) + <span class="string">"."</span> +base64UrlEncode(payload),secret)</span><br></pre></td></tr></table></figure>
-<h2><span id="实例">实例</span></h2>
-<p>这是一个JWT的字符串</p>
+
+<h2><span id="实例">实例</span></h2><p>这是一个JWT的字符串</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1NTY3NzkxMjUzMDksImV4cCI6MTU1NzM4MzkyNX0.d-iki0193X0bBOETf2UN3r3PotNIEAV7mzIxxeI5IxFyzzkOZxS0PGfF_SK6wxCv2K8S0cZjMkv6b5bCqc0VBwCopy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
-<h2><span id="实现认证和授权的原理">实现认证和授权的原理</span></h2>
-<ol>
+
+<h2><span id="实现认证和授权的原理">实现认证和授权的原理</span></h2><ol>
 <li>用户调用登录接口，登录成功后获取到 JWT 的 token</li>
-<li>之后用户每次调用接口都在 http 的 header 中添加一个 [头叫 <em><strong>Authorization</strong></em> 的，值为 JWT 的 token]</li>
+<li>之后用户每次调用接口都在 http 的 header 中添加一个 [头叫 <strong><em>Authorization</em></strong> 的，值为 JWT 的 token]</li>
 <li>后台程序通过对Authorization头中信息的解码及数字签名校验来获取其中的用户信息，从而实现认证和授权。</li>
 </ol>
-<h2><span id="流程图">流程图</span></h2>
-<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/109.png" alt="109.png"></p>
+<h2><span id="流程图">流程图</span></h2><p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/109.png" alt="109.png"></p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/134.png" alt="134.png"></p>
-<h2><span id="jwt-存在的问题">JWT 存在的问题</span></h2>
-<ol>
+<h2><span id="jwt-存在的问题">JWT 存在的问题</span></h2><ol>
 <li>续签问题，这是被很多人诟病的问题之一，传统的cookie+session的方案天然的支持续签，但是jwt由于服务端不保存用户状态，因此很难完美解决续签问题，如果引入redis，虽然可以解决问题，但是jwt也变得不伦不类了。</li>
 <li>注销问题，由于服务端不再保存用户信息，所以一般可以通过修改secret来实现注销，服务端secret修改后，已经颁发的未过期的token就会认证失败，进而实现注销，不过毕竟没有传统的注销方便。</li>
 <li>密码重置，密码重置后，原本的token依然可以访问系统，这时候也需要强制修改secret。</li>
 <li>基于第2点和第3点，一般建议不同用户取不同secret。</li>
 </ol>
-<h1><span id="session-和-cookie">Session 和 Cookie</span></h1>
-<blockquote>
+<h1><span id="session-和-cookie">Session 和 Cookie</span></h1><blockquote>
 <p>Session 是服务端用来记录用户的状态的一种机制。</p>
 </blockquote>
 <p>由于 HTTP 协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建特定的 Session，用于标识这个用户，并且跟踪用户。</p>
 <p>这个 Session 是保存在服务端的，有一个唯一标识。在服务端保存 Session 的方法很多，内存，数据库，文件都有，<strong>不过一般是通过 redis 进行存储</strong>。</p>
-<h2><span id="服务端如何识别特定的客户">服务端如何识别特定的客户？</span></h2>
-<p>这个时候 Cookie 登场了，每次 Http 请求的时候，客户端都会发送相应的 Cookie 信息到服务端。实际上大多数应用都是用 Cookie 来实现 Session 跟踪的。每一次创建 Session 的时候，服务端会在 Http 协议中告诉客户端，需要在 Cookie 里面记录一个 Session ID，以后每次请求把这个 <em><strong>会话ID</strong></em> 发送到服务器，服务端就知道你是谁了。</p>
-<p>有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做 <em><strong>URL重写</strong></em>  的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 <u>sid=xxxxx</u> 这样的参数，服务端据此来识别用户。</p>
-<h2><span id="cookie">Cookie</span></h2>
-<p>Cookie其实还可以用在一些方便用户的场景下，设想你某次登陆过一个网站，下次登录的时候不想再次输入账号了，怎么办？这个信息可以写到Cookie里面，访问网站的时候，网站页面的脚本可以读取这个信息，就自动帮你把用户名给填了，能够方便一下用户。这也是Cookie名称的由来，给用户的一点甜头。</p>
-<h2><span id="流程图">流程图</span></h2>
-<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/110.png" alt="110"></p>
-<h2><span id="总结">总结</span></h2>
-<p>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；<br>
-Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</p>
-<h2><span id="优劣势">优劣势</span></h2>
-<h3><span id="优点">优点</span></h3>
-<ul>
-<li>
-<p>相比JWT，最大的优势就在于可以主动清除session了</p>
+<h2><span id="服务端如何识别特定的客户">服务端如何识别特定的客户？</span></h2><p>这个时候 Cookie 登场了，每次 Http 请求的时候，客户端都会发送相应的 Cookie 信息到服务端。实际上大多数应用都是用 Cookie 来实现 Session 跟踪的。每一次创建 Session 的时候，服务端会在 Http 协议中告诉客户端，需要在 Cookie 里面记录一个 Session ID，以后每次请求把这个 <strong><em>会话ID</em></strong> 发送到服务器，服务端就知道你是谁了。</p>
+<p>有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做 <strong><em>URL重写</em></strong>  的技术来进行会话跟踪，即每次HTTP交互，URL后面都会被附加上一个诸如 <u>sid=xxxxx</u> 这样的参数，服务端据此来识别用户。</p>
+<h2><span id="cookie">Cookie</span></h2><p>Cookie其实还可以用在一些方便用户的场景下，设想你某次登陆过一个网站，下次登录的时候不想再次输入账号了，怎么办？这个信息可以写到Cookie里面，访问网站的时候，网站页面的脚本可以读取这个信息，就自动帮你把用户名给填了，能够方便一下用户。这也是Cookie名称的由来，给用户的一点甜头。</p>
+<h2><span id="流程图">流程图</span></h2><p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/110.png" alt="110"></p>
+<h2><span id="总结">总结</span></h2><p>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；<br>Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式。</p>
+<h2><span id="优劣势">优劣势</span></h2><h3><span id="优点">优点</span></h3><ul>
+<li><p>相比JWT，最大的优势就在于可以主动清除session了</p>
 </li>
-<li>
-<p>session保存在服务器端，相对较为安全</p>
+<li><p>session保存在服务器端，相对较为安全</p>
 </li>
-<li>
-<p>结合cookie使用，较为灵活，兼容性较好</p>
+<li><p>结合cookie使用，较为灵活，兼容性较好</p>
 </li>
 </ul>
-<h3><span id="劣势">劣势</span></h3>
-<ul>
+<h3><span id="劣势">劣势</span></h3><ul>
 <li>cookie + session在跨域场景表现并不好</li>
 <li>如果是分布式部署，需要做多机共享session机制，实现方法可将session存储到数据库中或者redis中</li>
 <li>基于 cookie 的机制很容易被 CSRF</li>
 <li>查询session信息可能会有数据库查询操作</li>
 </ul>
-<h1><span id="核心组件">核心组件</span></h1>
-<h2><span id="securitycontextholder">SecurityContextHolder</span></h2>
-<blockquote>
+<h1><span id="核心组件">核心组件</span></h1><h2><span id="securitycontextholder">SecurityContextHolder</span></h2><blockquote>
 <p>SecurityContextHolder 它持有的是安全上下文( security context ) 的信息。当前操作的用户是谁，该用户是否已经被认证，他拥有哪些角色权限等等，这些都被保存在 SecurityContextHolder 中。SecurityContextHolder 默认使用 ThreadLocal 策略来存储认证信息。看到ThreadLocal 也就意味着，这是一种与线程绑定的策略。在web环境下，Spring Security在用户登录时自动绑定认证信息到当前线程，在用户退出时，自动清除当前线程的认证信息。</p>
 </blockquote>
 <p><strong>获取当前用户信息</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Object principal =SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span><br><span class="line"><span class="keyword">if</span> (principal <span class="keyword">instanceof</span> UserDetails) &#123;</span><br><span class="line">    String username = ((UserDetails)principal).getUsername();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    String username = principal.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>getAuthentication() 返回认证信息，getPrincipal() 返回身份信息，UserDetails 便是 Spring 对身份信息封装的一个接口</p>
-<h2><span id="securitycontext">SecurityContext</span></h2>
-<blockquote>
+<h2><span id="securitycontext">SecurityContext</span></h2><blockquote>
 <p>安全上下文,主要持有 Authentication 对象，如果用户未鉴权，那 Authentication 对象将会是空的</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SecurityContext</span> <span class="keyword">extends</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="function">Authentication <span class="title">getAuthentication</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setAuthentication</span><span class="params">(Authentication var1)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2><span id="authentication">Authentication</span></h2>
-<blockquote>
+
+<h2><span id="authentication">Authentication</span></h2><blockquote>
 <p>鉴权对象，该对象主要包含了用户的详细信息(UserDetails) 和用户鉴权时所需要的信息，如用户提交的用户密码，Remeber-me Token, 或者 digest hash 值等，按不同鉴权方式使用不同的 Authentication</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.security.core;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.security.Principal;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Authentication</span> <span class="keyword">extends</span> <span class="title">Principal</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    Collection&lt;? extends GrantedAuthority&gt; getAuthorities();</span><br><span class="line"></span><br><span class="line">    <span class="function">Object <span class="title">getCredentials</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Object <span class="title">getDetails</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Object <span class="title">getPrincipal</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isAuthenticated</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setAuthenticated</span><span class="params">(<span class="keyword">boolean</span> var1)</span> <span class="keyword">throws</span> IllegalArgumentException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ol>
 <li>Authentication 是 Spring Security 包中的接口，直接继承自 Principal 类，而 Principal 是位于 java.security 包中。可以见得，Authentication在spring security中是最高级别的身份/认证的抽象。</li>
 <li>由这个顶级接口，我们可以得到用户拥有的权限信息列表，密码，用户细节信息，用户身份信息，认证信息。</li>
-<li><em><strong>getAuthorities()</strong></em>，权限信息列表，默认是GrantedAuthority接口的一些实现类，通常是代表权限信息的一系列字符串。</li>
-<li><em><strong>getCredentials()</strong></em>，密码信息，用户输入的密码字符串，在认证过后通常会被移除，用于保障安全。</li>
-<li><em><strong>getDetails()</strong></em>，细节信息，web应用中的实现接口通常为 WebAuthenticationDetails，它记录了访问者的ip地址和sessionId的值。</li>
-<li><em><strong>getPrincipal()</strong></em>，敲黑板！！！最重要的身份信息，大部分情况下返回的是UserDetails接口的实现类，也是框架中的常用接口之一。</li>
+<li><strong><em>getAuthorities()</em></strong>，权限信息列表，默认是GrantedAuthority接口的一些实现类，通常是代表权限信息的一系列字符串。</li>
+<li><strong><em>getCredentials()</em></strong>，密码信息，用户输入的密码字符串，在认证过后通常会被移除，用于保障安全。</li>
+<li><strong><em>getDetails()</em></strong>，细节信息，web应用中的实现接口通常为 WebAuthenticationDetails，它记录了访问者的ip地址和sessionId的值。</li>
+<li><strong><em>getPrincipal()</em></strong>，敲黑板！！！最重要的身份信息，大部分情况下返回的是UserDetails接口的实现类，也是框架中的常用接口之一。</li>
 </ol>
-<h2><span id="grantedauthority">GrantedAuthority</span></h2>
-<blockquote>
+<h2><span id="grantedauthority">GrantedAuthority</span></h2><blockquote>
 <p>该接口表示了当前用户所拥有的权限(或者角色) 信息。这些信息由授权负责对象 AccessDecisionManager 来使用，并决定最终用户可以访问某资源 (URL 或方法调用或域对象)。鉴权时并不会使用到该对象</p>
 </blockquote>
-<h2><span id="userdetails">UserDetails</span></h2>
-<blockquote>
+<h2><span id="userdetails">UserDetails</span></h2><blockquote>
 <p>这个接口规范了用户详细信息所拥有的字段，譬如用户名、密码、账号是否过期、是否锁定等。在Spring Security中，获取当前登录的用户的信息,一般情况是需要在这个接口上面进行扩展，用来对接自己系统的用户</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.security.core.userdetails;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> org.springframework.security.core.GrantedAuthority;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDetails</span> <span class="keyword">extends</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    Collection&lt;? extends GrantedAuthority&gt; getAuthorities();</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getPassword</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getUsername</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isAccountNonExpired</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isAccountNonLocked</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isCredentialsNonExpired</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isEnabled</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2><span id="userdetailsservice">UserDetailsService</span></h2>
-<blockquote>
+
+<h2><span id="userdetailsservice">UserDetailsService</span></h2><blockquote>
 <p>这个接口只提供一个接口loadUserByUsername(String username)，这个接口非常重要，一般情况我们都是通过扩展这个接口来显示获取我们的用户信息，用户登陆时传递的用户名和密码也是通过这里这查找出来的用户名和密码进行校验，但是真正的校验不在这里，而是由AuthenticationManager以及AuthenticationProvider负责的，需要强调的是，如果用户不存在，不应返回NULL，而要抛出异常UsernameNotFoundException</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDetailsService</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ~ Methods</span></span><br><span class="line">    <span class="comment">// ========================================================================================================</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Locates the user based on the username. In the actual implementation, the search</span></span><br><span class="line"><span class="comment">	 * may possibly be case sensitive, or case insensitive depending on how the</span></span><br><span class="line"><span class="comment">	 * implementation instance is configured. In this case, the &lt;code&gt;UserDetails&lt;/code&gt;</span></span><br><span class="line"><span class="comment">	 * object that comes back may have a username that is of a different case than what</span></span><br><span class="line"><span class="comment">	 * was actually requested..</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@param</span> username the username identifying the user whose data is required.</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> a fully populated user record (never &lt;code&gt;null&lt;/code&gt;)</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@throws</span> UsernameNotFoundException if the user could not be found or the user has no</span></span><br><span class="line"><span class="comment">	 * GrantedAuthority</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">    <span class="function">UserDetails <span class="title">loadUserByUsername</span><span class="params">(String username)</span> <span class="keyword">throws</span> UsernameNotFoundException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2><span id="authenticationmanager">AuthenticationManager</span></h2>
-<blockquote>
+
+<h2><span id="authenticationmanager">AuthenticationManager</span></h2><blockquote>
 <p>初次接触Spring Security的朋友相信会被AuthenticationManager，ProviderManager ，AuthenticationProvider …这么多相似的Spring认证类搞得晕头转向，但只要稍微梳理一下就可以理解清楚它们的联系和设计者的用意。AuthenticationManager（接口）是认证相关的核心接口，也是发起认证的出发点，因为在实际需求中，我们可能会允许用户使用用户名+密码登录，同时允许用户使用邮箱+密码，手机号码+密码登录，甚至，可能允许用户使用指纹登录（还有这样的操作？没想到吧），所以说AuthenticationManager一般不直接认证，AuthenticationManager接口的常用实现类ProviderManager 内部会维护一个List&lt;AuthenticationProvider&gt;列表，存放多种认证方式，实际上这是委托者模式的应用（Delegate）。也就是说，核心的认证入口始终只有一个：AuthenticationManager，不同的认证方式：用户名+密码（UsernamePasswordAuthenticationToken），邮箱+密码，手机号码+密码登录则对应了三个AuthenticationProvider。这样一来就好理解多了？。</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Authentication <span class="title">authenticate</span><span class="params">(Authentication authentication)</span></span></span><br><span class="line"><span class="function">    <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">    Class&lt;? extends Authentication&gt; toTest = authentication.getClass();</span><br><span class="line">    AuthenticationException lastException = <span class="keyword">null</span>;</span><br><span class="line">    Authentication result = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> debug = logger.isDebugEnabled();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//依次进行验证</span></span><br><span class="line">    <span class="keyword">for</span> (AuthenticationProvider provider : getProviders()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!provider.supports(toTest)) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (debug) &#123;</span><br><span class="line">            logger.debug(<span class="string">"Authentication attempt using "</span></span><br><span class="line">                         + provider.getClass().getName());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            result = provider.authenticate(authentication);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果有Authentication信息，则直接返回</span></span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">                copyDetails(authentication, result);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (AccountStatusException e) &#123;</span><br><span class="line">            prepareException(e, authentication);</span><br><span class="line">            <span class="comment">// SEC-546: Avoid polling additional providers if auth failure is due to</span></span><br><span class="line">            <span class="comment">// invalid account status</span></span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (InternalAuthenticationServiceException e) &#123;</span><br><span class="line">            prepareException(e, authentication);</span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">            lastException = e;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (result == <span class="keyword">null</span> &amp;&amp; parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// Allow the parent to try.</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            result = parent.authenticate(authentication);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (ProviderNotFoundException e) &#123;</span><br><span class="line">            <span class="comment">// ignore as we will throw below if no other exception occurred prior to</span></span><br><span class="line">            <span class="comment">// calling parent and the parent</span></span><br><span class="line">            <span class="comment">// may throw ProviderNotFound even though a provider in the child already</span></span><br><span class="line">            <span class="comment">// handled the request</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">            lastException = e;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (eraseCredentialsAfterAuthentication</span><br><span class="line">            &amp;&amp; (result <span class="keyword">instanceof</span> CredentialsContainer)) &#123;</span><br><span class="line">            <span class="comment">//移除密码</span></span><br><span class="line">            ((CredentialsContainer) result).eraseCredentials();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//发布登录成功事件</span></span><br><span class="line">        eventPublisher.publishAuthenticationSuccess(result);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//执行到此，说明没有认证成功，包装异常信息</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (lastException == <span class="keyword">null</span>) &#123;</span><br><span class="line">        lastException = <span class="keyword">new</span> ProviderNotFoundException(messages.getMessage(</span><br><span class="line">            <span class="string">"ProviderManager.providerNotFound"</span>,</span><br><span class="line">            <span class="keyword">new</span> Object[] &#123; toTest.getName() &#125;,</span><br><span class="line">            <span class="string">"No AuthenticationProvider found for &#123;0&#125;"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    prepareException(lastException, authentication);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> lastException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2><span id="核心类图">核心类图</span></h2>
-<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/135.png" alt="135.png"></p>
-<h1><span id="spring-security-是如何完成身份认证的">Spring Security 是如何完成身份认证的？</span></h1>
-<ol>
-<li>用户名和密码被过滤器获取到，封装成 Authentication，通常情况下是<em><strong>UsernamePasswordAuthenticationToken</strong></em> 这个实现类</li>
+
+<h2><span id="核心类图">核心类图</span></h2><p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/135.png" alt="135.png"></p>
+<h1><span id="spring-security-是如何完成身份认证的">Spring Security 是如何完成身份认证的？</span></h1><ol>
+<li>用户名和密码被过滤器获取到，封装成 Authentication，通常情况下是<strong><em>UsernamePasswordAuthenticationToken</em></strong> 这个实现类</li>
 <li>AuthenticationManager 身份管理器负责验证这个 Authentication</li>
-<li>认证成功后，<em><strong>AuthenticationManager</strong></em> 身份管理器返回一个被填满了信息的（包括上面提到的权限信息，身份信息，细节信息，但密码通常会被移除）Authentication 实例</li>
-<li><em><strong>SecurityContextHolder</strong></em>安全上下文容器将第3步填充了信息的Authentication，通过SecurityContextHolder.getContext().setAuthentication()方法，设置到其中。</li>
+<li>认证成功后，<strong><em>AuthenticationManager</em></strong> 身份管理器返回一个被填满了信息的（包括上面提到的权限信息，身份信息，细节信息，但密码通常会被移除）Authentication 实例</li>
+<li><strong><em>SecurityContextHolder</em></strong>安全上下文容器将第3步填充了信息的Authentication，通过SecurityContextHolder.getContext().setAuthentication()方法，设置到其中。</li>
 </ol>
-<h1><span id="过滤器机制">过滤器机制</span></h1>
-<p>Spring Security 框架的过滤器是基于基础的 filter 来实现，这样它可以不需要依赖任何 web 框架，甚至连 SpringMVC 框架都不需要依赖，这样整个spring security过滤器就会变得异常的轻量级和无侵入性。</p>
-<h2><span id="spring-security-处理请求流程">Spring Security 处理请求流程</span></h2>
-<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/136.png" alt="136.png"></p>
+<h1><span id="过滤器机制">过滤器机制</span></h1><p>Spring Security 框架的过滤器是基于基础的 filter 来实现，这样它可以不需要依赖任何 web 框架，甚至连 SpringMVC 框架都不需要依赖，这样整个spring security过滤器就会变得异常的轻量级和无侵入性。</p>
+<h2><span id="spring-security-处理请求流程">Spring Security 处理请求流程</span></h2><p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/136.png" alt="136.png"></p>
 <p>用户发起请求，认证管理器（Authentication Manager）会发起拦截，验证用户发起请求时的一些凭证信息，未通过验证信息审核的那么返回给用户，通过审核的，那么继续进行请求访问，访问页面之前，会被访问决策管理（Access Decision Manager）拦截，访问决策管理器验证用户是否有访问页面的权限，如果有，那么继续到访问页面。</p>
-<p>另外spring security是通过委托代理（delegates）的方式去实现过滤器链的，<br>
-首先先通过过滤器拦截用户的请求，拦截后通过servlet来进行处理，如果处理成功那么进行正常访问，在返回给用户一个请求。</p>
+<p>另外spring security是通过委托代理（delegates）的方式去实现过滤器链的，<br>首先先通过过滤器拦截用户的请求，拦截后通过servlet来进行处理，如果处理成功那么进行正常访问，在返回给用户一个请求。</p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/137.png" alt="137.png"></p>
 <ol>
 <li>ChannelProcessingFilter，使用它因为我们可能会指向不同的协议(如:Http,Https)</li>
@@ -462,138 +438,136 @@ Cookie是客户端保存用户信息的一种机制，用来记录用户的一�
 <li>ExceptionTranslationFilter，为了捕获spring security的错误，所以一个http响应将返回一个Exception或是触发AuthenticationEntryPoint。</li>
 <li>FilterSecurityInterceptor，当连接被拒绝时，保护web URLS并且抛出异常。</li>
 </ol>
-<h1><span id="基本配置">基本配置</span></h1>
-<p>Spring Security3.2分为11个模块，如下表所示：</p>
+<h1><span id="基本配置">基本配置</span></h1><p>Spring Security3.2分为11个模块，如下表所示：</p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/139.png" alt="139.png"></p>
 <p>Spring Security3.2引入了新的Java配置方案，完全不在需要通过XML来配置安全性功能。如下，展现了Spring Security最简单的Java配置：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spitter.config;</span><br><span class="line">......</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSecurity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecurityConfig</span> <span class="keyword">extends</span> <span class="title">WebSecurityConfigurerAdapter</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>@EnableWebSecurity 注解将会启动 Web 安全功能，但它本身没什么功能。Spring Security必须配置在一个实现了WebSecurityConfigurer的bean中，或者扩展WebSecurityConfigurerAdapter，扩展该类是最简单的配置方法。<br>
-这样做有以下几点好处：</p>
+
+<p>@EnableWebSecurity 注解将会启动 Web 安全功能，但它本身没什么功能。Spring Security必须配置在一个实现了WebSecurityConfigurer的bean中，或者扩展WebSecurityConfigurerAdapter，扩展该类是最简单的配置方法。<br>这样做有以下几点好处：</p>
 <ul>
-<li>
-<p>a、该注解配置了一个Spring MVC参数解析器（argument<br>
-resolver），这样处理器方法能够通过带有@AuthenticationPrincipal注解的参数获得认证用户的principal（或username）。</p>
+<li><p>a、该注解配置了一个Spring MVC参数解析器（argument<br>resolver），这样处理器方法能够通过带有@AuthenticationPrincipal注解的参数获得认证用户的principal（或username）。</p>
 </li>
-<li>
-<p>b、它配置了一个bean，在使用Spring表单绑定标签库来定义表单时，这个bean会自动添加一个隐藏的跨站请求伪造token输入域。</p>
+<li><p>b、它配置了一个bean，在使用Spring表单绑定标签库来定义表单时，这个bean会自动添加一个隐藏的跨站请求伪造token输入域。</p>
 </li>
 </ul>
-<p>我们可以通过重载WebSecurityConfigurerAdapter中的一个或多个方法来指定Web安全的细节。例如WebSecurityConfigurerAdapter的三个configure()方法：configure(WebSecurity)、configure(HttpSecurity)、configure(AuthenticationManagerBuilder)，详情如下表：<br>
-<img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/140.png" alt="140"></p>
+<p>我们可以通过重载WebSecurityConfigurerAdapter中的一个或多个方法来指定Web安全的细节。例如WebSecurityConfigurerAdapter的三个configure()方法：configure(WebSecurity)、configure(HttpSecurity)、configure(AuthenticationManagerBuilder)，详情如下表：<br><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/140.png" alt="140"></p>
 <p>上面的程序清单中没有重写任何一个configure()方法，所以应用现在是被严格锁定的，没有任何人能够进入系统。为了让Spring Security满足我们应用的需求，还需要再添加一点配置。具体来讲，我们需要：</p>
 <ul>
-<li>
-<p>a、配置用户存储</p>
+<li><p>a、配置用户存储</p>
 </li>
-<li>
-<p>b、指定哪些请求需要认证，哪些请求不需要认证，以及需要的权限。</p>
+<li><p>b、指定哪些请求需要认证，哪些请求不需要认证，以及需要的权限。</p>
 </li>
-<li>
-<p>c、提供一个自定义的登录页面，替代原来简单的默认登录页。</p>
+<li><p>c、提供一个自定义的登录页面，替代原来简单的默认登录页。</p>
 </li>
 </ul>
-<h1><span id="配置用户存储">配置用户存储</span></h1>
-<h2><span id="使用基于内存的用户存储">使用基于内存的用户存储</span></h2>
-<p>重写 <em><strong>configure(AuthenticationManagerBuilder)</strong></em> 方法可以方便地配置Spring Security对认证的支持。通过inmMemoryAuthentication()方法，我们可以启用、配置并任意填充基于内存的用户存储。实例如下：</p>
+<h1><span id="配置用户存储">配置用户存储</span></h1><h2><span id="使用基于内存的用户存储">使用基于内存的用户存储</span></h2><p>重写 <strong><em>configure(AuthenticationManagerBuilder)</em></strong> 方法可以方便地配置Spring Security对认证的支持。通过inmMemoryAuthentication()方法，我们可以启用、配置并任意填充基于内存的用户存储。实例如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebMvcSecurity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecurityConfig</span> <span class="keyword">extends</span> <span class="title">WebSecurityConfigurerAdapter</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        auth.inMemoryAuthentication().withUser(<span class="string">"user"</span>).password(<span class="string">"password"</span>).roles(<span class="string">"USER"</span>).and().withUser(<span class="string">"admin"</span>).password(<span class="string">"password"</span>).roles(<span class="string">"USER"</span>,<span class="string">"ADMIN"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>withUser()方法返回的是UserDetailsManagerConfigurer.UserDetailsBuilder，这个对象提供了多个进一步配置用户的方法，如上面的为用户设置密码的password()方法、授予用户多个角色权限的roles()方法。UserDetailsManagerConfigurer.UserDetailsBuilder对象的更多方法如下表：<br>
-<img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/141.png" alt="141.png"></p>
-<h2><span id="基于数据库表进行认证">基于数据库表进行认证</span></h2>
-<p>用户数据通常会存储在关系型数据库中，并通过JDBC进行访问。所需的最少配置如下：</p>
+
+<p>withUser()方法返回的是UserDetailsManagerConfigurer.UserDetailsBuilder，这个对象提供了多个进一步配置用户的方法，如上面的为用户设置密码的password()方法、授予用户多个角色权限的roles()方法。UserDetailsManagerConfigurer.UserDetailsBuilder对象的更多方法如下表：<br><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/141.png" alt="141.png"></p>
+<h2><span id="基于数据库表进行认证">基于数据库表进行认证</span></h2><p>用户数据通常会存储在关系型数据库中，并通过JDBC进行访问。所需的最少配置如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">DataSource dataSource;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    auth</span><br><span class="line">        .jdbcAuthentication()</span><br><span class="line">        .dataSource(dataSource);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们使用JDBCAuthentication()方法来实现一JDBC为支撑的用户存储，必须要配置的只是一个DataSource，就能访问关系型数据库了。</p>
-<h3><span id="重写默认的用户查询功能">重写默认的用户查询功能</span></h3>
-<p>Spring Security内部默认的查询语句是写定的，可能在某些情况下并不适用。我们可以按照如下的方式配置自己的查询：</p>
+<h3><span id="重写默认的用户查询功能">重写默认的用户查询功能</span></h3><p>Spring Security内部默认的查询语句是写定的，可能在某些情况下并不适用。我们可以按照如下的方式配置自己的查询：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Authentication auth)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    auth</span><br><span class="line">        .jdbcAuthentication()</span><br><span class="line">        .dataSource(dataSource)</span><br><span class="line">        .usersByUsernameQuery(<span class="string">"select username,password,true from Spitter where username=?"</span>)</span><br><span class="line">        .authoritiesByUsernameQuery(<span class="string">"select username,'ROLE_USER' from Spitter where username=?"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="使用转码后的密码">使用转码后的密码</span></h3>
-<p>通常数据库中的密码都会加密，那么如果我们只是按照上面那样配置的话，用户提交的明文密码和数据库的加密密码就会不匹配，从而认证失败。为了解决这个问题，我们需要借助passwordEncoder()方法指定一个密码转码器：</p>
+
+<h3><span id="使用转码后的密码">使用转码后的密码</span></h3><p>通常数据库中的密码都会加密，那么如果我们只是按照上面那样配置的话，用户提交的明文密码和数据库的加密密码就会不匹配，从而认证失败。为了解决这个问题，我们需要借助passwordEncoder()方法指定一个密码转码器：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(Authentication auth)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    auth</span><br><span class="line">        .jdbcAuthentication()</span><br><span class="line">        .dataSource(dataSource)</span><br><span class="line">        .usersByUsernameQuery(<span class="string">"select username,password,true from Spitter where username=?"</span>)</span><br><span class="line">        .authoritiesByUsernameQuery(<span class="string">"select username,'ROLE_USER' from Spitter where username=?"</span>)</span><br><span class="line">        .passwordEncoder(<span class="keyword">new</span> StandardPasswordEncoder(<span class="string">"53cr3t"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>passwordEncoder()方法可以接受Spring Security中PasswordEncoder接口的任意实现。Spring Security的加密模块包括三个这样的实现：</p>
 <ul>
-<li>[x] <em><strong>BCryptPasswordEncoder</strong></em></li>
-<li>[x] <em><strong>NoOpPasswordEncoder</strong></em></li>
-<li>[x] <em><strong>StandardPasswordEncoder</strong></em>。</li>
+<li><input checked disabled type="checkbox"> <strong><em>BCryptPasswordEncoder</em></strong></li>
+<li><input checked disabled type="checkbox"> <strong><em>NoOpPasswordEncoder</em></strong></li>
+<li><input checked disabled type="checkbox"> <strong><em>StandardPasswordEncoder</em></strong>。</li>
 </ul>
-<h2><span id="配置自定义的用户服务">配置自定义的用户服务</span></h2>
-<p>如果我们需要认证的用户存储在非关系型数据库中，如Mongo或Neo4j，那么我们需要提供一个自定义的UserDetailsService接口实现。UserDetailsService接口非常简单：</p>
+<h2><span id="配置自定义的用户服务">配置自定义的用户服务</span></h2><p>如果我们需要认证的用户存储在非关系型数据库中，如Mongo或Neo4j，那么我们需要提供一个自定义的UserDetailsService接口实现。UserDetailsService接口非常简单：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDetailsService</span></span>&#123;</span><br><span class="line">    <span class="function">UserDetails <span class="title">loadUserByUsername</span><span class="params">(String username)</span> <span class="keyword">throws</span> UsernameNotFoundException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们需要做的就是实现loadUserByUsername()方法，根据给定的用户名来查找用户。该方法会返回代表给定用户的UserDetails对象。当我们自定义的配置类完成后，以SpitterUserService（实现了UserDetailsSevice接口并重写了loadUserByUsername方法）为例，可以通过如下方式将其配置为用户存储：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">SpitterRepository spitterRepository;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(AuthenticationManagerBuilder auth)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    auth.userDetailsService(<span class="keyword">new</span> SpitterUserSevice(spitterRepository));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1><span id="拦截请求">拦截请求</span></h1>
-<p>在任何应用中，并不是所有请求都需要同等程度地保护起来。有些请求需要认证，有些不需要。</p>
-<p>对每个请求进行细粒度安全性控制的关键在于重载 <em><strong>configure(HttpSecurity)</strong></em> 方法。如下代码片段展现了重载的configure(HttpSecurity)方法，它为不同的URL路径有选择地应用安全性：</p>
+
+<h1><span id="拦截请求">拦截请求</span></h1><p>在任何应用中，并不是所有请求都需要同等程度地保护起来。有些请求需要认证，有些不需要。</p>
+<p>对每个请求进行细粒度安全性控制的关键在于重载 <strong><em>configure(HttpSecurity)</em></strong> 方法。如下代码片段展现了重载的configure(HttpSecurity)方法，它为不同的URL路径有选择地应用安全性：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .authorizeRequests()</span><br><span class="line">        .antMatchers(<span class="string">"/spitters/me"</span>).authenticated()</span><br><span class="line">        .antMatchers(HttpMethod.POST,<span class="string">"/spittles"</span>).authenticated()</span><br><span class="line">        .anyRequest().permitAll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><em><strong>antMatchers()</strong></em> 方法所设定的路径支持 <em><strong>Ant</strong></em> 风格的通配符。如下</p>
+
+<p><strong><em>antMatchers()</em></strong> 方法所设定的路径支持 <strong><em>Ant</em></strong> 风格的通配符。如下</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/spitters/**"</span>,<span class="string">"spittles/mine"</span>).authenticated();          <span class="comment">//Ant风格</span></span><br></pre></td></tr></table></figure>
+
 <p>antMatchers() 方法所使用的路径可能会包括 Ant 风格的通配符，而 <strong>regexMatchers()</strong> 方法则能够接受正则表达式来定义请求路径。如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.regexMatchers(<span class="string">"spitters/.*"</span>).authenticated();   <span class="comment">//正则表达式风格</span></span><br></pre></td></tr></table></figure>
-<p>除了路径选择，我们还通过 <em><strong>authenticated()</strong></em> 和 <em><strong>permitAll()</strong></em> 来定义该如何保护路径。</p>
+
+<p>除了路径选择，我们还通过 <strong><em>authenticated()</em></strong> 和 <strong><em>permitAll()</em></strong> 来定义该如何保护路径。</p>
 <p><strong><u>authenticated()</u></strong> 要求在执行该请求时，必须已经登录了应用。如果用户没有认证，Spring Security的Filter将会捕获该请求，并将用户重定向到应用的登录界面。</p>
 <p><strong><u>permitAll()</u></strong> 方法允许请求没有任何的安全限制。</p>
 <p>除了authenticated()和permitAll()以外，authorizeRequests()方法返回的对象还有更多的方法用于细粒度地保护请求。如下所示：</p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/142.png" alt="142"></p>
 <p>我们可以将任意数量的antMatchers()、regexMatchers()和anyRequest()连接起来，以满足Web应用安全规则的需要。</p>
 <p>注意，将最不具体的路径（如anyRequest()）放在最后面。如果不这样做，那不具体的路径配置将会覆盖掉更为具体的路径配置。</p>
-<h2><span id="使用-spring-表达式进行安全保护">使用 Spring 表达式进行安全保护</span></h2>
-<p>上面的方法虽然满足了大多数应用场景，但并不是全部。如果我们希望限制某个角色只能在星期二进行访问的话，那么就比较困难了。同时，上面的大多数方法都是一维的，如hasRole()方法和hasIpAddress()方法没办法同时限制一个请求路径。</p>
+<h2><span id="使用-spring-表达式进行安全保护">使用 Spring 表达式进行安全保护</span></h2><p>上面的方法虽然满足了大多数应用场景，但并不是全部。如果我们希望限制某个角色只能在星期二进行访问的话，那么就比较困难了。同时，上面的大多数方法都是一维的，如hasRole()方法和hasIpAddress()方法没办法同时限制一个请求路径。</p>
 <p>借助access()方法，我们可以将SpEL作为声明访问限制的一种方式。例如，如下就是使用SpEL表达式来声明具有“ROLE_SPITTER”角色才能访问“/spitter/me”URL：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/spitters/me"</span>).access(<span class="string">"hasRole('ROLE_SPITTER')"</span>);</span><br></pre></td></tr></table></figure>
+
 <p>回顾下 SpEL 的知识吧</p>
 <blockquote>
 <p>SpEL（Spring Expression Language），即Spring表达式语言.</p>
 <p>Spring表达式语言（简称SpEl）是一个支持查询和操作运行时对象导航图功能的强大的表达式语言. 它的语法类似于传统EL，但提供额外的功能，最出色的就是函数调用和简单字符串的模板函数。</p>
 <p>例如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ExpressionParser parser = <span class="keyword">new</span> SpelExpressionParser();</span><br><span class="line">Expression exp = parser.parseExpression(<span class="string">"'Hello World'.concat('!')"</span>);</span><br><span class="line">String message = (String) exp.getValue();</span><br></pre></td></tr></table></figure>
+
 <p>结果将是 <em>Hello World!</em></p>
 </blockquote>
 <p>让SpEL更强大的原因在于，hasRole()仅是Spring支持的安全相关表达式中的一种。下表列出了Spring Security支持的所有SpEL表达式。</p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/143.png" alt="143"></p>
 <p>现在，如果我们想限制“/spitter/me”URL的访问，不仅需要ROLE_SPITTER角色，还需要来自指定的IP地址，那么我们可以按照如下的方式调用access()方法：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/spitter/me"</span>)</span><br><span class="line">    .access(<span class="string">"hasRole('SPITTER') and hasIpAddress('127.0.0.1')"</span>);</span><br></pre></td></tr></table></figure>
-<h2><span id="spring-security拦截请求的另外一种方式强制通道的安全性">Spring Security拦截请求的另外一种方式：强制通道的安全性</span></h2>
-<p>通过 Http 发送的数据没有经过加密，黑客就有机会拦截请求并且能够看到它们想看的数据。这就是为什么敏感信息要通过HTTPS来加密发送的原因。传递到 configure() 方法中的 HttpSecurity 对象，除了具有 authorizeRequest() 方法以外，还有一个 requiresChannel() 方法，借助这个方法能够为各种 URL 模式声明所要求的通道( 如 Https)</p>
+
+<h2><span id="spring-security拦截请求的另外一种方式强制通道的安全性">Spring Security拦截请求的另外一种方式：强制通道的安全性</span></h2><p>通过 Http 发送的数据没有经过加密，黑客就有机会拦截请求并且能够看到它们想看的数据。这就是为什么敏感信息要通过HTTPS来加密发送的原因。传递到 configure() 方法中的 HttpSecurity 对象，除了具有 authorizeRequest() 方法以外，还有一个 requiresChannel() 方法，借助这个方法能够为各种 URL 模式声明所要求的通道( 如 Https)</p>
 <p>在注册表单中，用户会希望敏感信息（用户不希望泄露的信息，如信用卡号等）是私密的。为了保证注册表单的数据通过HTTPS传送，我们可以在配置中添加requiresChannel()方法，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .authorizeRequests()</span><br><span class="line">        .antMatchers(<span class="string">"/spitter/me"</span>).hasRole(<span class="string">"SPITTER"</span>)</span><br><span class="line">        .antMatchers(HttpMethod.POST,<span class="string">"/spittles"</span>).hasRole(<span class="string">"SPITTER"</span>)</span><br><span class="line">        .anyRequest().permitAll();</span><br><span class="line">    .and()</span><br><span class="line">        .requiresChannel()</span><br><span class="line">        .antMatchers(<span class="string">"spitter/form"</span>).requiresSecure();   <span class="comment">//需要 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不论何时，只要是对“/spitter/form”的请求，Spring Security都视为需要安全通道（通过调用requiresChannel()确定的）并自动将请求重定向到HTTPS上。<br>
-与之相反，有些页面并不需要通过HTTPS传送。例如，首页不包含任何敏感信息，因此并不需要通过HTTPS传送。我们可以使用requiresInsecure()代替requiresSecure()方法，将首页声明为始终通过HTTP传送：</p>
+
+<p>不论何时，只要是对“/spitter/form”的请求，Spring Security都视为需要安全通道（通过调用requiresChannel()确定的）并自动将请求重定向到HTTPS上。<br>与之相反，有些页面并不需要通过HTTPS传送。例如，首页不包含任何敏感信息，因此并不需要通过HTTPS传送。我们可以使用requiresInsecure()代替requiresSecure()方法，将首页声明为始终通过HTTP传送：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.antMatchers(<span class="string">"/"</span>).requiresInsecure();</span><br></pre></td></tr></table></figure>
-<h2><span id="防止跨站请求伪造">防止跨站请求伪造</span></h2>
-<p>什么是跨站请求伪造？下面是一个简单的例子：</p>
+
+<h2><span id="防止跨站请求伪造">防止跨站请求伪造</span></h2><p>什么是跨站请求伪造？下面是一个简单的例子：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"POST"</span> <span class="attr">action</span>=<span class="string">"http://www.spittr.com/Spittles"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"massage"</span> <span class="attr">value</span>=<span class="string">"I'm a stupid"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Click here to win a new car!"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>这是跨站请求伪造（cross-site request forgery，CRSF）的一个简单样例。简单来讲，入过一个站点欺骗用户提交请求到其他服务器的话，就会发生CSRF攻击，这可能会带来很严重的后果。</p>
 <p>从Spring Security3.2开始，默认就会启用CSRF攻击。</p>
-<p>Spring Security通过一个同步token的方式来实现CSRF防护。它会拦截状态变化的请求并检查CSRF token。如果请求不包含CSRF token，或token不能与服务器端的token相匹配，请求将会失败，并抛出CsrfException。<br>
-Spring Security已经简化了将token放到请求的属性中这一任务。</p>
-<h1><span id="认证用户">认证用户</span></h1>
-<p>如果我们使用如下的最简单的配置</p>
+<p>Spring Security通过一个同步token的方式来实现CSRF防护。它会拦截状态变化的请求并检查CSRF token。如果请求不包含CSRF token，或token不能与服务器端的token相匹配，请求将会失败，并抛出CsrfException。<br>Spring Security已经简化了将token放到请求的属性中这一任务。</p>
+<h1><span id="认证用户">认证用户</span></h1><p>如果我们使用如下的最简单的配置</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> spitter.config;</span><br><span class="line">......</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableWebSecurity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecurityConfig</span> <span class="keyword">extends</span> <span class="title">WebSecurityConfigurerAdapter</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
 <p>那么就能地得到一个登陆页面：</p>
 <p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/112.png" alt="112"></p>
-<p>实际上，在重写configure(HttpSecurity)之前，我们都能使用一个简单却功能完备的登录页。但是，一旦重写了configure(HttpSecurity)方法，就是失去了这个简单的登录界面。不过，这个功能要找回也容易。我们只需要在configure(HttpSecurity)方法中，<em><strong>调用formLogin()</strong></em>，如下所示：</p>
+<p>实际上，在重写configure(HttpSecurity)之前，我们都能使用一个简单却功能完备的登录页。但是，一旦重写了configure(HttpSecurity)方法，就是失去了这个简单的登录界面。不过，这个功能要找回也容易。我们只需要在configure(HttpSecurity)方法中，<strong><em>调用formLogin()</em></strong>，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .formLogin()</span><br><span class="line">        .and()</span><br><span class="line">        .authorizeRequests()</span><br><span class="line">        .antMatchers(<span class="string">"/spitter/me"</span>).hasRole(<span class="string">"SPITTER"</span>)</span><br><span class="line">        .antMatchers(HttpMethod.POST,<span class="string">"/spittles"</span>).hasRole(<span class="string">"SPITTER"</span>)</span><br><span class="line">        .anyRequest().permitAll()</span><br><span class="line">        .and()</span><br><span class="line">        .requiresChannel()</span><br><span class="line">        .antMatchers(<span class="string">"/spitter/form"</span>).requiresSecure();   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如果我们访问应用的“/login”链接或者导航到需要认证的页面，那么将会在浏览器中展现登录界面。这个界面在审美上没什么令人兴奋的，但是它却能实现所需的功能。</p>
-<h2><span id="添加自定义的登录页">添加自定义的登录页</span></h2>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Spitter<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> </span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"text/css"</span> </span></span><br><span class="line"><span class="tag">              <span class="attr">th:href</span>=<span class="string">"@&#123;/resources/style.css&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">link</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">'document.f.username.focus();'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"header"</span> <span class="attr">th:include</span>=<span class="string">"page :: header"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/spitter/register&#125;"</span>&gt;</span>Register<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">'f'</span> <span class="attr">th:action</span>=<span class="string">'@&#123;/login&#125;'</span> <span class="attr">method</span>=<span class="string">'POST'</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>User:<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'text'</span> <span class="attr">name</span>=<span class="string">'username'</span> <span class="attr">value</span>=<span class="string">''</span> /&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>Password:<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'password'</span> <span class="attr">name</span>=<span class="string">'password'</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">'2'</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"remember_me"</span> <span class="attr">name</span>=<span class="string">"remember-me"</span> <span class="attr">type</span>=<span class="string">"checkbox"</span>/&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"remember_me"</span> <span class="attr">class</span>=<span class="string">"inline"</span>&gt;</span>Remember me<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">'2'</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"submit"</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Login"</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"footer"</span> <span class="attr">th:include</span>=<span class="string">"page :: copy"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2><span id="启用-http-basic-认证">启用 Http Basic 认证</span></h2>
-<p>如果要启用HTTP Basic认证的话，只需要在configure()方法所传入的HttpSecurity对象上调用httpBasic()即可。另外，还可以通过调用realmName()方法指定域。如下是在Spring Security中启用HTTP Basic认证的典型配置：</p>
+<h2><span id="添加自定义的登录页">添加自定义的登录页</span></h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/1999/xhtml"</span></span></span><br><span class="line"><span class="tag">      <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Spitter<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> </span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"text/css"</span> </span></span><br><span class="line"><span class="tag">              <span class="attr">th:href</span>=<span class="string">"@&#123;/resources/style.css&#125;"</span>&gt;</span><span class="tag">&lt;/<span class="name">link</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">'document.f.username.focus();'</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"header"</span> <span class="attr">th:include</span>=<span class="string">"page :: header"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">th:href</span>=<span class="string">"@&#123;/spitter/register&#125;"</span>&gt;</span>Register<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">form</span> <span class="attr">name</span>=<span class="string">'f'</span> <span class="attr">th:action</span>=<span class="string">'@&#123;/login&#125;'</span> <span class="attr">method</span>=<span class="string">'POST'</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>User:<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'text'</span> <span class="attr">name</span>=<span class="string">'username'</span> <span class="attr">value</span>=<span class="string">''</span> /&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>Password:<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'password'</span> <span class="attr">name</span>=<span class="string">'password'</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">'2'</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"remember_me"</span> <span class="attr">name</span>=<span class="string">"remember-me"</span> <span class="attr">type</span>=<span class="string">"checkbox"</span>/&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"remember_me"</span> <span class="attr">class</span>=<span class="string">"inline"</span>&gt;</span>Remember me<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">tr</span>&gt;</span><span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">'2'</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"submit"</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Login"</span>/&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"footer"</span> <span class="attr">th:include</span>=<span class="string">"page :: copy"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="启用-http-basic-认证">启用 Http Basic 认证</span></h2><p>如果要启用HTTP Basic认证的话，只需要在configure()方法所传入的HttpSecurity对象上调用httpBasic()即可。另外，还可以通过调用realmName()方法指定域。如下是在Spring Security中启用HTTP Basic认证的典型配置：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .formLogin()</span><br><span class="line">        .loginPage(<span class="string">"/login"</span>)</span><br><span class="line">        .and()</span><br><span class="line">        .httpBasic()</span><br><span class="line">        .realmName(<span class="string">"Spittr"</span>)</span><br><span class="line">        .and()</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在httpBasic()方法中，并没有太多的可配置项，甚至不需要什么额外配置。HTTP Basic认证要么开启，要么关闭。</p>
-<h2><span id="启用remember-me功能">启用Remember-me功能</span></h2>
-<p>站在用户的角度来讲，如果应用程序不用每次都提示他们登录是更好的。这就是为什么许多站点提供了Remember-me功能。你只要登录过一次，应用就会记住你。<br>
-Spring Security使得为应用添加Remember-me功能变得非常容易。只需要在configure()方法所传入的HttpSecurity对象上调用 <em><strong>rememberMe()</strong></em> 即可。</p>
+<h2><span id="启用remember-me功能">启用Remember-me功能</span></h2><p>站在用户的角度来讲，如果应用程序不用每次都提示他们登录是更好的。这就是为什么许多站点提供了Remember-me功能。你只要登录过一次，应用就会记住你。<br>Spring Security使得为应用添加Remember-me功能变得非常容易。只需要在configure()方法所传入的HttpSecurity对象上调用 <strong><em>rememberMe()</em></strong> 即可。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .formLogin()</span><br><span class="line">        .loginPage(<span class="string">"/login"</span>)</span><br><span class="line">        .and()</span><br><span class="line">        .rememberMe()</span><br><span class="line">        .tokenValiditySeconds(<span class="number">2419200</span>)</span><br><span class="line">        .key(<span class="string">"spittrKey"</span>)</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>默认情况下，这个功能是通过在Cookie中存储一个token完成的，这个token最多两周内有效。但是，在这里，我们指定这个token最多四周内有效（2,419,200秒）。存储在cookie中的token包含用户名、密码、过期时间和一个私匙——在写入cookie前都进行了MD5哈希。默认情况下，私匙的名为SpringSecured，但是这里我们将其设置为spitterKey，使他专门用于Spittr应用。<br>
-既然Remember-me功能已经启用，我们需要有一种方式来让用户表明他们希望应用程序记住他们。为了实现这一点，登录请求必须包含一个名为remember-me的参数。在登录表单中，增加一个简单复选框就可以完成这件事：</p>
+
+<p>默认情况下，这个功能是通过在Cookie中存储一个token完成的，这个token最多两周内有效。但是，在这里，我们指定这个token最多四周内有效（2,419,200秒）。存储在cookie中的token包含用户名、密码、过期时间和一个私匙——在写入cookie前都进行了MD5哈希。默认情况下，私匙的名为SpringSecured，但是这里我们将其设置为spitterKey，使他专门用于Spittr应用。<br>既然Remember-me功能已经启用，我们需要有一种方式来让用户表明他们希望应用程序记住他们。为了实现这一点，登录请求必须包含一个名为remember-me的参数。在登录表单中，增加一个简单复选框就可以完成这件事：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"remember-me"</span> <span class="attr">name</span>=<span class="string">"remember-me"</span> <span class="attr">type</span>=<span class="string">"checkbox"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">lable</span> <span class="attr">for</span>=<span class="string">"remember-me"</span> <span class="attr">class</span>=<span class="string">"inline"</span>&gt;</span>Remember me<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2><span id="退出">退出</span></h2>
-<p>其实，按照我们的配置，退出功能已经可以使用了，不需要再做其他的配置了。我们需要的只是一个使用该功能的链接。</p>
+
+<h2><span id="退出">退出</span></h2><p>其实，按照我们的配置，退出功能已经可以使用了，不需要再做其他的配置了。我们需要的只是一个使用该功能的链接。  </p>
 <p>退出功能是通过Servlet容器的Filter实现的（默认情况下），这个Filter会拦截针对“/logout”的请求。在新版本的SpringSecurity中，出于安全的考虑（防止CSRF攻击），已经修改了LogoutFilter，使得Get方式的“/logout”请求不可用。必须以POST方式发起对该链接的请求才能生效。因此，为应用添加退出功能只需要添加如下表单即可（如下以Thymeleaf代码片段的形式进行了展现）：</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">th:action</span>=<span class="string">"@&#123;/logout&#125;"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>退出登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>提交这个表单，会发起对“/logout”的请求，这个请求会被Spring Security的LogoutFilter所处理。用户会退出应用，所有的Remember-me token都会被清楚掉。在退出完成后，用户浏览器将会重定向到“/login?logout”，从而允许用户进行再次登录。如果希望被重定向到其他的页面，如应用的首页，那么可以在configure()中进行配置：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">configure</span><span class="params">(HttpSecurity http)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    http</span><br><span class="line">        .formLogin()</span><br><span class="line">        .loginPage(<span class="string">"/login"</span>)</span><br><span class="line">        .and()</span><br><span class="line">        .logout()</span><br><span class="line">        .logoutSuccessUrl(<span class="string">"/"</span>)</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>除了logoutSuccessUrl()方法之外，你可能还希望重写默认的LogoutFilter拦截路径。我们可以通过调用logoutUrl()方法实现这一功能：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.logout()</span><br><span class="line">   .logoutSuccessUrl(<span class="string">"/"</span>)</span><br><span class="line">   .logoutUrl(<span class="string">"/signout"</span>)</span><br></pre></td></tr></table></figure>
-<p>未完待续…</p>
+
+
+
+<p>未完待续……</p>
 
     </div>
 
@@ -713,7 +687,7 @@ Spring Security使得为应用添加Remember-me功能变得非常容易。只需
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -726,7 +700,7 @@ Spring Security使得为应用添加Remember-me功能变得非常容易。只需
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -771,12 +745,12 @@ Spring Security使得为应用添加Remember-me功能变得非常容易。只需
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

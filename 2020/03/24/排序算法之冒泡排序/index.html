@@ -274,16 +274,19 @@
 <p>由于这几天即将参加 广发银行的广州分行 的技术面试。所以准备这几天 “临时抱佛脚”，看看能不能成功上岸哈哈。</p>
 <p>记得大学学的冒泡排序是最简单的排序算法，没有任何的优化处理。参考了下前辈的文章，果然我跟优秀的人还是由很大的差距！</p>
 <a id="more"></a>
+
 <blockquote>
 <p>冒泡排序的英文 <strong>Bubble Sort</strong>，是一种最基础的交换排序。</p>
 </blockquote>
 <p>该排序算法实现的效果有点像汽水中常常有许多小小的气泡，哗啦哗啦飘到上面来。</p>
 <p>而我们的冒泡排序之所以叫做冒泡排序，正是因为这种排序算法的每一个元素都可以像小气泡一样，根据自身大小，一点一点向着数组的一侧移动。</p>
-<p>原始的冒泡排序是 <em><strong>稳定的排序</strong></em>。由于该排序算法的每一轮要遍历所有元素，轮转的次数和元素数量相当，所以时间复杂度是<strong>O（N^2）</strong> 。</p>
+<p>原始的冒泡排序是 <strong><em>稳定的排序</em></strong>。由于该排序算法的每一轮要遍历所有元素，轮转的次数和元素数量相当，所以时间复杂度是<strong>O（N^2）</strong> 。</p>
 <p>冒泡排序的第一版：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> array[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> tmp  = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++)&#123;        </span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; array.length - i - <span class="number">1</span>; j++)        </span><br><span class="line">		&#123;            </span><br><span class="line">			<span class="keyword">if</span>(array[j] &gt; array[j+<span class="number">1</span>])            </span><br><span class="line">			&#123;                </span><br><span class="line">				tmp = array[j];                </span><br><span class="line">				array[j] = array[j+<span class="number">1</span>];                </span><br><span class="line">				array[j+<span class="number">1</span>] = tmp;            </span><br><span class="line">			&#125;        </span><br><span class="line">		&#125;    </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>,<span class="number">8</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">9</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">7</span>&#125;;    </span><br><span class="line">	sort(array);    </span><br><span class="line">	System.out.println(Arrays.toString(array));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>由于在排序的过程中可能出现已经有序的情况下，仍进行排序的话，就会造成许多的无用功。所以将排序进行了改良，性能得到大大的提升。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> array[])</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span> tmp  = <span class="number">0</span>;    </span><br><span class="line">	<span class="comment">//记录最后一次交换的位置    </span></span><br><span class="line">	<span class="keyword">int</span> lastExchangeIndex = <span class="number">0</span>;    </span><br><span class="line">	<span class="comment">//无序数列的边界，每次比较只需要比到这里为止    </span></span><br><span class="line">	<span class="keyword">int</span> sortBorder = array.length - <span class="number">1</span>;    </span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; array.length; i++)&#123;        </span><br><span class="line">		<span class="comment">//有序标记，每一轮的初始是true        </span></span><br><span class="line">		<span class="keyword">boolean</span> isSorted = <span class="keyword">true</span>;        </span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; sortBorder; j++)&#123;            </span><br><span class="line">			<span class="keyword">if</span>(array[j] &gt; array[j+<span class="number">1</span>])   </span><br><span class="line">			&#123;                </span><br><span class="line">				tmp = array[j];                </span><br><span class="line">				array[j] = array[j+<span class="number">1</span>];                </span><br><span class="line">				array[j+<span class="number">1</span>] = tmp;                </span><br><span class="line">				<span class="comment">//有元素交换，所以不是有序，标记变为false                </span></span><br><span class="line">				isSorted = <span class="keyword">false</span>;                </span><br><span class="line">				<span class="comment">//把无序数列的边界更新为最后一次交换元素的位置                </span></span><br><span class="line">				lastExchangeIndex = j;            </span><br><span class="line">			&#125;        </span><br><span class="line">		&#125;        </span><br><span class="line">		sortBorder = lastExchangeIndex;        </span><br><span class="line">		<span class="keyword">if</span>(isSorted)&#123;            </span><br><span class="line">			<span class="keyword">break</span>;        </span><br><span class="line">		&#125;    </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;    </span><br><span class="line">	<span class="keyword">int</span>[] array = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;;    </span><br><span class="line">	sort(array);    </span><br><span class="line">	System.out.println(Arrays.toString(array));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -402,7 +405,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -415,7 +418,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -460,12 +463,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

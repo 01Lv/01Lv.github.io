@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="¶1.什么是vagrant vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机 ¶2.为什么要使用vagrant vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时">
+  <meta name="description" content="1.什么是vagrant  vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机 2.为什么要使用vagrant vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vagrant知识点">
 <meta property="og:url" content="https://01lv.github.io/2020/03/04/Vagrant%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="¶1.什么是vagrant vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机 ¶2.为什么要使用vagrant vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时">
+<meta property="og:description" content="1.什么是vagrant  vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机 2.为什么要使用vagrant vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时是">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-04T06:16:46.000Z">
 <meta property="article:modified_time" content="2020-03-07T12:59:54.873Z">
@@ -277,64 +277,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2><span id="1什么是vagrant"><strong>1.什么是vagrant</strong></span></h2>
-<p>vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机</p>
-<h2><span id="2为什么要使用vagrant">2.<strong>为什么要使用vagrant</strong></span></h2>
-<p>vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时是用命令行来管理虚拟机非常简单</p>
-<h2><span id="3必须要有virtualbox才能正常安装vagrant">3.<strong>必须要有virtualbox才能正常安装vagrant</strong></span></h2>
-<a id="more"></a>
-<h2><span id="4vagrant常用命令">4.<strong>vagrant常用命令</strong></span></h2>
-<ul>
-<li>
-<p>初始化vagrant工程</p>
+        <h2><span id="1什么是vagrant"><strong>1.什么是vagrant</strong></span></h2><p>  vagrant 是一个通过命令行，来管理虚拟机的工具，vagrant 本身并没有提供虚拟化的功能，vagrant 可以用来管理virtualbox，可以通过vagrant 提供的命令创建，启动和关闭virtualbox里面的虚拟机</p>
+<h2><span id="2为什么要使用vagrant">2.<strong>为什么要使用vagrant</strong></span></h2><p> vagrant提供一个配置文件 vagrantfile,可以通过该配置文件快速创建或者复制一个虚拟机，同时是用命令行来管理虚拟机非常简单</p>
+<h2><span id="3必须要有virtualbox才能正常安装vagrant">3.<strong>必须要有virtualbox才能正常安装vagrant</strong></span></h2><a id="more"></a>
+
+<h2><span id="4vagrant常用命令">4.<strong>vagrant常用命令</strong></span></h2><ul>
+<li><p>初始化vagrant工程</p>
 <p>vagrant init ubuntu/trusty64：</p>
 <figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">该命令会在当前目录下创建vagrantfile,并且指定所使用的<span class="built_in">box</span>为ubuntu/trusty64，该<span class="built_in">box</span>由Hashicorp官网提供。此时，vagrant发现<span class="built_in">box</span>的名字的格式为<span class="string">"用户名/box名"</span>,则会使用<span class="string">"https://atlas.hashicorp.com/用户名/box名"</span>来下载该<span class="built_in">box</span>.</span><br><span class="line">对于非官网提供的<span class="built_in">box</span>，可以通过以下命令创建：</span><br><span class="line">vagrant init my-<span class="built_in">box</span> https://boxes.company.com/my.<span class="built_in">box</span>(其中，my-<span class="built_in">box</span>为该<span class="built_in">box</span>的名字，后面的URL为该<span class="built_in">box</span>的下载地址。)</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>启动虚拟机</p>
+<li><p>启动虚拟机</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant up</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>关闭虚拟机</p>
+<li><p>关闭虚拟机</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant halt</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>重启虚拟机</p>
+<li><p>重启虚拟机</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant reload</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>登录虚拟机</p>
+<li><p>登录虚拟机</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant ssh</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>挂起虚拟机(非常实用，节省内存)</p>
+<li><p>挂起虚拟机(非常实用，节省内存)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant suspend</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>唤醒虚拟机</p>
+<li><p>唤醒虚拟机</p>
 <figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">vagrant resume</span></span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>查看虚拟机状态</p>
+<li><p>查看虚拟机状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant status</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>删除虚拟机</p>
+<li><p>删除虚拟机</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vagrant destroy</span><br><span class="line"></span><br><span class="line">注：vagrant destroy只会删除虚拟机本身，也即你在Virtualbox将看不到该虚拟机，但是不会删除该虚拟机所使用的box。</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>列出本地所有的box</p>
+<li><p>列出本地所有的box</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box list</span><br></pre></td></tr></table></figure>
 </li>
-<li>
-<p>删除某个box</p>
+<li><p>删除某个box</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant box remove boxname</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
-<h2><span id="4provision">4.provision</span></h2>
-<p>Provisioner 是 Vagrant 中的一个概念，表示用户在 Vagrantfile 中所提供的自动或手动执行的虚拟机任务。任务的类型也有很多种，比如执行 Shell 脚本，文件拷贝等等。</p>
+<h2><span id="4provision">4.provision</span></h2><p>Provisioner 是 Vagrant 中的一个概念，表示用户在 Vagrantfile 中所提供的自动或手动执行的虚拟机任务。任务的类型也有很多种，比如执行 Shell 脚本，文件拷贝等等。</p>
 <p>vagrant 执行特定任务的通用语法如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vagrant provision --provision-with &lt;provisioner&gt;</span><br></pre></td></tr></table></figure>
+
+
+
 
     </div>
 
@@ -456,7 +445,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -469,7 +458,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -514,12 +503,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

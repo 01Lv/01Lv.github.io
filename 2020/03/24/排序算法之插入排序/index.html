@@ -273,8 +273,10 @@
 <p>把 n 个待排序的元素看成为一个有序表和一个无序表。开始时有序表中只包含 1 个元素，无序表中包含有 n - 1个元素，排序过程中每次从无序表中取出第一个元素，将它插入到有序表中的适当位置，使之成为新的有序表，重复 n - 1 次可完成排序的过程。</p>
 </blockquote>
 <a id="more"></a>
-<p>直接插入排序的时间复杂度是 <em><strong>O(N^2)</strong></em>, 且是一个稳定的算法</p>
+
+<p>直接插入排序的时间复杂度是 <strong><em>O(N^2)</em></strong>, 且是一个稳定的算法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> arr[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i =<span class="number">1</span>; i&lt;arr.length;i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//插入的数</span></span><br><span class="line">        <span class="keyword">int</span> insertVal = arr[i];</span><br><span class="line">        <span class="comment">//被插入的位置(准备和前一个数比较)</span></span><br><span class="line">        <span class="keyword">int</span> index = i-<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//如果插入的数比被插入的数小</span></span><br><span class="line">        <span class="keyword">while</span>(index&gt;=<span class="number">0</span>&amp;&amp;insertVal &lt; arr[index])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//将把 arr[index] 向后移动</span></span><br><span class="line">            arr[index+<span class="number">1</span>]=arr[index];</span><br><span class="line">            <span class="comment">//让 index 向前移动</span></span><br><span class="line">            index--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//把插入的数放入合适位置</span></span><br><span class="line">        arr[index+<span class="number">1</span>]=insertVal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -393,7 +395,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -406,7 +408,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -451,12 +453,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="好记忆不如烂笔头  1.docker: Error response from daemon: Cannot link to &#x2F;mysql, as it does not belong to the default network 参考 无法链接到由docker-compose启动的正在运行的容器问题解决 首先要通过 --link mysql, 链接到 mysql。通过 docker inspe">
+  <meta name="description" content="好记忆不如烂笔头  1.docker: Error response from daemon: Cannot link to &#x2F;mysql, as it does not belong to the default network参考 无法链接到由docker-compose启动的正在运行的容器问题解决 首先要通过 --link mysql, 链接到 mysql。通过 docker inspec">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker错误总结">
 <meta property="og:url" content="https://01lv.github.io/2020/03/22/Docker%E9%94%99%E8%AF%AF%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="追风的少年">
-<meta property="og:description" content="好记忆不如烂笔头  1.docker: Error response from daemon: Cannot link to &#x2F;mysql, as it does not belong to the default network 参考 无法链接到由docker-compose启动的正在运行的容器问题解决 首先要通过 --link mysql, 链接到 mysql。通过 docker inspe">
+<meta property="og:description" content="好记忆不如烂笔头  1.docker: Error response from daemon: Cannot link to &#x2F;mysql, as it does not belong to the default network参考 无法链接到由docker-compose启动的正在运行的容器问题解决 首先要通过 --link mysql, 链接到 mysql。通过 docker inspec">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200322223814662.png#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200322223828851.png#pic_center">
@@ -280,20 +280,23 @@
         <blockquote>
 <p>好记忆不如烂笔头</p>
 </blockquote>
-<h1><span id="1docker-error-response-from-daemon-cannot-link-to-mysql-as-it-does-not-belong-to-the-default-network">1.docker: Error response from daemon: Cannot link to /mysql, as it does not belong to the default network</span></h1>
-<p>参考</p>
+<h1><span id="1docker-error-response-from-daemon-cannot-link-to-mysql-as-it-does-not-belong-to-the-default-network">1.docker: Error response from daemon: Cannot link to /mysql, as it does not belong to the default network</span></h1><p>参考</p>
 <p><a href="https://lhalcyon.com/docker-networklink-issue/" target="_blank" rel="noopener">无法链接到由docker-compose启动的正在运行的容器问题解决</a></p>
 <p>首先要通过 <code>--link mysql</code>, 链接到 mysql。通过 <code>docker inspect mysql</code> ，可以看到</p>
 <a id="more"></a>
+
 <p><img src="https://img-blog.csdnimg.cn/20200322223814662.png#pic_center" alt="image-20200322223735944"></p>
 <p>首先通过命令列出所有 docker 网络 .</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+
 <p><img src="https://img-blog.csdnimg.cn/20200322223828851.png#pic_center" alt="image-20200322223220201"></p>
 <p>docker-compose 在运行时会创建一个新的网络 .例如在我遇到的情况中,是已有一个由 docker-compose 运行的 base-service_default 的网络 , 后面想通过 <code>docker run xxx</code> 命令链接上 <code>base-service_default</code> 网络 .</p>
 <p>原来的命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8080:8080 --name mall-admin \</span><br><span class="line">--link 679 \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">-v /mydata/app/admin/logs:/var/logs \</span><br><span class="line">-d mall/mall-admin:1.0-SNAPSHOT</span><br></pre></td></tr></table></figure>
+
 <p>正确的运行命令</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8080:8080 --name mall-admin \</span><br><span class="line">--link 679 \</span><br><span class="line">--net base-service_default \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">-v /mydata/app/admin/logs:/var/logs \</span><br><span class="line">-d mall/mall-admin:1.0-SNAPSHOT</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -412,7 +415,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -425,7 +428,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -470,12 +473,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

@@ -283,16 +283,20 @@
 <p>由于我的 Hexo 的版本(7.7.2) 在目前来说是最新的，所以通过百度和google查询到的资料不多，所以耗费了好几个小时在搜查相关的资料，终于功夫不负有心人，最终升级成功。</p>
 <p>据<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">官网</a>说, 他们在第三方服务中提供了 <strong>不蒜子统计</strong> 的功能，看来多看看官网还是有好处的哈哈。</p>
 <a id="more"></a>
+
 <p><img src="https://img-blog.csdnimg.cn/20200315223305251.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70" alt="image-20200315222038516"></p>
 <p>1.参照了相关的资料，需要修改将 <strong>主题配置文件</strong> 中的<code>busuanzi_count</code>的配置项。</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="comment"># Get more information on http://ibruce.info/2015/04/04/busuanzi</span></span><br><span class="line"><span class="attr">busuanzi_count:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
 <p>给 <strong>footer.swig</strong> 添加以下内容，该文件在径<code>&quot;\themes\next\layout\_partials\</code> 下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">&lt;span id&#x3D;&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">	&lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">		&lt;i class&#x3D;&quot;fa fa-eye&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">	&lt;&#x2F;span&gt;</span><br><span class="line">	访问量：&lt;span id&#x3D;&quot;busuanzi_value_site_pv&quot;&gt;&lt;&#x2F;span&gt; 次数</span><br><span class="line">&lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">&lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">	&lt;span id&#x3D;&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">	访客数：&lt;span id&#x3D;&quot;busuanzi_value_site_uv&quot;&gt;&lt;&#x2F;span&gt; 人次</span><br><span class="line">&lt;&#x2F;span&gt;</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>注意: 以上内容放错位置可就显示的不好看哦</p>
 </blockquote>
 <p>把这段内容添加 <code>&lt;div div class=&quot;copyright&quot;&gt;</code> 模块的末尾添加，示例如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class&#x3D;&quot;copyright&quot;&gt;</span><br><span class="line">  &#123;% set copyright_year &#x3D; date(null, &#39;YYYY&#39;) %&#125;</span><br><span class="line">  &amp;copy; &#123;% if theme.footer.since and theme.footer.since !&#x3D; copyright_year %&#125;&#123;&#123; theme.footer.since &#125;&#125; – &#123;% endif %&#125;</span><br><span class="line">  &lt;span itemprop&#x3D;&quot;copyrightYear&quot;&gt;&#123;&#123; copyright_year &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span class&#x3D;&quot;with-love&quot;&gt;</span><br><span class="line">    &lt;i class&#x3D;&quot;fa fa-&#123;&#123; theme.footer.icon.name &#125;&#125;&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span class&#x3D;&quot;author&quot; itemprop&#x3D;&quot;copyrightHolder&quot;&gt;&#123;&#123; theme.footer.copyright or author &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">  &#123;%- if config.symbols_count_time.total_symbols %&#125;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-area-chart&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- if theme.symbols_count_time.item_text_total %&#125;</span><br><span class="line">      &lt;span class&#x3D;&quot;post-meta-item-text&quot;&gt;&#123;&#123; __(&#39;symbols_count_time.count_total&#39;) + __(&#39;symbol.colon&#39;) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line">    &lt;span title&#x3D;&quot;&#123;&#123; __(&#39;symbols_count_time.count_total&#39;) &#125;&#125;&quot;&gt;&#123;&#123; symbolsCountTotal(site) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &#123;%- endif %&#125;</span><br><span class="line"></span><br><span class="line">  &#123;%- if config.symbols_count_time.total_time %&#125;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-coffee&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- if theme.symbols_count_time.item_text_total %&#125;</span><br><span class="line">      &lt;span class&#x3D;&quot;post-meta-item-text&quot;&gt;&#123;&#123; __(&#39;symbols_count_time.time_total&#39;) &#125;&#125; &amp;asymp;&lt;&#x2F;span&gt;</span><br><span class="line">    &#123;%- endif %&#125;</span><br><span class="line">    &lt;span title&#x3D;&quot;&#123;&#123; __(&#39;symbols_count_time.time_total&#39;) &#125;&#125;&quot;&gt;&#123;&#123; symbolsTimeTotal(site, theme.symbols_count_time.awl, theme.symbols_count_time.wpm, __(&#39;symbols_count_time.time_minutes&#39;)) &#125;&#125;&lt;&#x2F;span&gt;</span><br><span class="line">  &#123;%- endif %&#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;添加的位置从这里开始</span><br><span class="line">  &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span id&#x3D;&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">    &lt;span class&#x3D;&quot;post-meta-item-icon&quot;&gt;</span><br><span class="line">      &lt;i class&#x3D;&quot;fa fa-eye&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">    &lt;&#x2F;span&gt;</span><br><span class="line">    访问量：&lt;span id&#x3D;&quot;busuanzi_value_site_pv&quot;&gt;&lt;&#x2F;span&gt; 次数</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line"></span><br><span class="line">  &lt;span class&#x3D;&quot;post-meta-divider&quot;&gt;|&lt;&#x2F;span&gt;</span><br><span class="line">  &lt;span id&#x3D;&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">    访客数：&lt;span id&#x3D;&quot;busuanzi_value_site_uv&quot;&gt;&lt;&#x2F;span&gt; 人次</span><br><span class="line">  &lt;&#x2F;span&gt;</span><br><span class="line">  &#x2F;&#x2F;这里结束</span><br><span class="line">&lt;&#x2F;div&gt;</span><br></pre></td></tr></table></figure>
+
 <p>重新部署一下，需要的内容就出来啦！</p>
 <p>效果如下：</p>
 <p><img src="https://img-blog.csdnimg.cn/20200315223249814.png" alt="image-20200315223107231"></p>
@@ -415,7 +419,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-count">58</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -428,7 +432,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">69</span>
+        <span class="site-state-item-count">70</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -473,12 +477,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">308k</span>
+    <span title="站点总字数">311k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:40</span>
+    <span title="站点阅读时长">4:43</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
