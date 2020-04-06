@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot之Interceptor</title>
+    <url>/2020/04/06/SpringBoot%E4%B9%8BInterceptor/</url>
+    <content><![CDATA[<p>转载自：</p>
+<p><a href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/basis/springboot-interceptor.md" target="_blank" rel="noopener">Interceptor介绍</a></p>
+<p><strong>拦截器(Interceptor)</strong> 同 Filter(过滤器) 一样，它俩都是面向切面编程——AOP 的具体实现（AOP切面编程只是一种编程思想而已）。</p>
+<p>你可以使用 Interceptor 来执行某些任务，例如在 <strong>Controller</strong> 处理请求之前编写日志，添加或更新配置……</p>
+<p>在 <strong>Spring中</strong>，当请求发送到 <strong>Controller</strong> 时，在被<strong>Controller</strong>处理之前，它必须经过 <strong>Interceptors</strong>（0或更多）。</p>
+<p><strong>Spring Interceptor</strong>是一个非常类似于<strong>Servlet Filter</strong> 的概念 。</p>
+<a id="more"></a>
+
+<h1><span id="过滤器和拦截器的区别">过滤器和拦截器的区别</span></h1><p>对于过滤器和拦截器的区别：</p>
+<ul>
+<li><strong>过滤器(Filter)：</strong>当你有一堆东西的时候，你只希望选择符合你要求的某一些东西。定义这些要求的工具，就是过滤器。</li>
+<li><strong>拦截器(Interceptor)：</strong>在一个流程正在进行的时候，你希望干预它的进展，甚至终止它进行，这是拦截器做的事情。</li>
+</ul>
+<h1><span id="自定义-interceptor">自定义 Interceptor</span></h1><p>如果你需要自定义 <strong>Interceptor</strong> 的话必须实现 <strong>org.springframework.web.servlet.HandlerInterceptor</strong>接口或继承 <strong>org.springframework.web.servlet.handler.HandlerInterceptorAdapter</strong>类，并且需要重写下面下面3个方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">                         HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">                         Object handler)</span></span></span><br><span class="line"><span class="function"> </span></span><br><span class="line"><span class="function"> </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">                       HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">                       Object handler,</span></span></span><br><span class="line"><span class="function"><span class="params">                       ModelAndView modelAndView)</span></span></span><br><span class="line"><span class="function"> </span></span><br><span class="line"><span class="function"> </span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(HttpServletRequest request,</span></span></span><br><span class="line"><span class="function"><span class="params">                            HttpServletResponse response,</span></span></span><br><span class="line"><span class="function"><span class="params">                            Object handler,</span></span></span><br><span class="line"><span class="function"><span class="params">                            Exception ex)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>注意： <strong><em>preHandle</em></strong>方法返回 <strong>true</strong>或 <strong>false</strong>。如果返回 <strong>true</strong>，则意味着请求将继续到达 <strong>Controller</strong> 被处理。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200406225518922.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="162"></p>
+<p><strong><code>LogInterceptor</code>用于过滤所有请求</strong></p>
+<p><strong><code>OldLoginInterceptor</code></strong> 是一个拦截器，如果用户输入已经被废弃的链接 <code>/admin/oldLogin</code> ，它将重定向到新的 <code>/admin/login</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20200406225549735.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="163"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200406225655909.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="164"></p>
+<p><strong><code>AdminInterceptor</code></strong>用于拦截请求路径为 <code>/admin/*</code> 下的请求</p>
+<p>配置拦截器：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// LogInterceptor apply to all URLs.</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> LogInterceptor());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Old Login url, no longer use.</span></span><br><span class="line">        <span class="comment">// Use OldURLInterceptor to redirect to a new URL.</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> OldLoginInterceptor())</span><br><span class="line">            .addPathPatterns(<span class="string">"/admin/oldLogin"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// This interceptor apply to URL like /admin/*</span></span><br><span class="line">        <span class="comment">// Exclude /admin/oldLogin</span></span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> AdminInterceptor())</span><br><span class="line">            .addPathPatterns(<span class="string">"/admin/*"</span>)</span><br><span class="line">            .excludePathPatterns(<span class="string">"/admin/oldLogin"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结合<strong>自定义 Controller 验证拦截器</strong>，完成测试，具体请看源码: <a href="https://gitee.com/mikeLv01/security-interceptor-demo.git" target="_blank" rel="noopener">https://gitee.com/mikeLv01/security-interceptor-demo.git</a></p>
+<p><strong>注意：该实例需要引入 thymeleaf 的依赖，否则报错</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- thymeleaf --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="结果">结果：</span></h2><p>测试用户访问 <a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a> 的时候， <strong>LogInterceptor</strong>记录相关信息（页面地址，访问时间），并计算 <strong>Web服务器</strong>处理请求的时间。另外，页面会被渲染成 <code>test.html</code>。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200406225717264.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="165"></p>
+<p>当用户访问 <a href="http://localhost:8080/admin/oldLogin" target="_blank" rel="noopener">http://localhost:8080/admin/oldLogin</a> 也就是旧的登录页面（不再使用）时， <strong>OldLoginInterceptor</strong>将请求重定向 <a href="http://localhost:8080/admin/login" target="_blank" rel="noopener">http://localhost:8080/admin/login</a> 页面会被渲染成正常的登录页面 <code>login.html</code>。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">Request URL: http://localhost:8088/admin/oldLogin</span><br><span class="line"><span class="keyword">Start</span> <span class="built_in">Time</span>: <span class="number">1586184588848</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-------- OldLoginInterceptor.preHandle --- </span></span><br><span class="line">Request <span class="keyword">URL</span>: <span class="keyword">http</span>://localhost:<span class="number">8088</span>/<span class="keyword">admin</span>/oldLogin</span><br><span class="line">Sorry! This <span class="keyword">URL</span> <span class="keyword">is</span> <span class="keyword">no</span> longer used, Redirect <span class="keyword">to</span> /<span class="keyword">admin</span>/login</span><br><span class="line"></span><br><span class="line"><span class="comment">-------- LogInterception.afterCompletion --- </span></span><br><span class="line">Request <span class="keyword">URL</span>: <span class="keyword">http</span>://localhost:<span class="number">8088</span>/<span class="keyword">admin</span>/oldLogin</span><br><span class="line"><span class="keyword">End</span> <span class="built_in">Time</span>: <span class="number">1586184588849</span></span><br><span class="line"><span class="built_in">Time</span> Taken: <span class="number">1</span></span><br><span class="line">Request <span class="keyword">URL</span>: <span class="keyword">http</span>://localhost:<span class="number">8088</span>/<span class="keyword">admin</span>/login</span><br><span class="line"><span class="keyword">Start</span> <span class="built_in">Time</span>: <span class="number">1586184588857</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-------- AdminInterceptor.preHandle --- </span></span><br><span class="line"></span><br><span class="line"><span class="comment">-------- MainController.login --- </span></span><br><span class="line"> ** You <span class="keyword">are</span> <span class="keyword">in</span> Controller ** </span><br><span class="line"></span><br><span class="line"><span class="comment">-------- AdminInterceptor.postHandle --- </span></span><br><span class="line"></span><br><span class="line"><span class="comment">-------- LogInterception.postHandle --- </span></span><br><span class="line">Request <span class="keyword">URL</span>: <span class="keyword">http</span>://localhost:<span class="number">8088</span>/<span class="keyword">admin</span>/login</span><br><span class="line"></span><br><span class="line"><span class="comment">-------- AdminInterceptor.afterCompletion --- </span></span><br><span class="line"></span><br><span class="line"><span class="comment">-------- LogInterception.afterCompletion --- </span></span><br><span class="line">Request <span class="keyword">URL</span>: <span class="keyword">http</span>://localhost:<span class="number">8088</span>/<span class="keyword">admin</span>/login</span><br><span class="line"><span class="keyword">End</span> <span class="built_in">Time</span>: <span class="number">1586184588860</span></span><br><span class="line"><span class="built_in">Time</span> Taken: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>Interceptor</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java的锁机制</title>
     <url>/2020/04/04/Java%E7%9A%84%E9%94%81%E6%9C%BA%E5%88%B6/</url>
     <content><![CDATA[<p>转载自：</p>
@@ -172,9 +219,17 @@
 <p>Filter.java</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.servlet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">   <span class="comment">//初始化过滤器后执行的操作</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">   <span class="comment">// 对请求进行过滤</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest var1, ServletResponse var2, FilterChain var3)</span> <span class="keyword">throws</span> IOException, ServletException</span>;</span><br><span class="line">   <span class="comment">// 销毁过滤器后执行的操作，主要用户对某些资源的回收</span></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-<p>todo：2. Filter是如何实现拦截的？</p>
+<h1><span id="filter-是如何实现拦截的">Filter 是如何实现拦截的？</span></h1><p><code>Filter</code> 接口中有一个叫做 <code>doFilter</code> 的方法，这个方法实现了对用户请求的过滤。具体流程大体是这样的：</p>
+<ol>
+<li>用户发送请求到 web 服务器，请求会先到过滤器；</li>
+<li>过滤器会对请求进行一些处理比如过滤请求的参数、修改返回给客户端的 response 的内容、判断是否让用户访问该接口等等。</li>
+<li>用户请求响应完毕</li>
+<li>进行一些自己想要的其他操作</li>
+</ol>
+<h1><span id="如何自定义-filter">如何自定义 Filter</span></h1><h2><span id="webfilter-注解">@WebFilter 注解</span></h2><p>@WebFilter 用于将一个类声明为过滤器，该注解将会在部署时被容器处理，容器将根据具体的属性配置将相应的类部署为过滤器。该注解具有下表给出的一些常用属性 ( 以下所有属性均为可选属性，但是 value、urlPatterns、servletNames 三者必需至少包含一个，且 value 和 urlPatterns 不能共存，如果同时指定，通常忽略 value 的取值 )</p>
+<h2><span id="示例">示例</span></h2><p><a href="https://gitee.com/mikeLv01/security-filter-demo.git" target="_blank" rel="noopener">https://gitee.com/mikeLv01/security-filter-demo.git</a></p>
+<p>结果示意图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200406151727685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="161"></p>
 ]]></content>
       <categories>
         <category>SpringBoot</category>
@@ -3451,6 +3506,12 @@
 <h2><span id="最初级的缓存不一致问题及解决方案">最初级的缓存不一致问题及解决方案</span></h2><p><strong>问题：</strong>先修改数据库，再删除缓存。如果删除缓存失败了，那么会导致数据库中是新数据，缓存中是旧数据，数据就出现了不一致。</p>
 <p><img src="https://mmbiz.qpic.cn/mmbiz_png/JdLkEI9sZfeoyd3H8CCETFgcdAU1AWvN9Zoz5cFzMJEfD36zwfXteNoC1CYC68bFicI1RpwcwicmjAl9GwgLLuWg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
 <p><strong>解决思路：</strong>先删除缓存，再修改数据库。如果数据库修改失败了，那么数据库中是旧数据，缓存中是空的，那么数据不会不一致。因为读的时候缓存没有，则读数据库中旧数据，然后更新到缓存中。</p>
+<h1><span id="20restcontroller-vs-controller">20.@RestController vs @Controller</span></h1><p>参考：</p>
+<p><a href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/basis/RestControllerVSController.md" target="_blank" rel="noopener">https://github.com/Snailclimb/springboot-guide/blob/master/docs/basis/RestControllerVSController.md</a></p>
+<p><strong><em>@Controller 返回一个页面</em></strong></p>
+<p>单独是用 <code>@Controller</code> 不加 <code>@ResponseBody</code> 的话一般使用在要返回一个视图的情况，这种情况属于比较传统的 SpringMVC 的应用，对应于前后端不分离的情况</p>
+<p><strong><em>@RestController 返回 JSON 或 XML 形式数据</em></strong></p>
+<p>但<code>@RestController</code>只返回对象，对象数据直接以 <strong>JSON</strong> 或 <strong>XML</strong> 形式写入 HTTP 响应(Response)中，这种情况属于 RESTful Web服务，这也是目前日常开发所接触的最常用的情况（前后端分离）。</p>
 ]]></content>
       <categories>
         <category>日常</category>
