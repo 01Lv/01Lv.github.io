@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot之异步编程</title>
+    <url>/2020/04/06/SpringBoot%E4%B9%8B%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>参考自：</p>
+<p><a href="https://github.com/Snailclimb/springboot-guide/blob/master/docs/advanced/springboot-async.md" target="_blank" rel="noopener">新手也能看懂的 SpringBoot 异步编程指南</a></p>
+<h1><span id="future-模式">Future 模式</span></h1><p>异步编程在处理耗时操作以及多任务处理的场景下非常有用，我们可以更好的让我们的系统利用好机器的 CPU 和 内存，提高它们的利用率。多线程设计模式有很多种，Future模式是多线程开发中非常常见的一种设计模式。</p>
+<p>先简单介绍一下 <strong>Future 模式的核心思想</strong> 吧！</p>
+<blockquote>
+<p>Future 模式的核心思想是 <strong>异步调用</strong> 。当我们执行一个方法时，假如这个方法中有多个耗时的任务需要同时去做，而且又不着急等待这个结果时可以让客户端立即返回，然后后台慢慢去计算任务。当然你也可以选择等这些任务都执行完了，再返回给客户端。这个在 Java 中都有很好的支持，我在后面的示例程序中会详细对比这两种方式的区别。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="实战">实战</span></h1><p>如果我们需要在 SpringBoot 实现异步编程的话，通过 Spring 提供的两个注解会让这件事情变的非常简单。</p>
+<ul>
+<li><code>@EnableAsync</code>：通过在 <strong>配置类</strong> 或者 <strong>Main类</strong> 上加@EnableAsync开启对异步方法的支持。</li>
+<li><code>@Async</code>：可以作用在 <strong>类</strong> 上或者 <strong>方法</strong> 上，作用在类上代表这个类的所有方法都是异步方法。</li>
+</ul>
+<h2><span id="自定义-taskexecutor">自定义 TaskExecutor</span></h2><p>从名字就能看出它是任务的执行者，它领导执行着线程来处理任务，就像司令官一样，而我们的线程就好比一只只军队一样，这些军队可以异步对敌人进行打击。</p>
+<p>Spring 提供了<code>TaskExecutor</code>接口作为任务执行者的抽象,它和<code>java.util.concurrent</code>包下的<code>Executor</code>接口很像。稍微不同的 <code>TaskExecutor</code>接口用到了 Java 8 的语法<code>@FunctionalInterface</code>声明这个接口是一个函数式接口。</p>
+<p><code>org.springframework.core.task.TaskExecutor</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.core.task;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executor;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TaskExecutor</span> <span class="keyword">extends</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable var1)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>todo：未完成，继续。。。</p>
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>异步编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringBoot之Interceptor</title>
     <url>/2020/04/06/SpringBoot%E4%B9%8BInterceptor/</url>
     <content><![CDATA[<p>转载自：</p>
