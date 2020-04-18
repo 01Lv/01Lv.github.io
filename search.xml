@@ -163,8 +163,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Spring之@validated</title>
-    <url>/2020/04/15/Spring%E4%B9%8B@validated/</url>
+    <title>Spring之validated校验</title>
+    <url>/2020/04/15/Spring%E4%B9%8Bvalidated%E6%A0%A1%E9%AA%8C/</url>
     <content><![CDATA[<p><a href="https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/validation/annotation/Validated.html" target="_blank" rel="noopener">官网</a></p>
 <p><a href="https://www.cnkirito.moe/spring-validation/" target="_blank" rel="noopener">使用 spring validation 完成数据后端校验</a></p>
 <a id="more"></a>
