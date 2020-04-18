@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Specification官网 【一目了然】Spring Data JPA使用Specification动态构建多表查询、复杂查询及排序示例 JPA 使用 Specification 复杂查询和 Criteria 查询 CriteriaBuilder官网 Criteria官网 Criteria-Root官网 JPA criteria 查询:类型安全与面向对象 JPA 2.0 中的动态类型安全查询">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring之Specification复杂查询和Criteria查询">
+<meta property="og:url" content="https://01lv.github.io/2020/04/17/Spring%E4%B9%8BSpecification/index.html">
+<meta property="og:site_name" content="追风的少年">
+<meta property="og:description" content="Specification官网 【一目了然】Spring Data JPA使用Specification动态构建多表查询、复杂查询及排序示例 JPA 使用 Specification 复杂查询和 Criteria 查询 CriteriaBuilder官网 Criteria官网 Criteria-Root官网 JPA criteria 查询:类型安全与面向对象 JPA 2.0 中的动态类型安全查询">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200418162037917.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200418162055711.png#pic_center">
+<meta property="article:published_time" content="2020-04-17T09:49:23.000Z">
+<meta property="article:modified_time" content="2020-04-18T08:22:13.556Z">
+<meta property="article:author" content="mikelv">
+<meta property="article:tag" content="Spring">
+<meta property="article:tag" content="Specification">
+<meta property="article:tag" content="Criteria">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200418162037917.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://01lv.github.io/2020/04/17/Spring%E4%B9%8BSpecification/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Spring之Specification复杂查询和Criteria查询 | 追风的少年</title>
+  
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">追风的少年</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">just have a little faith</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/04/17/Spring%E4%B9%8BSpecification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring之Specification复杂查询和Criteria查询
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-17 17:49:23" itemprop="dateCreated datePublished" datetime="2020-04-17T17:49:23+08:00">2020-04-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-18 16:22:13" itemprop="dateModified" datetime="2020-04-18T16:22:13+08:00">2020-04-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/04/17/Spring%E4%B9%8BSpecification/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/17/Spring%E4%B9%8BSpecification/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://docs.spring.io/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/domain/Specification.html" target="_blank" rel="noopener">Specification官网</a></p>
+<p><a href="https://www.jianshu.com/p/659e9715d01d" target="_blank" rel="noopener">【一目了然】Spring Data JPA使用Specification动态构建多表查询、复杂查询及排序示例</a></p>
+<p><a href="https://blog.wuwii.com/jpa-specification.html" target="_blank" rel="noopener">JPA 使用 Specification 复杂查询和 Criteria 查询</a></p>
+<p><a href="https://docs.oracle.com/javaee/7/api/javax/persistence/criteria/CriteriaBuilder.html" target="_blank" rel="noopener">CriteriaBuilder官网</a></p>
+<p><a href="https://docs.oracle.com/javaee/7/api/javax/persistence/criteria/package-summary.html" target="_blank" rel="noopener">Criteria官网</a></p>
+<p><a href="https://docs.oracle.com/javaee/7/api/javax/persistence/criteria/Root.html" target="_blank" rel="noopener">Criteria-Root官网</a></p>
+<p><a href="https://my.oschina.net/zhaoqian/blog/133500" target="_blank" rel="noopener">JPA criteria 查询:类型安全与面向对象</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-typesafejpa/index.html" target="_blank" rel="noopener">JPA 2.0 中的动态类型安全查询</a></p>
+<p><a href="https://blog.csdn.net/ID_Kong/article/details/70225032" target="_blank" rel="noopener">java-jpa-criteriaBuilder使用入门</a></p>
+<p><a href="https://juejin.im/post/5d64f70fe51d4561fa2ec09c" target="_blank" rel="noopener">Spring data jpa 的使用与详解（二）：复杂动态查询及分页，排序</a></p>
+<blockquote>
+<p>业务需求：JPA 确实挺好用，给我们提供了 CRUD 的功能，并且用起来也是特别的方便，基本都是一行代码就能完成各种数据库操作，跟 mybatisplus 很像。。。但是在遇到复杂的多条件以及多表查询的时候，总是会首先考虑到手写原生的 SQL。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>Specification 算是 JPA 中比较灵活的查询方式，也少不了 Criteria 类型安全和面向对象的优点</p>
+<h1><span id="环境配置">环境配置</span></h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- jpa --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1><span id="代码实现">代码实现</span></h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxxSpecification</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">xxxSpecification</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Specification&lt;xxxEntity&gt; <span class="title">buildFromParam</span><span class="params">(Set&lt;String&gt; xxxList)</span></span>&#123;</span><br><span class="line">		</span><br><span class="line">        <span class="keyword">return</span> (root,query,builder) -&gt; &#123;</span><br><span class="line">            <span class="comment">//Predicate: 过滤条件,相当于构造 where 中的条件</span></span><br><span class="line">            ArrayList&lt;Predicate&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span>(!CollectionUtils.isEmpty(xxxList))&#123;</span><br><span class="line">				<span class="comment">//root：从元模型中获取相应的字段</span></span><br><span class="line">                CriteriaBuilder.In&lt;String&gt; in = builder.in(root.get(<span class="string">"id"</span>));</span><br><span class="line">                <span class="keyword">for</span>(String itemId:xxxList)&#123;</span><br><span class="line">                    in.value(itemId);</span><br><span class="line">                &#125;</span><br><span class="line">                list.add(in);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            list.add(builder.equal(root.get(<span class="string">"status"</span>), TableStatusEnum.NORMAL_STATUS.getCode()));</span><br><span class="line">            Predicate[] predicates = <span class="keyword">new</span> Predicate[list.size()];</span><br><span class="line">            predicates = list.toArray(predicates);</span><br><span class="line">            <span class="keyword">return</span> builder.and(predicates);</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上的代码对应于</p>
+<p><img src="https://img-blog.csdnimg.cn/20200418162037917.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="169"></p>
+<h1><span id="原理">原理</span></h1><p>JPA 提供动态接口(<strong><em>JpaSpecificationExecutor</em></strong>)，利用类型检查方式，进行复杂的条件查询，这个比自己写 SQL 更加安全</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.data.jpa.repository;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Optional;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.domain.Page;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.domain.Pageable;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.domain.Sort;</span><br><span class="line"><span class="keyword">import</span> org.springframework.data.jpa.domain.Specification;</span><br><span class="line"><span class="keyword">import</span> org.springframework.lang.Nullable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">JpaSpecificationExecutor</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">Optional&lt;T&gt; <span class="title">findOne</span><span class="params">(@Nullable Specification&lt;T&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;T&gt; <span class="title">findAll</span><span class="params">(@Nullable Specification&lt;T&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Page&lt;T&gt; <span class="title">findAll</span><span class="params">(@Nullable Specification&lt;T&gt; var1, Pageable var2)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;T&gt; <span class="title">findAll</span><span class="params">(@Nullable Specification&lt;T&gt; var1, Sort var2)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">count</span><span class="params">(@Nullable Specification&lt;T&gt; var1)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Specification</code> 是我们传入进去的查询参数，实际上它是一个接口，并且只有一个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Specification</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function">Predicate <span class="title">toPredicate</span><span class="params">(Root&lt;T&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder cb)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="元模型">元模型</span></h2><p>在JPA中,标准查询是以元模型的概念为基础的，元模型是为具体持久化单元的受管实体定义的.这些实体可以是实体类,嵌入类或者映射的父类.提供受管实体元信息的类就是元模型类.<br>简单的说就是<strong>元模型是实体类对应的一个“受管实体</strong></p>
+<h3><span id="例子">例子：</span></h3><p><strong>实体类</strong> Employee(com.demo.entities包中定义)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Employee</span></span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;   </span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="meta">@OneToMany</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Address&gt; addresses;</span><br><span class="line">    <span class="comment">// Other code…</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Employee类的标准<strong>元模型类</strong>的名字是 Employee_</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.annotation.Generated;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.SingularAttribute;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.ListAttribute;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.StaticMetamodel;</span><br><span class="line"><span class="meta">@StaticMetamodel</span>(Employee<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">Employee_</span> </span>&#123;     </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, Integer&gt; id;   </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, Integer&gt; age;   </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, String&gt; name;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> ListAttribute&lt;Employee, Address&gt; addresses;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Employee的每一个属性都会使用在JPA2规范中描述的以下规则在相应的元模型类中映射：</p>
+<blockquote>
+<ul>
+<li>元模型类的属性全部是static和public的。</li>
+<li>元模型类的属性全部是static和public的。Employee的每一个属性都会使用在JPA2规范中描述的以下规则在相应的元模型类中映射：</li>
+<li>对于Addess这样的集合类型，会定义静态属性ListAttribute&lt; A, B&gt; b，这里List对象b是定义在类A中类型B的对象。其它集合类型可以是SetAttribute, MapAttribute 或 CollectionAttribute 类型。</li>
+</ul>
+</blockquote>
+<p>为什么要使用<strong>元模型</strong>，答：查询类型更加安全</p>
+<h2><span id="criteria-查询">Criteria 查询</span></h2><p>为了更好的理解criteria 查询，考虑拥有Employee实例集合的Dept实体，Employee和Dept的元模型类的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//All Necessary Imports</span></span><br><span class="line"><span class="meta">@StaticMetamodel</span>(Dept<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">Dept_</span> </span>&#123;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Dept, Integer&gt; id;   </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> ListAttribute&lt;Dept, Employee&gt; employeeCollection;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Dept, String&gt; name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//All Necessary Imports</span></span><br><span class="line"><span class="meta">@StaticMetamodel</span>(Employee<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">Employee_</span> </span>&#123;     </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, Integer&gt; id;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, Integer&gt; age;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, String&gt; name;    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> SingularAttribute&lt;Employee, Dept&gt; deptId;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码片段展示了一个criteria 查询，它用于获取所有年龄大于24岁的员工：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();</span><br><span class="line">CriteriaQuery&lt;Employee&gt; criteriaQuery = criteriaBuilder.createQuery(Employee<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">Root&lt;Employee&gt; employee = criteriaQuery.from(Employee<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">Predicate condition = criteriaBuilder.gt(employee.get(Employee_.age), <span class="number">24</span>);</span><br><span class="line">criteriaQuery.where(condition);</span><br><span class="line">TypedQuery&lt;Employee&gt; typedQuery = em.createQuery(criteriaQuery);</span><br><span class="line">List&lt;Employee&gt; result = typedQuery.getResultList();</span><br></pre></td></tr></table></figure>
+
+<p>对应的<strong>SQL: SELECT * FROM employee WHERE age &gt; 24</strong></p>
+<h2><span id="criteriabuilder-安全查询创建工厂">CriteriaBuilder 安全查询创建工厂</span></h2><p>CriteriaBuilder 安全查询创建工厂，创建 <strong>CriteriaQuery</strong>，创建查询具体条件 <strong>Predicate</strong> 等。</p>
+<p>CriteriaBuilder是一个工厂对象,安全查询的开始.用于构建JPA安全查询.可以从EntityManager 或 EntityManagerFactory类中获得CriteriaBuilder。<br>比如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();</span><br></pre></td></tr></table></figure>
+
+<h2><span id="criteriaquery-安全查询主语句">CriteriaQuery 安全查询主语句</span></h2><ul>
+<li>它通过调用 CriteriaBuilder, createQuery 或CriteriaBuilder.createTupleQuery 获得。</li>
+<li>CriteriaBuilder就像CriteriaQuery 的工厂一样。</li>
+<li>CriteriaQuery对象必须在实体类型或嵌入式类型上的Criteria 查询上起作用。</li>
+<li>Employee实体的 CriteriaQuery 对象以下面的方式创建：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();</span><br><span class="line">CriteriaQuery&lt;Employee&gt; criteriaQuery = criteriaBuilder.createQuery(Employee<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="root-定义查询的-from-子句中能出现的类型">Root 定义查询的 From 子句中能出现的类型</span></h2><p><img src="https://img-blog.csdnimg.cn/20200418162055711.png#pic_center" alt="170"></p>
+<p>查询表达式被赋予泛型。一些典型的表达式是：</p>
+<ul>
+<li><p>Root&lt;T&gt;, 相当于一个 From 子句,定义查询的 From 子句中能出现的类型</p>
+</li>
+<li><p>Criteria查询的查询根定义了实体类型，能为将来导航获得想要的结果，它与SQL查询中的FROM子句类似。</p>
+</li>
+<li><p>Root实例也是类型化的，且定义了查询的FROM子句中能够出现的类型。</p>
+</li>
+<li><p>查询根实例能通过传入一个实体类型给 AbstractQuery.from方法获得</p>
+</li>
+<li><p>Criteria查询，可以有多个查询根。</p>
+</li>
+<li><p>Employee 实体的查询根对象可以用以下语法获得：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Root&lt;Employee&gt; employee = criteriaQuery.from(Employee<span class="class">.<span class="keyword">class</span>)</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3><span id="源码">源码</span></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.persistence.criteria;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.EntityType;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Root</span>&lt;<span class="title">X</span>&gt; <span class="keyword">extends</span> <span class="title">From</span>&lt;<span class="title">X</span>, <span class="title">X</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">EntityType&lt;X&gt; <span class="title">getModel</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出 Root 继承自 <strong>From</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">From</span>&lt;<span class="title">Z</span>, <span class="title">X</span>&gt; <span class="keyword">extends</span> <span class="title">Path</span>&lt;<span class="title">X</span>&gt;, <span class="title">FetchParent</span>&lt;<span class="title">Z</span>, <span class="title">X</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>而 From 又继承自 <strong>Path</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> javax.persistence.criteria;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Collection;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.Bindable;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.MapAttribute;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.PluralAttribute;</span><br><span class="line"><span class="keyword">import</span> javax.persistence.metamodel.SingularAttribute;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Path</span>&lt;<span class="title">X</span>&gt; <span class="keyword">extends</span> <span class="title">Expression</span>&lt;<span class="title">X</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">Bindable&lt;X&gt; <span class="title">getModel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    Path&lt;?&gt; getParentPath();</span><br><span class="line"></span><br><span class="line">    &lt;Y&gt; <span class="function">Path&lt;Y&gt; <span class="title">get</span><span class="params">(SingularAttribute&lt;? <span class="keyword">super</span> X, Y&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    &lt;E, C extends Collection&lt;E&gt;&gt; <span class="function">Expression&lt;C&gt; <span class="title">get</span><span class="params">(PluralAttribute&lt;X, C, E&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    &lt;K, V, M extends Map&lt;K, V&gt;&gt; <span class="function">Expression&lt;M&gt; <span class="title">get</span><span class="params">(MapAttribute&lt;X, K, V&gt; var1)</span></span>;</span><br><span class="line"></span><br><span class="line">    Expression&lt;Class&lt;? extends X&gt;&gt; type();</span><br><span class="line"></span><br><span class="line">    &lt;Y&gt; <span class="function">Path&lt;Y&gt; <span class="title">get</span><span class="params">(String var1)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="predicate-过滤条件">Predicate 过滤条件</span></h2><ul>
+<li>过滤条件应用到SQL语句的FROM子句中。</li>
+<li>在criteria 查询中，查询条件通过Predicate 或Expression 实例应用到CriteriaQuery 对象上。</li>
+<li>这些条件使用 CriteriaQuery .where 方法应用到CriteriaQuery 对象上。</li>
+<li>Predicate 实例也可以用Expression 实例的 isNull， isNotNull 和 in方法获得，复合的Predicate 语句可以使用CriteriaBuilder的and, or andnot 方法构建。</li>
+<li>CriteriaBuilder 也是作为Predicate 实例的工厂，Predicate 对象通过调用CriteriaBuilder 的条件方法（ equal，notEqual， gt， ge，lt， le，between，like等）创建。</li>
+<li>这些条件使用 CriteriaQuery .where 方法应用到CriteriaQuery 对象上。</li>
+</ul>
+<p>下面的代码片段展示了Predicate 实例检查年龄大于24岁的员工实例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Predicate condition = criteriaBuilder.gt(employee.get(Employee_.age), <span class="number">24</span>);</span><br><span class="line">criteriaQuery.where(condition);</span><br></pre></td></tr></table></figure>
+
+<h1><span id="初步结论">初步结论</span></h1><p>CriteriaBuilder: 构造 sql 语句</p>
+<p>predicate：构造 where 中的条件语句，过滤条件</p>
+<p>root：获取对应元模型的字段属性</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2020/04/17/Spring%E4%B9%8BSpecification/" title="Spring之Specification复杂查询和Criteria查询">https://01lv.github.io/2020/04/17/Spring之Specification/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Spring/" rel="tag"># Spring</a>
+              <a href="/tags/Specification/" rel="tag"># Specification</a>
+              <a href="/tags/Criteria/" rel="tag"># Criteria</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/17/mqtt%E4%B9%8B%E5%AD%A6%E4%B9%A0/" rel="prev" title="mqtt之学习">
+      <i class="fa fa-chevron-left"></i> mqtt之学习
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">代码实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">例子：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Criteria 查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">CriteriaBuilder 安全查询创建工厂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">CriteriaQuery 安全查询主语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Root 定义查询的 From 子句中能出现的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">源码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Predicate 过滤条件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">初步结论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mikelv"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mikelv</p>
+  <div class="site-description" itemprop="description">放弃不难，但坚持一定很酷</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/01Lv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;01Lv" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yisheng.mikelv@foxmail.com" title="E-Mail → mailto:yisheng.mikelv@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mikelv</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">335k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">5:05</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'vUOBlgy4bWczaSuWqPWA4Orb-gzGzoHsz',
+      appKey     : 'c6DxvrOXBybBJ2w0DCsMGKeM',
+      placeholder: "皮一下也很开心哦!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
