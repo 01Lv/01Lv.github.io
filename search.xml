@@ -1,6 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Excel导入导出的实现</title>
+    <url>/2020/04/19/Excel%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<p><a href="https://www.jianshu.com/p/895ecf3d871c" target="_blank" rel="noopener">Java 使用POI实现Excel表格的导入导出</a></p>
+<p><a href="https://www.cnblogs.com/jerehedu/p/4343509.html" target="_blank" rel="noopener">Java中导入、导出Excel</a></p>
+<p><a href="https://blog.csdn.net/vbirdbest/article/details/72870714" target="_blank" rel="noopener">Apache POI使用详解</a></p>
+<p><a href="http://poi.apache.org/apidocs/index.html" target="_blank" rel="noopener">官方文档</a></p>
+<p><a href="https://www.cnblogs.com/Damon-Luo/p/5919656.html" target="_blank" rel="noopener">Java中使用poi导入、导出Excel</a></p>
+<p><a href="https://www.cnblogs.com/LiZhiW/p/4313789.html" target="_blank" rel="noopener">Apache POI使用详解</a></p>
+<blockquote>
+<p>业务需求：最近前端要求我这个后端的渣渣给她们提供一个接口方便从 excel 中导入业务数据。当时听到这个需求的时候我是两眼一蒙蔽，因为之前在外包公司的时候都是使用提供好的框架。。。实现原理没多少了解。于是我痛下决心好好学习下这项技术。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="介绍">介绍</span></h1><p>开发中经常回设计到excel的处理，如导出 Excel，导入 Excel到数据库中，操作Excel目前有两个框架，一个是 <strong>apache 的 poi</strong>，另一个是 <strong>Java Excel</strong>。</p>
+<ul>
+<li>Apache POI 是用 Java 编写的免费开源的跨平台的 Java API，Apache POI提供API给Java程式对Microsoft Office（Excel、WORD、PowerPoint、Visio等）格式档案读和写的功能。</li>
+<li>Java Excel 是一开发源码项目，通过它Java开发人员可以读取Excel文件的内容、创建新的Excel文件、更新已经存在的Excel文件。jxl 由于其小巧 易用的特点, 逐渐已经取代了 POI-excel的地位, 成为了越来越多的java开发人员生成excel文件的首选。</li>
+</ul>
+<h1><span id="apache-poi-常用的类">Apache POI 常用的类</span></h1><ul>
+<li><strong>HSSF</strong> － 提供读写Microsoft Excel XLS格式档案的功能。</li>
+<li><strong>XSSF</strong> － 提供读写Microsoft Excel OOXML XLSX格式档案的功能。</li>
+<li><strong>HWPF</strong> － 提供读写Microsoft Word DOC97格式档案的功能。</li>
+<li><strong>XWPF</strong> － 提供读写Microsoft Word DOC2003格式档案的功能。</li>
+<li><strong>HSLF</strong> － 提供读写Microsoft PowerPoint格式档案的功能。</li>
+<li><strong>HDGF</strong> － 提供读Microsoft Visio格式档案的功能。</li>
+<li><strong>HPBF</strong> － 提供读Microsoft Publisher格式档案的功能。</li>
+<li><strong>HSMF</strong> － 提供读Microsoft Outlook格式档案的功能。</li>
+</ul>
+<p>在开发中中我们经常使用 HSSF 来操作 Excel 处理表格数据，对于其它的不经常使用。</p>
+<p>HSSF 是 Horrible SpreadSheet Format 的缩写，通过 HSSF，你可以用 Java 代码来读取，写入，修改 Excel 文件。</p>
+<p>HSSF 为读取操作提供了两类 API：<strong>usermodel</strong> 和 <strong>eventusermodel</strong>，即 “用户模型” 和 “事件-用户模型”。</p>
+<h2><span id="常用的类和方法">常用的类和方法</span></h2><ul>
+<li><p>HSSFWorkbook：工作簿，代表一个 excel 的整个文档</p>
+<ul>
+<li>HSSFWorkbook()：创建一个新的工作簿</li>
+<li>HSSFWorkbook(InputStream inputStream)：创建一个关联输入流的工作簿，可以将一个excel文件封装成工作簿</li>
+<li>HSSFSheet createSheet(String sheetname)：创建一个新的 sheet</li>
+<li>HSSFSheet getSheet(String sheetName): 通过名称获取Sheet</li>
+<li>HSSFSheet getSheetAt(int index); // 通过索引获取Sheet，索引从0开始</li>
+<li>HSSFCellStyle createCellStyle()； 创建单元格样式</li>
+<li>int getNumberOfSheets(); 获取sheet的个数</li>
+<li>setActiveSheet(int index); 设置默认选中的工作表</li>
+<li>write();</li>
+<li>write(File newFile);</li>
+<li>write(OutputStream stream);</li>
+</ul>
+</li>
+<li><p>HSSFSheet：工作表</p>
+<ul>
+<li>HSSFRow createRow(int rownum); 创建新行，需要指定行号，行号从0开始</li>
+<li>HSSFRow getRow(int index); 根据索引获取指定的行</li>
+<li>int addMergedRegion(CellRangeAddress region); 合并单元格</li>
+<li>CellRangeAddress(int firstRow, int lastRow, int firstCol, int lastCol); 单元格范围, 用于合并单元格，需要指定要合并的首行、最后一行、首列、最后一列。</li>
+<li>autoSizeColumn(int column); 自动调整列的宽度来适应内容</li>
+<li>getLastRowNum(); 获取最后的行的索引，没有行或者只有一行的时候返</li>
+<li>setColumnWidth(int columnIndex, int width); 设置某一列的宽度，width=字符个数 * 256，例如20个字符的宽度就是20 * 256</li>
+</ul>
+</li>
+<li><p>HSSFRow ：行</p>
+<ul>
+<li>HSSFCell createCell(int column); 创建新的单元格</li>
+<li>HSSFCell setCell(shot index);</li>
+<li>HSSFCell getCell(shot index);</li>
+<li>setRowStyle(HSSFCellStyle style); 设置行样式</li>
+<li>short getLastCellNum(); 获取最后的单元格号，如果单元格有第一个开始算，lastCellNum就是列的个数</li>
+<li>setHeightInPoints(float height); 设置行的高度</li>
+</ul>
+</li>
+<li><p>HSSFCell：单元格</p>
+<ul>
+<li>setCellValue(String value); 设置单元格的值</li>
+<li>setCellType(); 设置单元格类型，如 字符串、数字、布尔等</li>
+<li>setCellStyle(); 设置单元格样式</li>
+<li>String getStringCellValue(); 获取单元格中的字符串值</li>
+<li>setCellStyle(HSSFCellStyle style); 设置单元格样式，例如字体、加粗、格式化</li>
+<li>setCellFormula(String formula); 设置计算公式，计算的结果作为单元格的值，也提供了异常常用的函数，如求和”sum(A1,C1)”、日期函数、字符串相关函数、CountIf和SumIf函数、随机数函数等</li>
+</ul>
+</li>
+<li><p>HSSFCellStyle ：单元格样式</p>
+<ul>
+<li>setFont(Font font); 为单元格设置字体样式</li>
+<li>setAlignment(HorizontalAlignment align); // 设置水平对齐方式</li>
+<li>setVerticalAlignment(VerticalAlignment align); // 设置垂直对齐方式</li>
+<li>setFillPattern(FillPatternType fp);</li>
+<li>setFillForegroundColor(short bg); 设置前景色</li>
+<li>setFillBackgroundColor(short bg); 设置背景颜色</li>
+</ul>
+</li>
+<li><p>HSSFFont：字体，</p>
+<ul>
+<li>setColor(short color); // 设置字体颜色</li>
+<li>setBold(boolean bold); // 设置是否粗体</li>
+<li>setItalic(boolean italic); 设置倾斜</li>
+<li>setUnderline(byte underline); 设置下划线</li>
+</ul>
+</li>
+<li><p>HSSFName：名称</p>
+</li>
+<li><p>HSSFDataFormat ：日期格式化</p>
+</li>
+<li><p>HSSFHeader ： Sheet的头部</p>
+</li>
+<li><p>HSSFFooter ：Sheet的尾部</p>
+</li>
+<li><p>HSSFDateUtil ：日期工具</p>
+</li>
+<li><p>HSSFPrintSetup ：打印设置</p>
+</li>
+<li><p>HSSFErrorConstants：错误信息表</p>
+</li>
+</ul>
+<p>Excel 中的工作簿，工作表，行，单元格中的关系</p>
+<figure class="highlight excel"><table><tr><td class="code"><pre><span class="line">一个 Excel 文件对应于一个 workbook(HSSFWorkbook)</span><br><span class="line">一个 workbook 可以有多个 <span class="built_in">sheet</span>(HSSFSheet) 组成</span><br><span class="line">一个 <span class="built_in">sheet</span> 是由多个 <span class="built_in">row</span>(HSSFRow) 组成</span><br><span class="line">一个 <span class="built_in">row</span> 是由多个 <span class="built_in">cell</span>(HSSFCell) 组成</span><br></pre></td></tr></table></figure>
+
+<h2><span id="基本操作步骤">基本操作步骤</span></h2><ol>
+<li>用 HSSFWorkbook 打开或者创建 “Excel文件对象”</li>
+<li>用 HSSFWorkbook 对象返回或者创建 Sheet 对象</li>
+<li>用 Sheet 对象返回行对象，用行对象得到 Cell 对象</li>
+<li>对 Cell 对象读写</li>
+</ol>
+<h1><span id="实现">实现</span></h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExcelFileImportUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将excel转换为对象(Object)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">parseExcelToObject</span><span class="params">(MultipartFile multipartFile, Class&lt;T&gt; clazz)</span> <span class="keyword">throws</span> RestApiException </span>&#123;</span><br><span class="line"></span><br><span class="line">        List&lt;T&gt; resultList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Field[] fields = getFields(clazz);</span><br><span class="line">        List&lt;List&lt;Cell&gt;&gt; parseList = parseExcel(multipartFile);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == parseList || parseList.size() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> resultList;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">for</span> (List&lt;Cell&gt; cellList : parseList) &#123;</span><br><span class="line">                T object = clazz.newInstance();</span><br><span class="line">                cellList.stream().forEach(e -&gt; &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">null</span> != e) &#123;</span><br><span class="line">                        <span class="keyword">int</span> index = e.getColumnIndex();</span><br><span class="line">                        setFieldValue(object, fields[index], e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">                resultList.add(object);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.warn(<span class="string">"解析文件出错   e=&#123;&#125;"</span>, e.toString());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.PARSE_IMPORT_FILE_ERROR, ErrorConstant.PARSE_IMPORT_FILE_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将excel转换为list</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;String&gt;&gt; parseExcelToList(MultipartFile multipartFile) <span class="keyword">throws</span> RestApiException &#123;</span><br><span class="line">        List&lt;List&lt;String&gt;&gt; resultList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;List&lt;Cell&gt;&gt; parseList = parseExcel(multipartFile);</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == parseList || parseList.size() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> resultList;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            parseList.stream().forEach(a -&gt; &#123;</span><br><span class="line">                List&lt;String&gt; cellList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">                a.stream().forEach(b -&gt; &#123;</span><br><span class="line">                    <span class="keyword">if</span> (b == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        cellList.add(<span class="string">""</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        b.setCellType(Cell.CELL_TYPE_STRING);</span><br><span class="line">                        cellList.add(b.getStringCellValue());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">                resultList.add(cellList);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            log.error(<span class="string">"解析文件出错   e=&#123;&#125;"</span>+ e.getMessage(),e);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.PARSE_IMPORT_FILE_ERROR, ErrorConstant.PARSE_IMPORT_FILE_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//将excel转换为题目</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">parseExcelTitle</span><span class="params">(MultipartFile multipartFile)</span> <span class="keyword">throws</span> RestApiException </span>&#123;</span><br><span class="line">        Workbook workbook = generateWorkbook(multipartFile);</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; titleList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Sheet sheet = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 行</span></span><br><span class="line">        Row row = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//单元格</span></span><br><span class="line">        Cell cell = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//只取第一个表格</span></span><br><span class="line">        sheet = workbook.getSheetAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (sheet == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从第二行开始,第一行是标题</span></span><br><span class="line">        row = sheet.getRow(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//遍历单元格</span></span><br><span class="line">        <span class="keyword">if</span> (row != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = row.getFirstCellNum(); i &lt; row.getLastCellNum(); i++) &#123;</span><br><span class="line">                cell = row.getCell(i);</span><br><span class="line">                cell.setCellType(Cell.CELL_TYPE_STRING);</span><br><span class="line">                titleList.add(cell.getStringCellValue());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> titleList;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//解析excel</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> List&lt;List&lt;Cell&gt;&gt; parseExcel(MultipartFile multipartFile) <span class="keyword">throws</span> RestApiException &#123;</span><br><span class="line">        Workbook workbook = generateWorkbook(multipartFile);</span><br><span class="line"></span><br><span class="line">        List&lt;List&lt;Cell&gt;&gt; parseList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        Sheet sheet = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 行</span></span><br><span class="line">        Row row = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//单元格</span></span><br><span class="line">        Cell cell = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//只取第一个表格</span></span><br><span class="line">        sheet = workbook.getSheetAt(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (sheet == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从第二行开始,第一行是标题</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = sheet.getFirstRowNum(); j &lt;= sheet.getLastRowNum(); j++) &#123;</span><br><span class="line">            row = sheet.getRow(j);</span><br><span class="line">            <span class="keyword">if</span> (row == <span class="keyword">null</span> || (row.getFirstCellNum() == j &amp;&amp; j == <span class="number">0</span>)) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//                if(j == 1) &#123;</span></span><br><span class="line">            <span class="comment">//                    continue;</span></span><br><span class="line">            <span class="comment">//                &#125;</span></span><br><span class="line">            List&lt;Cell&gt; cellList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">            <span class="comment">//遍历单元格</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> k = row.getFirstCellNum(); k &lt; row.getLastCellNum(); k++) &#123;</span><br><span class="line">                cell = row.getCell(k);</span><br><span class="line">                cellList.add(cell);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            parseList.add(cellList);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> parseList;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//将excel转换为workbook</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Workbook <span class="title">generateWorkbook</span><span class="params">(MultipartFile multipartFile)</span> <span class="keyword">throws</span> RestApiException </span>&#123;</span><br><span class="line">        InputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!multipartFile.getOriginalFilename().endsWith(<span class="string">".xlsx"</span>) &amp;&amp; !multipartFile.getOriginalFilename().endsWith(<span class="string">".xls"</span>)) &#123;</span><br><span class="line">            log.warn(<span class="string">"校验文件格式错误  fileName&#123;&#125;"</span>, multipartFile.getOriginalFilename());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.IMPORT_FILE_FORMAT_ERROR, ErrorConstant.IMPORT_FILE_FORMAT_ERROR_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Long fileSize = multipartFile.getSize();</span><br><span class="line">        <span class="keyword">if</span> (fileSize &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            log.warn(<span class="string">"parseFile  导入的文件为空  fileName =&#123;&#125;"</span>, multipartFile.getOriginalFilename());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.IMPORT_FILE_IS_EMPTY_ERROR, ErrorConstant.IMPORT_FILE_IS_EMPTY_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Workbook workbook = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            inputStream = multipartFile.getInputStream();</span><br><span class="line">            workbook = WorkbookFactory.create(inputStream);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.warn(<span class="string">"解析文件出错  fileName=&#123;&#125;"</span>, multipartFile.getOriginalFilename());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.PARSE_IMPORT_FILE_ERROR, ErrorConstant.PARSE_IMPORT_FILE_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> == workbook) &#123;</span><br><span class="line">            log.warn(<span class="string">"parseFile  导入的文件为空  fileName =&#123;&#125;"</span>, multipartFile.getOriginalFilename());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RestApiException(ErrorConstant.IMPORT_FILE_IS_EMPTY_ERROR, ErrorConstant.IMPORT_FILE_IS_EMPTY_ERROR_MSG);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> workbook;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取字段数组</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> clazz</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Field[] getFields(Class clazz) &#123;</span><br><span class="line">        <span class="keyword">return</span> clazz.getDeclaredFields();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 给字段赋值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> object</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> field</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> cell</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setFieldValue</span><span class="params">(Object object, Field field, Cell cell)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (cell == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Class clazz = field.getType();</span><br><span class="line">        <span class="comment">//将字段设置为可以访问的</span></span><br><span class="line">        field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (clazz == String<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                cell.setCellType(Cell.CELL_TYPE_STRING);</span><br><span class="line">                field.set(object, cell.getStringCellValue());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (clazz == Date<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                field.set(object, cell.getDateCellValue());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (clazz == Boolean<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                field.set(object, cell.getBooleanCellValue());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (clazz == Double<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">                field.set(object, cell.getNumericCellValue());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            log.warn(<span class="string">"赋值错误  e&#123;&#125;"</span>, e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring之Specification复杂查询和Criteria查询</title>
     <url>/2020/04/17/Spring%E4%B9%8BSpecification/</url>
     <content><![CDATA[<p><a href="https://docs.spring.io/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/domain/Specification.html" target="_blank" rel="noopener">Specification官网</a></p>
@@ -119,7 +251,98 @@
   <entry>
     <title>mqtt之学习</title>
     <url>/2020/04/17/mqtt%E4%B9%8B%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p><a href="https://www.jianshu.com/p/5c42cb0ed1e9" target="_blank" rel="noopener">一文读懂MQTT协议</a></p>
+<p><a href="http://mqtt.org/documentation" target="_blank" rel="noopener">官网</a></p>
+<a id="more"></a>
+
+<h1><span id="简述">简述</span></h1><p>MQTT(Message Queuing Telemetry Transport,消息队列遥测传输协议)，是一种基于发布/订阅模式的”轻量级”通讯协议，该协议构建于 TCP/IP 协议。</p>
+<p>MQTT 最大优点在于，可以以极少的代码和有限的带宽，为连接远程设备提供实时可靠的消息服务。作为一种低开销，低带宽占用的即时通讯协议，使其在物联网，小型设备，移动应用等方面有较广泛的应用。</p>
+<p>MQTT 是一个基于客户端-服务器的消息发布/订阅传输协议。MQTT 协议是轻量，简单，开放和易于实现的，这些特点使它适用范围非常广泛。在很多情况下，包括受限的环境中，如：机器与机器（M2M）通信和物联网（IoT）。其在，通过卫星链路通信传感器、偶尔拨号的医疗设备、智能家居、及一些小型化设备中已广泛使用。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200418221259224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="172"></p>
+<h1><span id="设计规范">设计规范</span></h1><p>由于物联网的环境是非常特别的，所以MQTT遵循以下设计原则：</p>
+<ul>
+<li>（1）精简，不添加可有可无的功能；</li>
+<li>（2）发布/订阅（Pub/Sub）模式，方便消息在传感器之间传递；</li>
+<li>（3）允许用户动态创建主题，零运维成本；</li>
+<li>（4）把传输量降到最低以提高传输效率；</li>
+<li>（5）把低带宽、高延迟、不稳定的网络等因素考虑在内；</li>
+<li>（6）支持连续的会话控制；</li>
+<li>（7）理解客户端计算能力可能很低；</li>
+<li>（8）提供服务质量管理；</li>
+<li>（9）假设数据不可知，不强求传输数据的类型与格式，保持灵活性。</li>
+</ul>
+<h1><span id="主要特性">主要特性</span></h1><p>MQTT协议工作在低带宽、不可靠的网络的远程传感器和控制设备通讯而设计的协议，它具有以下主要的几项特性：</p>
+<ul>
+<li><p>（1）使用发布/订阅消息模式，提供一对多的消息发布，解除应用程序耦合。</p>
+<p>这一点很类似于XMPP，但是MQTT的信息冗余远小于XMPP，,因为XMPP使用XML格式文本来传递数据。</p>
+</li>
+<li><p>（2）对负载内容屏蔽的消息传输。</p>
+</li>
+<li><p>（3）使用TCP/IP提供网络连接。</p>
+<p>主流的MQTT是基于TCP连接进行数据推送的，但是同样有基于UDP的版本，叫做MQTT-SN。这两种版本由于基于不同的连接方式，优缺点自然也就各有不同了。</p>
+</li>
+<li><p>（4）有三种消息发布服务质量：</p>
+<p>“至多一次”，消息发布完全依赖底层TCP/IP网络。会发生消息丢失或重复。这一级别可用于如下情况，环境传感器数据，丢失一次读记录无所谓，因为不久后还会有第二次发送。这一种方式主要普通APP的推送，倘若你的智能设备在消息推送时未联网，推送过去没收到，再次联网也就收不到了。</p>
+<p>“至少一次”，确保消息到达，但消息重复可能会发生。</p>
+<p>“只有一次”，确保消息到达一次。在一些要求比较严格的计费系统中，可以使用此级别。在计费系统中，消息重复或丢失会导致不正确的结果。这种最高质量的消息发布服务还可以用于即时通讯类的APP的推送，确保用户收到且只会收到一次。</p>
+</li>
+<li><p>（5）小型传输，开销很小（固定长度的头部是2字节），协议交换最小化，以降低网络流量。</p>
+<p>这就是为什么在介绍里说它非常适合”在物联网领域，传感器与服务器的通信，信息的收集”，要知道嵌入式设备的运算能力和带宽都相对薄弱，使用这种协议来传递消息再适合不过了。</p>
+</li>
+<li><p>（6）使用Last Will和Testament特性通知有关各方客户端异常中断的机制。</p>
+<p>Last Will：即遗言机制，用于通知同一主题下的其他设备发送遗言的设备已经断开了连接。</p>
+<p>Testament：遗嘱机制，功能类似于Last Will。</p>
+</li>
+</ul>
+<h1><span id="mqtt协议原理">MQTT协议原理</span></h1><h2><span id="mqtt协议实现方式">MQTT协议实现方式</span></h2><p>实现MQTT协议需要客户端和服务器端通讯完成，在通讯过程中，MQTT协议中有三种身份：发布者（Publish）、代理（Broker）（服务器）、订阅者（Subscribe）。其中，消息的发布者和订阅者都是客户端，消息代理是服务器，消息发布者可以同时是订阅者。</p>
+<p>MQTT传输的消息分为：主题（Topic）和负载（payload）两部分：</p>
+<ul>
+<li>（1）Topic，可以理解为消息的类型，订阅者订阅（Subscribe）后，就会收到该主题的消息内容（payload）；</li>
+<li>（2）payload，可以理解为消息的内容，是指订阅者具体要使用的内容。</li>
+</ul>
+<h2><span id="网络传输与应用消息">网络传输与应用消息</span></h2><p>MQTT会构建底层网络传输：它将建立客户端到服务器的连接，提供两者之间的一个有序的、无损的、基于字节流的双向传输。</p>
+<p>当应用数据通过MQTT网络发送时，MQTT会把与之相关的服务质量（QoS）和主题名（Topic）相关连。</p>
+<h2><span id="mqtt客户端">MQTT客户端</span></h2><p>一个使用MQTT协议的应用程序或者设备，它总是建立到服务器的网络连接。客户端可以：</p>
+<ul>
+<li>（1）发布其他客户端可能会订阅的信息；</li>
+<li>（2）订阅其它客户端发布的消息；</li>
+<li>（3）退订或删除应用程序的消息；</li>
+<li>（4）断开与服务器连接。</li>
+</ul>
+<h2><span id="mqtt服务器">MQTT服务器</span></h2><p>MQTT服务器以称为”消息代理”（Broker），可以是一个应用程序或一台设备。它是位于消息发布者和订阅者之间，它可以：</p>
+<ul>
+<li>（1）接受来自客户的网络连接；</li>
+<li>（2）接受客户发布的应用信息；</li>
+<li>（3）处理来自客户端的订阅和退订请求；</li>
+<li>（4）向订阅的客户转发应用程序消息。</li>
+</ul>
+<h3><span id="mqtt协议中的订阅-主题-会话">MQTT协议中的订阅、主题、会话</span></h3><h3><span id="一-订阅subscription"><strong>一、订阅（Subscription）</strong></span></h3><p>订阅包含主题筛选器（Topic Filter）和最大服务质量（QoS）。订阅会与一个会话（Session）关联。一个会话可以包含多个订阅。每一个会话中的每个订阅都有一个不同的主题筛选器。</p>
+<h3><span id="二-会话session"><strong>二、会话（Session）</strong></span></h3><p>每个客户端与服务器建立连接后就是一个会话，客户端和服务器之间有状态交互。会话存在于一个网络之间，也可能在客户端和服务器之间跨越多个连续的网络连接。</p>
+<h3><span id="三-主题名topic-name"><strong>三、主题名（Topic Name）</strong></span></h3><p>连接到一个应用程序消息的标签，该标签与服务器的订阅相匹配。服务器会将消息发送给订阅所匹配标签的每个客户端。</p>
+<h3><span id="四-主题筛选器topic-filter"><strong>四、主题筛选器（Topic Filter）</strong></span></h3><p>一个对主题名通配符筛选器，在订阅表达式中使用，表示订阅所匹配到的多个主题。</p>
+<h3><span id="五-负载payload"><strong>五、负载（Payload）</strong></span></h3><p>消息订阅者所具体接收的内容。</p>
+<h3><span id="mqtt协议中的方法">MQTT协议中的方法</span></h3><p>MQTT协议中定义了一些方法（也被称为动作），来于表示对确定资源所进行操作。这个资源可以代表预先存在的数据或动态生成数据，这取决于服务器的实现。通常来说，资源指服务器上的文件或输出。主要方法有：</p>
+<ul>
+<li>（1）Connect。等待与服务器建立连接。</li>
+<li>（2）Disconnect。等待MQTT客户端完成所做的工作，并与服务器断开TCP/IP会话。</li>
+<li>（3）Subscribe。等待完成订阅。</li>
+<li>（4）UnSubscribe。等待服务器取消客户端的一个或多个topics订阅。</li>
+<li>（5）Publish。MQTT客户端发送消息请求，发送完成后返回应用程序线程。</li>
+</ul>
+<h1><span id="mqtt协议数据包结构">MQTT协议数据包结构</span></h1><p>在MQTT协议中，一个MQTT数据包由：固定头（Fixed header）、可变头（Variable header）、消息体（payload）三部分构成。MQTT数据包结构如下：</p>
+<ul>
+<li>（1）固定头（Fixed header）。存在于所有MQTT数据包中，表示数据包类型及数据包的分组类标识。</li>
+<li>（2）可变头（Variable header）。存在于部分MQTT数据包中，数据包类型决定了可变头是否存在及其具体内容。</li>
+<li>（3）消息体（Payload）。存在于部分MQTT数据包中，表示客户端收到的具体内容。</li>
+</ul>
+<p>todo:未完待续…</p>
+]]></content>
+      <categories>
+        <category>协议</category>
+      </categories>
+      <tags>
+        <tag>mqtt</tag>
+      </tags>
   </entry>
   <entry>
     <title>记一次Intellij的误操作(update projects)</title>
@@ -247,7 +470,8 @@
 
 <h1><span id="使用场景">使用场景</span></h1><ol>
 <li>在需要一个类的大量对象的时候，使用原型模式是最佳选择，因为原型模式是在内存中对这个对象进行拷贝，要比直接 new 这个对象性能要好很多，在这种情况下，需要的对象越多，原型模式体现出的优点越明显。</li>
-<li>如果一个对象的初始化需要很多其他对象的数据准备或其他资源的繁琐计算，</li>
+<li>如果一个对象的初始化需要很多其他对象的数据准备或其他资源的繁琐计算，那么可以使用原型模式</li>
+<li>当需要一个对象的大量公共信息，少量字段进行个性化设置的时候，也可以使用原型模式拷贝出现现有对象的副本进行加工处理。</li>
 </ol>
 ]]></content>
       <categories>
