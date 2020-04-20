@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Nacos权限控制设计方案</title>
+    <url>/2020/04/20/Nacos%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88/</url>
+    <content><![CDATA[<p><a href="https://nacos.io/en-us/blog/access%20control%20design.html" target="_blank" rel="noopener">官网</a></p>
+<blockquote>
+<p>业务需求：最近我的直属领导要求我有空去学习下 Nacos 的权限控制，因为有业务需求要对每个接口进行权限控制，由于前段时间正好学习了下 Spring-Security 和 Shrio，可以结合来学习下，融会贯通嘻嘻。。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="什么是权限控制">什么是权限控制？</span></h1><p>在分布式服务调用时，需要对未知的或者不受信任的请求来源的请求进行识别和拒绝。权限控制一般分为两个阶段：身份识别(Authentication) 和权限识别(Authorization)。身份认证主要确定访问者的身份，权限识别则判断这个访问者是否有对应资源的权限。</p>
+<p>在 Nacos 的场景中，配置管理的权限控制指的是设置某个配置能否被某个用户读写，这个比较好理解，没有权限的用户依旧无法读取或者写入对应的配置。</p>
+]]></content>
+      <categories>
+        <category>Nacos</category>
+      </categories>
+      <tags>
+        <tag>Nacos</tag>
+        <tag>权限控制</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Excel导入导出的实现</title>
     <url>/2020/04/19/Excel%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<p><a href="https://www.jianshu.com/p/895ecf3d871c" target="_blank" rel="noopener">Java 使用POI实现Excel表格的导入导出</a></p>
@@ -4145,7 +4165,24 @@
 <p>单独是用 <code>@Controller</code> 不加 <code>@ResponseBody</code> 的话一般使用在要返回一个视图的情况，这种情况属于比较传统的 SpringMVC 的应用，对应于前后端不分离的情况</p>
 <p><strong><em>@RestController 返回 JSON 或 XML 形式数据</em></strong></p>
 <p>但<code>@RestController</code>只返回对象，对象数据直接以 <strong>JSON</strong> 或 <strong>XML</strong> 形式写入 HTTP 响应(Response)中，这种情况属于 RESTful Web服务，这也是目前日常开发所接触的最常用的情况（前后端分离）。</p>
-]]></content>
+<h1><span id="21通过sql删除重复的数据货拉拉">21.通过sql删除重复的数据(货拉拉)</span></h1><p><a href="https://blog.csdn.net/anya/article/details/6407280" target="_blank" rel="noopener">https://blog.csdn.net/anya/article/details/6407280</a></p>
+<p>查出多于1条的重复数据</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">id</span> <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">id</span> <span class="keyword">having</span> <span class="keyword">count</span>(<span class="keyword">id</span>)&gt;<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>删除表中多余的重复记录，重复记录是根据单个字段(id) 来判断的，只保留有 rowid 最小的记录</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> T <span class="keyword">where</span> <span class="keyword">name</span> <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">by</span> <span class="keyword">name</span> <span class="keyword">having</span> <span class="keyword">count</span>(<span class="keyword">name</span>) &gt; <span class="number">1</span>)</span><br><span class="line"><span class="keyword">and</span> <span class="keyword">id</span> <span class="keyword">not</span> <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">id</span>) <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">name</span> <span class="keyword">having</span>(<span class="keyword">name</span>) &gt; <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>查找表中多余的重复记录(多个字段)</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> T</span><br><span class="line"><span class="keyword">where</span> (T.a,T.b) <span class="keyword">in</span> (<span class="keyword">select</span> a,b <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">by</span> a,b <span class="keyword">having</span> <span class="keyword">count</span>(*) &gt; <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>删除表中多余的重复记录（多个字段），只留有rowid最小的记录</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> T</span><br><span class="line"><span class="keyword">where</span> (T.a,T.b) <span class="keyword">in</span> (<span class="keyword">select</span> a,b <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">by</span> a,b <span class="keyword">having</span> <span class="keyword">count</span>(*) &gt; <span class="number">1</span>)</span><br><span class="line"><span class="keyword">and</span> <span class="keyword">rowid</span> <span class="keyword">not</span> <span class="keyword">in</span> (<span class="keyword">select</span> <span class="keyword">min</span>(<span class="keyword">rowid</span>) <span class="keyword">from</span> T <span class="keyword">group</span> <span class="keyword">by</span> a,b <span class="keyword">having</span> <span class="keyword">count</span>(*)&gt;<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h1><span id="22http响应结构货拉拉">22.Http响应结构(货拉拉)</span></h1><p><a href="https://www.runoob.com/http/http-messages.html" target="_blank" rel="noopener">https://www.runoob.com/http/http-messages.html</a></p>
+<p><a href="https://www.nowcoder.com/questionTerminal/5459a06bdccd421cb9f8afe7a9662e15" target="_blank" rel="noopener">https://www.nowcoder.com/questionTerminal/5459a06bdccd421cb9f8afe7a9662e15</a></p>
+<p><a href="https://www.cnblogs.com/yonyong/p/9229297.html" target="_blank" rel="noopener">https://www.cnblogs.com/yonyong/p/9229297.html</a></p>
+<p>HTTP响应也由四个部分组成，分别是：<strong>状态行</strong>、<strong>消息报头</strong>、<strong>空行</strong>和<strong>响应正文</strong>。</p>
+<h1><span id="23克隆对象的方法">23.克隆对象的方法</span></h1>]]></content>
       <categories>
         <category>日常</category>
       </categories>
