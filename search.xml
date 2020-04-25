@@ -3,7 +3,10 @@
   <entry>
     <title>Git错误集合</title>
     <url>/2020/04/23/Git%E9%94%99%E8%AF%AF%E9%9B%86%E5%90%88/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<blockquote>
+<p>好记忆不如烂笔头。。，哈哈，最近开发中也遇到不少 Git 的错误，趁此机会汇总下。</p>
+</blockquote>
+<a id="more"></a>
 
 <h1><span id="you-have-not-concluded-your-merge-merge_head-exists">You have not concluded your merge. (MERGE_HEAD exists)</span></h1><p>转载自：<a href="https://blog.csdn.net/daotiao0199/article/details/82757056" target="_blank" rel="noopener">https://blog.csdn.net/daotiao0199/article/details/82757056</a></p>
 <p><strong>这个错误是因为以前 pull 下的代码没有自动合并导致的</strong></p>
