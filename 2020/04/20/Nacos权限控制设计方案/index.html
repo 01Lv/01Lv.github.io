@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="追风的少年">
 <meta property="og:description" content="官网  业务需求：最近我的直属领导要求我有空去学习下 Nacos 的权限控制，因为有业务需求要对每个接口进行权限控制，由于前段时间正好学习了下 Spring-Security 和 Shrio，可以结合来学习下，融会贯通嘻嘻。。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C174.png">
 <meta property="article:published_time" content="2020-04-20T02:28:09.000Z">
-<meta property="article:modified_time" content="2020-04-20T12:07:39.204Z">
+<meta property="article:modified_time" content="2020-04-21T05:09:09.089Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="Nacos">
 <meta property="article:tag" content="权限控制">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C174.png">
 
 <link rel="canonical" href="https://01lv.github.io/2020/04/20/Nacos%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88/">
 
@@ -216,10 +218,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-20 10:28:09 / 修改时间：20:07:39" itemprop="dateCreated datePublished" datetime="2020-04-20T10:28:09+08:00">2020-04-20</time>
+              <time title="创建时间：2020-04-20 10:28:09" itemprop="dateCreated datePublished" datetime="2020-04-20T10:28:09+08:00">2020-04-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-21 13:09:09" itemprop="dateModified" datetime="2020-04-21T13:09:09+08:00">2020-04-21</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -250,7 +258,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>314</span>
+              <span>1.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -276,7 +284,33 @@
 <a id="more"></a>
 
 <h1><span id="什么是权限控制">什么是权限控制？</span></h1><p>在分布式服务调用时，需要对未知的或者不受信任的请求来源的请求进行识别和拒绝。权限控制一般分为两个阶段：身份识别(Authentication) 和权限识别(Authorization)。身份认证主要确定访问者的身份，权限识别则判断这个访问者是否有对应资源的权限。</p>
-<p>在 Nacos 的场景中，配置管理的权限控制指的是设置某个配置能否被某个用户读写，这个比较好理解，没有权限的用户依旧无法读取或者写入对应的配置。</p>
+<p>在 Nacos 的场景中，配置管理的权限控制指的是设置某个配置能否被某个用户读写，这个比较好理解，没有权限的用户依旧无法读取或者写入对应的配置。服务发现的权限控制指的是用户是否有权限进行某个服务的注册或者订阅，这里需要注意的是服务发现的权限控制只能够控制用户是否可以从 Nacos 获取到服务的地址或者在 Nacos 上修改服务的地址。但是如果已经获取到了服务的地址，Nacos 无法在服务真正调用时进行权限控制，这个时候的权限控制需要由服务框架来完成。</p>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C174.png" alt="174"></p>
+<h1><span id="常见实现方式">常见实现方式</span></h1><h2><span id="认证authentication">认证(Authentication)</span></h2><ul>
+<li>用户名 + 密码</li>
+<li>Cookie</li>
+<li>Session</li>
+<li>Token(JWT,Oauth,LDAP,SAML,OpenID)</li>
+<li>AK/SK</li>
+</ul>
+<h2><span id="鉴权authorization">鉴权(Authorization)</span></h2><ul>
+<li>ACL：规定<strong>资源</strong>可以被哪些主体进行哪些操作</li>
+<li>DAC：规定<strong>资源</strong>可以被哪些<strong>主体</strong>进行哪些操作 同时，<strong>主体</strong>可以将<strong>资源</strong>的权限，授予其他<strong>主体</strong>；</li>
+<li>MAC：a. 规定<strong>资源</strong>可以被哪些类别的<strong>主体</strong>进行哪些<strong>操作</strong> b. 规定<strong>主体</strong>可以对哪些等级的<strong>资源</strong>进行哪些<strong>操作</strong> 当一个<strong>操作</strong>，同时满足a与b时，允许<strong>操作</strong>；</li>
+<li>RBAC：a. 规定<strong>角色</strong>可以对哪些<strong>资源</strong>进行哪些<strong>操作</strong> b. 规定<strong>主体</strong>拥有哪些<strong>角色</strong>当一个操作，同时满足a与b时，允许<strong>操作</strong>；</li>
+<li>ABAC： 规定哪些<strong>属性</strong>的<strong>主体</strong>可以对哪些<strong>属性</strong>的<strong>资源</strong>在哪些<strong>属性</strong>的情况下进行哪些<strong>操作</strong>。</li>
+</ul>
+<h1><span id="常见注册中心和配置中心的实现方式">常见注册中心和配置中心的实现方式</span></h1><p><strong>Zookeeper</strong></p>
+<p>Zookeeper 主要使用的是 ACL 的方式，直接将资源授权给对应的实体。一条授权记录主要由以下部分组成：</p>
+<ul>
+<li>设置权限的路径</li>
+<li>&lt;acl_type&gt;：ACL鉴权类型，分为 word，ip，auth，digest</li>
+<li>&lt;acl_content&gt;：ACL 鉴权内容，与鉴权类型关联</li>
+<li>: CREATE，DELETE，READ，WRITE，ADMIN</li>
+</ul>
+<p>操作示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> setAcl &lt;path&gt; &lt;acl_type&gt;:&lt;acl_content&gt;:&lt;action&gt;</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> setAcl /xxx/yyy world:anyone:cdrwa</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> setAcl /xxx/yyy ip:1.1.1.1:cdrwa</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> addauth digest root:pa55wdsetAcl /xxx/yyy auth:root:cdrwa</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -316,7 +350,10 @@
     <a href="/2020/04/19/Excel%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/" rel="prev" title="Excel导入导出的实现">
       <i class="fa fa-chevron-left"></i> Excel导入导出的实现
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/21/MySQL%E4%B9%8B%E8%A7%86%E5%9B%BE/" rel="next" title="MySQL之视图">
+      MySQL之视图 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -377,7 +414,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">什么是权限控制？</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">什么是权限控制？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">常见实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">认证(Authentication)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">鉴权(Authorization)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">常见注册中心和配置中心的实现方式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -393,20 +430,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">87</span>
+        <span class="site-state-item-count">90</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -451,12 +488,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">348k</span>
+    <span title="站点总字数">350k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:16</span>
+    <span title="站点阅读时长">5:19</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
