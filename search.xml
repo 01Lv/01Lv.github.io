@@ -41,7 +41,9 @@
   <entry>
     <title>Git命令集合</title>
     <url>/2020/04/21/Git%E5%91%BD%E4%BB%A4%E9%9B%86%E5%90%88/</url>
-    <content><![CDATA[<h1><span id="删除远程分支">删除远程分支</span></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin --delete [branch_name]</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<a id="more"></a>
+
+<h1><span id="删除远程分支">删除远程分支</span></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin --delete [branch_name]</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
