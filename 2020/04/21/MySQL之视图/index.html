@@ -28,8 +28,9 @@
 <meta property="og:description" content="MySQL视图之我见 深入解析MySQL视图VIEW MySQL快速入门12—-删除数据 &amp; 备份还原 &amp; 视图 &amp; 事务 &amp; 触发器  业务需求：最近项目上有用到视图，正好借此机会学习总结下视图。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200421122555622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200425204741291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2020-04-21T04:05:19.000Z">
-<meta property="article:modified_time" content="2020-04-21T04:26:39.317Z">
+<meta property="article:modified_time" content="2020-04-25T12:48:25.442Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="视图">
@@ -218,10 +219,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-21 12:05:19 / 修改时间：12:26:39" itemprop="dateCreated datePublished" datetime="2020-04-21T12:05:19+08:00">2020-04-21</time>
+              <time title="创建时间：2020-04-21 12:05:19" itemprop="dateCreated datePublished" datetime="2020-04-21T12:05:19+08:00">2020-04-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-25 20:48:25" itemprop="dateModified" datetime="2020-04-25T20:48:25+08:00">2020-04-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -252,7 +259,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>524</span>
+              <span>597</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -294,7 +301,11 @@
 <p>总而言之，使用视图的大部分情况是为了保障数据安全性，提高查询效率。</p>
 <h1><span id="创建视图">创建视图</span></h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">view</span> testView <span class="keyword">as</span> <span class="keyword">select</span> xxx <span class="keyword">from</span> t</span><br></pre></td></tr></table></figure>
 
-<p>未完待续。。。</p>
+<p>只要相应关联的表的字段都存在的话且有数据存在，则视图在建立之后马上就会有数据。</p>
+<h1><span id="排查">排查</span></h1><p>如果发现新建里的视图没有数据，视图的排查是很方便的一个操作。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">desc 视图名称</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20200425204741291.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="181"></p>
 
     </div>
 
@@ -398,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">什么是视图？视图是干什么用的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">为什么要用视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">创建视图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">什么是视图？视图是干什么用的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">为什么要用视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">创建视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">排查</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -414,7 +425,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">77</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -427,7 +438,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">90</span>
+        <span class="site-state-item-count">92</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -472,12 +483,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">350k</span>
+    <span title="站点总字数">352k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5:19</span>
+    <span title="站点阅读时长">5:20</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
