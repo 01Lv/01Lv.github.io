@@ -1,6 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot之单元测试学习</title>
+    <url>/2020/05/15/SpringBoot%E4%B9%8B%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/bobo_12138/article/details/77609109" target="_blank" rel="noopener">spring boot写单元测试(测试service层)</a></p>
+<p><a href="https://juejin.im/post/5bf970d66fb9a049dd7ff285" target="_blank" rel="noopener">Spring Boot实战系列(5)单元测试</a></p>
+<blockquote>
+<p>项目上有需求要用到单元测试，并且在未来可能会有代码测试覆盖率的指标，所以提前学习下。其实是只写了业务层的代码实现，可是没有接口，所以想到了通过单元测试来模拟接口调用哈哈</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="关键点">关键点</span></h1><ul>
+<li>引入依赖</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;junit.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在测试类上加上注解</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringRunner<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">SpringBootTest</span></span></span><br><span class="line"><span class="class">@<span class="title">Slf4j</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注入自己需要的bean</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> NetworkProxy networkProxy;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNetworkProxy</span><span class="params">(NetworkProxy networkProxy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.networkProxy = networkProxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实像正常的开发Service那样使用单元测试类就好了</p>
+<h1><span id="结果">结果</span></h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringRunner<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">SpringBootTest</span></span></span><br><span class="line"><span class="class">@<span class="title">Slf4j</span></span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">RestaurantServiceImplTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> NetworkProxy networkProxy;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNetworkProxy</span><span class="params">(NetworkProxy networkProxy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.networkProxy = networkProxy;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取accessToken</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAccessToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        HttpHeaders requestHeader = <span class="keyword">new</span> RequestHeaderUtils.RequestHeaderBuilder()</span><br><span class="line">            .setContentType(MediaType.APPLICATION_FORM_URLENCODED)</span><br><span class="line">            .build().getRequestHeader();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//body</span></span><br><span class="line">        MultiValueMap&lt;String, String&gt; requestTokenBody = <span class="keyword">new</span> RequestBodyUtils.RequestBodyBuilder()</span><br><span class="line">            .setGrantType(<span class="string">"xxx"</span>)</span><br><span class="line">            .setUsername(<span class="string">"xxx"</span>)</span><br><span class="line">            .setPassword(<span class="string">"xxx;"</span>)</span><br><span class="line">            .build().getRequestBody();</span><br><span class="line"></span><br><span class="line">        HttpEntity httpEntity = <span class="keyword">new</span> HttpEntity(requestTokenBody,requestHeader);</span><br><span class="line">        RestaurantRespDTO&lt;TokenRespDTO&gt; result = networkProxy.request(NetworkProxy.Target.RESTAURANT_LOGIN,HttpMethod.POST,httpEntity,</span><br><span class="line">                                                                      <span class="keyword">new</span> ParameterizedTypeReference&lt;RestaurantRespDTO&lt;TokenRespDTO&gt;&gt;()&#123;&#125;, <span class="keyword">new</span> HashMap&lt;&gt;());</span><br><span class="line">        log.info(<span class="string">"调用登录接口返回 全部消息: "</span> + result);</span><br><span class="line">        log.info(<span class="string">"调用登录接口返回 Code 码: "</span> + result.getStatusCode());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(result.isSuccess())&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result.getData().getAccess_token();</span><br><span class="line"></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//其他，获取token失败</span></span><br><span class="line">            log.error(<span class="string">"获取token失败: "</span> + result.getStatusMsg());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> BusinessException(Integer.parseInt(result.getStatusCode()),result.getStatusMsg());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getxxxIntroduction</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>单元测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Restemplate多级泛型反序列化问题解决</title>
+    <url>/2020/05/15/Restemplate%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/</url>
+    <content><![CDATA[<blockquote>
+<p>在项目开发过程中碰到restemplate.exchange()方法反序列化失败，因为接收接口返回的数据是一个复杂的dto，该dto中存在泛型的属性。期待是转成 xxxDto,可是得到的确实LinkedMap，并且抛出了转换类型错误。</p>
+</blockquote>
+<p><a href="https://blog.csdn.net/qq_33457058/article/details/65442566" target="_blank" rel="noopener">RestTemplate的多级泛型和消息转换器</a></p>
+<p><a href="https://www.jianshu.com/p/1cf198ade077" target="_blank" rel="noopener">RestTemplate 反序列化带泛型的返回值</a></p>
+<p><a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/core/ParameterizedTypeReference.html" target="_blank" rel="noopener">ParameterizedTypeReference官网</a></p>
+<a id="more"></a>
+
+<h1><span id="解决">解决</span></h1><p>首先看看 exchange源码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">ResponseEntity&lt;T&gt; <span class="title">exchange</span><span class="params">(String url, HttpMethod method, @Nullable HttpEntity&lt;?&gt; requestEntity, ParameterizedTypeReference&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</span> <span class="keyword">throws</span> RestClientException </span>&#123;</span><br><span class="line">        Type type = responseType.getType();</span><br><span class="line">        RequestCallback requestCallback = <span class="keyword">this</span>.httpEntityCallback(requestEntity, type);</span><br><span class="line">        ResponseExtractor&lt;ResponseEntity&lt;T&gt;&gt; responseExtractor = <span class="keyword">this</span>.responseEntityExtractor(type);</span><br><span class="line">        <span class="keyword">return</span> (ResponseEntity)nonNull(<span class="keyword">this</span>.execute(url, method, requestCallback, responseExtractor, uriVariables));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>exchange()</code>源码可以看出需序列化的返回类型也是<strong>参数化类型</strong>(<strong>ParameterizedTypeReference</strong>)，看来<code>exchange()</code> 是<strong>支持多级泛型的dto，但只能带一个参数(List&lt;T&gt;)</strong></p>
+<h1><span id="解决工具">解决工具</span></h1><p>ParameterizedTypeReference&lt;T&gt; 源码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ParameterizedTypeReference</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Type type;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">ParameterizedTypeReference</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Class&lt;?&gt; parameterizedTypeReferenceSubclass = findParameterizedTypeReferenceSubclass(<span class="keyword">this</span>.getClass());</span><br><span class="line">        Type type = parameterizedTypeReferenceSubclass.getGenericSuperclass();</span><br><span class="line">        <span class="comment">//isInstanceOf(Class clazz, Object obj) / isInstanceOf(Class type, Object obj, String message)  如果 obj 不能被正确造型为 clazz 指定的类将抛出异常；</span></span><br><span class="line">        Assert.isInstanceOf(ParameterizedType.class, type, "Type must be a parameterized type");</span><br><span class="line">        ParameterizedType parameterizedType = (ParameterizedType)type;</span><br><span class="line">        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();</span><br><span class="line">        <span class="comment">//复杂dto(含有泛型) 只允许有一个参数，例：List&lt;T&gt;</span></span><br><span class="line">        Assert.isTrue(actualTypeArguments.length == <span class="number">1</span>, <span class="string">"Number of type arguments must be 1"</span>);</span><br><span class="line">        <span class="keyword">this</span>.type = actualTypeArguments[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">ParameterizedTypeReference</span><span class="params">(Type type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.type = type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Type <span class="title">getType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.type;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(@Nullable Object other)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span> == other || other <span class="keyword">instanceof</span> ParameterizedTypeReference &amp;&amp; <span class="keyword">this</span>.type.equals(((ParameterizedTypeReference)other).type);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.type.hashCode();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"ParameterizedTypeReference&lt;"</span> + <span class="keyword">this</span>.type + <span class="string">"&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ParameterizedTypeReference&lt;T&gt; <span class="title">forType</span><span class="params">(Type type)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ParameterizedTypeReference&lt;T&gt;(type) &#123;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查找 ParameterizedTypeReference 类的子类</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Class&lt;?&gt; findParameterizedTypeReferenceSubclass(Class&lt;?&gt; child) &#123;</span><br><span class="line">        Class&lt;?&gt; parent = child.getSuperclass();</span><br><span class="line">        <span class="keyword">if</span> (Object<span class="class">.<span class="keyword">class</span> </span>== parent) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Expected ParameterizedTypeReference superclass"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> ParameterizedTypeReference<span class="class">.<span class="keyword">class</span> </span>== parent ? child : findParameterizedTypeReferenceSubclass(parent);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ParameterizedType(参数化类型)是什么请参考：<a href="https://blog.csdn.net/JustBeauty/article/details/81116144" target="_blank" rel="noopener">ParameterizedType详解</a></p>
+<h1><span id="实现">实现</span></h1><p>xxxDto</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxxDto</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String statusCode;</span><br><span class="line">    <span class="keyword">private</span> String  statusMsg;</span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSuccess</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"000000"</span>.equals(statusCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>restemplate 调用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">xxxDto&lt;xxxDto&gt; dto = networkProxy.request(NetworkProxy.Target.XXX, HttpMethod.POST, httpEntity,</span><br><span class="line">                <span class="keyword">new</span> ParameterizedTypeReference&lt;xxxDto&lt;xxxDto&gt;&gt;() &#123;</span><br><span class="line">                &#125;, <span class="keyword">new</span> HashMap&lt;&gt;());</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">request</span><span class="params">(Target target, HttpMethod httpMethod, HttpEntity httpEntity, ParameterizedTypeReference&lt;T&gt; responseType, Map&lt;String, ?&gt; uriVariables)</span> </span>&#123;</span><br><span class="line">        log.info(proxyAddress + target.getUrl());</span><br><span class="line">        <span class="keyword">return</span> restTemplate.exchange(proxyAddress + target.getUrl(), httpMethod, httpEntity, responseType, uriVariables).getBody();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Restemplate</tag>
+        <tag>序列化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java之泛型的学习</title>
+    <url>/2020/05/15/Java%E4%B9%8B%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/s10461/article/details/53941091" target="_blank" rel="noopener">泛型详解</a></p>
+<p><a href="https://segmentfault.com/a/1190000019606768" target="_blank" rel="noopener">Java泛型</a></p>
+<blockquote>
+<p>最近在项目中使用泛型去接收接口返回的数据，可是发现并没有反序列化成功，说明泛型失效了。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="概述">概述</span></h1><blockquote>
+<p>泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。</p>
+<p>泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。</p>
+</blockquote>
+<h1><span id="栗子">栗子</span></h1><p>一个被举了无数次的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List arrayList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">arrayList.add(<span class="string">"aaaa"</span>);</span><br><span class="line">arrayList.add(<span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i&lt; arrayList.size();i++)&#123;</span><br><span class="line">    String item = (String)arrayList.get(i);</span><br><span class="line">    Log.d(<span class="string">"泛型测试"</span>,<span class="string">"item = "</span> + item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>毫无疑问，程序的运行结果会以崩溃结束：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.ClassCastException</span>: <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.Integer</span> <span class="selector-tag">cannot</span> <span class="selector-tag">be</span> <span class="selector-tag">cast</span> <span class="selector-tag">to</span> <span class="selector-tag">java</span><span class="selector-class">.lang</span><span class="selector-class">.String</span></span><br></pre></td></tr></table></figure>
+
+<p>ArrayList可以存放任意类型，例子中添加了一个String类型，添加了一个Integer类型，再使用时都以String的方式使用，因此程序崩溃了。为了解决类似这样的问题（在编译阶段就可以解决），泛型应运而生。</p>
+<p>我们将第一行声明初始化list的代码更改一下，编译器会在编译阶段就能够帮我们发现类似这样的问题。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; arrayList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">...</span><br><span class="line"><span class="comment">//arrayList.add(100); 在编译阶段，编译器就会报错</span></span><br></pre></td></tr></table></figure>
+
+<h1><span id="特性">特性</span></h1><p>泛型只在编译阶段有效。看下面的代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; stringArrayList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; integerArrayList = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">Class classStringArrayList = stringArrayList.getClass();</span><br><span class="line">Class classIntegerArrayList = integerArrayList.getClass();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(classStringArrayList.equals(classIntegerArrayList))&#123;</span><br><span class="line">    Log.d(<span class="string">"泛型测试"</span>,<span class="string">"类型相同"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：D/泛型测试: 类型相同。</p>
+<p>通过上面的例子可以证明，在编译之后程序会采取去泛型化的措施。也就是说Java中的泛型，只在编译阶段有效。在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦出，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。<br>总结：<strong>泛型类型在逻辑上可以看成是多个不同的类型，实际上都是相同的基本类型。</strong></p>
+<h1><span id="使用">使用</span></h1><p>泛型有三种使用方式，分别为：泛型类，泛型接口，泛型方法</p>
+<h2><span id="泛型类">泛型类</span></h2><p>泛型类型用于类的定义中，被称为泛型类。通过泛型可以完成对一组类的操作对外开放相同的接口。最典型的就是各种容器类，如：List、Set、Map。</p>
+<p>未完待续…</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>泛型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Zuul之学习</title>
     <url>/2020/05/14/Zuul%E4%B9%8B%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p><a href="http://www.ityouknow.com/springcloud/2018/01/20/spring-cloud-zuul.html" target="_blank" rel="noopener">springcloud(十一)：服务网关Zuul高级篇</a></p>
@@ -1116,8 +1231,8 @@
         <category>Spring</category>
       </categories>
       <tags>
-        <tag>JPA</tag>
         <tag>Spring</tag>
+        <tag>JPA</tag>
       </tags>
   </entry>
   <entry>
