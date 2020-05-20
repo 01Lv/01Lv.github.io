@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Centos7下Spark之搭建</title>
+    <url>/2020/05/20/Centos7%E4%B8%8BSpark%E4%B9%8B%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p><a href="https://github.com/01Lv/BigData-Notes/blob/master/notes/installation/Spark%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md" target="_blank" rel="noopener">Spark开发环境搭建</a></p>
+<p><a href="http://spark.apache.org/" target="_blank" rel="noopener">官网</a></p>
+<blockquote>
+<p>AI + BigData + 云计算</p>
+</blockquote>
+<a id="more"></a>
+
+<p>其实 Spark 的搭建过程还是挺顺手的，基本没什么坑。</p>
+<p>结果：</p>
+<p>统计 <code>wc.txt</code> 文本中词频</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hadoop,spark,hadoop</span><br><span class="line">spark,flink,flink,spark</span><br><span class="line">hadoop,hadoop</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200520153437781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="195"></p>
+<p>图片中可以看出： <strong>flink 出现2次; spark 出现3次；hadoop 出现4次</strong></p>
+<p>Spark 是基于 Scala 语言进行开发的，分别提供了基于 Scala、Java、Python 语言的 API，如果你想使用 Scala 语言进行开发，则需要搭建 Scala 语言的开发环境。这边文章(<a href="https://github.com/01Lv/BigData-Notes/blob/master/notes/installation/Spark%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md" target="_blank" rel="noopener">Spark开发环境搭建</a>)也详细的介绍了 <code>Scala</code> 环境的搭建。</p>
+<p>端口：4040</p>
+<p><img src="https://img-blog.csdnimg.cn/20200520153418406.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="194"></p>
+]]></content>
+      <categories>
+        <category>BigData</category>
+      </categories>
+      <tags>
+        <tag>Spark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Centos7下Hadoop之单机搭建</title>
+    <url>/2020/05/20/Centos7%E4%B8%8BHadoop%E4%B9%8B%E5%8D%95%E6%9C%BA%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p><a href="https://github.com/01Lv/BigData-Notes/blob/master/notes/installation/Hadoop%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md" target="_blank" rel="noopener">Hadoop单机版环境搭建</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1121838" target="_blank" rel="noopener">centos7 hadoop 单机模式安装配置</a></p>
+<p><a href="https://hadoop.apache.org/" target="_blank" rel="noopener">官网</a></p>
+<blockquote>
+<p>AI+BigData+云计算</p>
+</blockquote>
+<a id="more"></a>
+
+<p>其实大部分安装过程这边文章(<a href="https://github.com/01Lv/BigData-Notes/blob/master/notes/installation/Hadoop%E5%8D%95%E6%9C%BA%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md" target="_blank" rel="noopener">Hadoop单机版环境搭建</a>)已经说的很清楚了,只是简单的说几个需要注意的点：</p>
+<ul>
+<li>安装包注意不要下成 <code>source</code> 或者 <code>binary</code> ,直接到 <code>Release Note</code> 去下载</li>
+<li>安装过程按照文章一步一步来就能成功了</li>
+</ul>
+<p>结果</p>
+<p>端口：50070</p>
+<p><img src="https://img-blog.csdnimg.cn/202005201235163.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="192"></p>
+<p>端口：8088</p>
+<p><img src="https://img-blog.csdnimg.cn/20200520123544221.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="193"></p>
+]]></content>
+      <categories>
+        <category>BigData</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringBoot之过滤器OncePerRequestFilter</title>
     <url>/2020/05/16/SpringBoot%E4%B9%8B%E8%BF%87%E6%BB%A4%E5%99%A8OncePerRequestFilter/</url>
     <content><![CDATA[<p><a href="https://blog.csdn.net/u013089490/article/details/84878319" target="_blank" rel="noopener">SpringBoot基础篇(五)过滤器OncePerRequestFilter</a></p>
@@ -1374,8 +1432,8 @@
         <category>Spring</category>
       </categories>
       <tags>
-        <tag>Spring</tag>
         <tag>JPA</tag>
+        <tag>Spring</tag>
       </tags>
   </entry>
   <entry>
