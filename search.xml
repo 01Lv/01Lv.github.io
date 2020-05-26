@@ -96,7 +96,8 @@
   <entry>
     <title>Nginx之知识点巩固</title>
     <url>/2020/05/25/Nginx%E4%B9%8B%E7%9F%A5%E8%AF%86%E7%82%B9%E5%B7%A9%E5%9B%BA/</url>
-    <content><![CDATA[<a id="more"></a>
+    <content><![CDATA[<p><a href="https://www.nginx.com/" target="_blank" rel="noopener">官网</a></p>
+<a id="more"></a>
 
 <h1><span id="正向代理">正向代理</span></h1><p>在客户端(浏览器) 配置代理服务器，通过代理服务器进行互联网访问。</p>
 <h1><span id="反向代理">反向代理</span></h1><p>只需要将请求发送到反向代理服务器，<strong>由反向代理服务器去选择目标服务器获取数据</strong>后，再返回给客户端，此时反向代理服务器和目标服务器对外就是一个服务器，暴露的是代理服务器的地址，隐藏了真实服务器IP地址。</p>
