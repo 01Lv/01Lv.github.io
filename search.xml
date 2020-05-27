@@ -261,6 +261,8 @@
 <p>通过添加相关缺少的依赖很好的解决问题。</p>
 <p>个人建议：<strong>idea 存在多个无关module的时候，尽量remove无关的module，避免不必要的错误！</strong></p>
 <p>好了，又可以愉快的开发了</p>
+<h1><span id="更新">更新</span></h1><p>如果你的版本是 <strong>idea 2020.1版本</strong>的，尝试参考这个 <a href="https://blog.csdn.net/qq_35524157/article/details/105867493" target="_blank" rel="noopener">文章</a> 解决下</p>
+<p>发现 <code>mvn idea:module</code> 和 <code>mvn idea:idea</code> 是个有用的命令</p>
 ]]></content>
       <tags>
         <tag>Maven</tag>
