@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Elasticsearch之rpm包安装</title>
+    <url>/2020/05/29/Elasticsearch%E4%B9%8Brpm%E5%8C%85%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/running-elasticsearch.html" target="_blank" rel="noopener">elastic 官网</a></p>
+<blockquote>
+<p>本次安装基于 Centos7</p>
+</blockquote>
+<a id="more"></a>]]></content>
+      <categories>
+        <category>Elasticsearch</category>
+      </categories>
+      <tags>
+        <tag>Elasticsearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kibana之rpm包安装</title>
+    <url>/2020/05/29/Kibana%E4%B9%8Brpm%E5%8C%85%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p><a href="https://www.elastic.co/guide/cn/kibana/current/rpm.html" target="_blank" rel="noopener">Kibana rpm安装</a></p>
+<blockquote>
+<p>本次安装是基于 Centos7 安装</p>
+</blockquote>
+<a id="more"></a>]]></content>
+      <categories>
+        <category>Kibana</category>
+      </categories>
+      <tags>
+        <tag>Kibana</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>轻量级日志采集器filebeat见解</title>
     <url>/2020/05/28/%E8%BD%BB%E9%87%8F%E7%BA%A7%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%99%A8filebeat%E8%A7%81%E8%A7%A3/</url>
     <content><![CDATA[<p><a href="https://www.elastic.co/cn/beats/filebeat" target="_blank" rel="noopener">filebeat官网</a></p>
 <p><a href="https://www.jianshu.com/p/1d29cd57b020" target="_blank" rel="noopener">centos7安装filebeat</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1634020" target="_blank" rel="noopener">Filebeat 收集日志的那些事儿</a></p>
 <blockquote>
 <p>最近项目组的大佬突然跟我说要搭一个日志采集系统，方便看日志。。。，好的，马上去搭建一个日志系统</p>
 </blockquote>
@@ -28,7 +59,71 @@
 <h1><span id="启动">启动</span></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/home/xxx/tools/filebeat/filebeat-7.7.0-linux-x86_64/filebeat -c ./filebeat.yml &amp;</span><br></pre></td></tr></table></figure>
 
 <h1><span id="结果">结果</span></h1><p><img src="https://img-blog.csdnimg.cn/20200528202756369.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="231"></p>
-<p>未完待续…</p>
+<h1><span id="原理">原理</span></h1><h2><span id="filebeat能做什么">FileBeat能做什么</span></h2><ul>
+<li>Filebeat可以从多种不同的上游<strong>input</strong> 中接受需要收集的数据，可以从<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.elastic.co%2Fguide%2Fen%2Fbeats%2Ffilebeat%2Fcurrent%2Fconfiguration-filebeat-options.html%23filebeat-input-types" target="_blank" rel="noopener">这里</a>看到当前所有被支持的input，其中我们最常用的就是<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.elastic.co%2Fguide%2Fen%2Fbeats%2Ffilebeat%2Fcurrent%2Ffilebeat-input-log.html" target="_blank" rel="noopener">log input</a>了，即从日志文件中收集数据；</li>
+<li>Filebeat对收集来的数据进行加工，比如：多行合并，增加业务自定义字段，json等格式的encode;</li>
+<li>Filebeat将加工好的数据发送到被称为<strong>output</strong>的下游，在<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.elastic.co%2Fguide%2Fen%2Fbeats%2Ffilebeat%2Fcurrent%2Fconfiguring-output.html" target="_blank" rel="noopener">这里</a>可以看到所有当前被支持的output， 其中我们最常用到的就是<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.elastic.co%2Fguide%2Fen%2Fbeats%2Ffilebeat%2Fcurrent%2Felasticsearch-output.html" target="_blank" rel="noopener">Elasticsearch</a>, <a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.elastic.co%2Fguide%2Fen%2Fbeats%2Ffilebeat%2Fcurrent%2Fkafka-output.html" target="_blank" rel="noopener">Kafka</a>了；</li>
+<li>Filebeat具有ACK反馈确认机制，即成功发送到output后，会将当前进度反馈给input, 这样在进程重启后可以断点续传；</li>
+<li>Filebeat在发送output失败后，会启动retry机制，和上一次ACK反馈确认机制一起，保证了每次消息<code>至少发送一次</code>的语义；</li>
+<li>Filebeat在发送output时，由于网络等原因发生阻塞，则在input上游端会减慢收集，自适应匹配下游output的状态；</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2020052923110348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="232"></p>
+<h2><span id="filebeat-背后的老大">FileBeat 背后的老大</span></h2><p>说到Filebeat，它其实只是<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Felastic%2Fbeats%2Ftree%2Fmaster%2Flibbeat" target="_blank" rel="noopener">beats家族</a>众多成员中的一个。除了Filebeat, 还有很多其他的beat小伙伴：</p>
+<table>
+<thead>
+<tr>
+<th align="left">beat</th>
+<th align="left">功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Filebeat</td>
+<td align="left">收集日志文件</td>
+</tr>
+<tr>
+<td align="left">Metricbeat</td>
+<td align="left">收集各种指标数据</td>
+</tr>
+<tr>
+<td align="left">Packetbeat</td>
+<td align="left">收集网络数据包</td>
+</tr>
+<tr>
+<td align="left">Auditbeat</td>
+<td align="left">收集审计数据</td>
+</tr>
+<tr>
+<td align="left">Heartbeat</td>
+<td align="left">收集服务运行状态监测数据</td>
+</tr>
+</tbody></table>
+<p>能实现以上这些beat，都离不开beats家族真正的“老大”—— libbeat， 它是beat体系的核心库。我们接下来看一下libbeat到底都作了些什么</p>
+<ul>
+<li>libbeat 提供了 <code>publisher</code> 组件，用于对接 <code>input</code></li>
+<li>收集到的数据在进入 <code>libbeat</code> 后，首先会经过各种 <code>processor</code>的加工处理，比如过滤添加字段，多行合并等等；</li>
+<li><code>input</code> 组件通过 <code>publisher</code> 组件将收集到的数据推送到 <code>publisher</code> 内部的队列；</li>
+<li>libbeat本身实现了前面介绍过的多种<code>output</code>, 因此它负责将处理好的数据通过output组件发送出去；</li>
+<li>libbeat本身封装了retry的逻辑；</li>
+<li>libbeat负责将ACK反馈通过到input组件 ；</li>
+</ul>
+<p>由此可见，大部分活儿都是libbeat来作，当“老大”不容易啊～。</p>
+<p><code>input</code>仅需要作两件事：</p>
+<ul>
+<li>从不同的介质中收集数据后投递给libbeat;</li>
+<li>接收libbeat反馈回来的ACK, 作相应的持久化;</li>
+</ul>
+<h2><span id="log-input是如何从日志文件中收集日志的">Log input是如何从日志文件中收集日志的</span></h2><h6><span id="input的创建">input的创建</span></h6><ul>
+<li>根据配置文件内容创建相应的Processors, 用于前面提到的对从文件中读取到的内容的加工处理;</li>
+<li>创建Acker, 用于持久化libbeat反馈回来的收集发送进度;</li>
+<li>使用libbeat提供的<code>Pipeline.queue.Producer</code>创建<code>producer</code>，用于将处理好的文件内容投递到libbeat的内部队列；</li>
+</ul>
+<h6><span id="收集文件内容">收集文件内容</span></h6><ul>
+<li>input会根据配置文件中的收集路径（正则匹配）来<strong>轮询</strong>是否有新文件产生，文件是否已经过期，文件是否被删除或移动;</li>
+<li>针对每一个文件创建一个Harvester来逐行读取文件内容；</li>
+<li>将文件内容封装后通过producer发送到libbeat的内部队列；</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200529231120384.png#pic_center" alt="233"></p>
+<p>未完待续。。</p>
 ]]></content>
       <categories>
         <category>filebeat</category>
