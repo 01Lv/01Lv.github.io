@@ -141,9 +141,9 @@
 <li>Key-Value 型 RDD 还拥有 Partitioner(分区器) , 用于决定数据被存储在哪个分区中，目前 Spark 中支持 HashPartitioner(安装哈希分区) 和 RangePartitioner(按照范围进行分区)</li>
 </ul>
 <p>RDD 其实实现的思想也是 <strong>装饰者模式</strong> </p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C227.png" alt="227"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200529092315677.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="227"></p>
 <p>spark 会优先计算数据存放在哪个 DataNode</p>
-<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C228.png" alt="228"></p>
+<p><img src="https://img-blog.csdnimg.cn/20200529092332525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="228"></p>
 <p><strong>算子：</strong>解决问题其实是将问题的初始状态，通过一系列的操作(Operate:算子)对问题进行转换，然后达到完成(解决) 状态</p>
 <p>Spark 中的所有的 RDD 方法都称为算子，但是分为<strong>两大类</strong>：转换算子 &amp; 行动算子</p>
 <h1><span id="创建">创建</span></h1><p>创建方式有三种：</p>
