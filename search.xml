@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Centos7下安装mongodb</title>
+    <url>/2020/06/01/Centos7%E4%B8%8B%E5%AE%89%E8%A3%85mongodb/</url>
+    <content><![CDATA[<p><a href="https://www.mongodb.com/download-center/community" target="_blank" rel="noopener">官网下载</a></p>
+<p><a href="https://www.runoob.com/mongodb/mongodb-linux-install.html" target="_blank" rel="noopener">Linux平台安装MongoDB</a></p>
+<blockquote>
+<p>我是使用 tgz 包来安装 mongodb的。系统：Centos7</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="安装">安装</span></h1><p>把从官网下载下来的tgz包安装到指定文件夹，解压得到的目录结构如下</p>
+<p><img src="https://img-blog.csdnimg.cn/20200601123431568.png#pic_center" alt="235"></p>
+<p>进入 <code>/bin</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20200601123446548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="236"></p>
+<p>配置 <code>/etc/profile</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">mongodb</span></span><br><span class="line">export MONGODB_HOME=mongodb的安装路径</span><br><span class="line">export PATH=$&#123;MONGODB_HOME&#125;/bin:$PATH</span><br></pre></td></tr></table></figure>
+
+<p>记得 <code>source /etc/profile</code></p>
+<ul>
+<li><code>mongod</code> : 相当于服务端，它打印的日志显示它在等待连接…</li>
+<li><code>mongo</code> : 相当于客户端</li>
+</ul>
+<h1><span id="配置">配置</span></h1><p>配置用户名/密码，设置登录需验证</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="keyword">admin</span>  </span><br><span class="line">db.createUser(&#123;</span><br><span class="line">  <span class="keyword">user</span>: <span class="string">'admin'</span>,  // 用户名</span><br><span class="line">  pwd: <span class="string">'123456'</span>,  // 密码</span><br><span class="line">  <span class="keyword">roles</span>:[&#123;</span><br><span class="line">    <span class="keyword">role</span>: <span class="string">'root'</span>,  // 角色</span><br><span class="line">    db: <span class="string">'admin'</span>  // 数据库</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我把配置文件 <code>mongodb.conf</code> 放在了 <code>/bin</code> 目录下</p>
+<p>mongodb.conf</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">port=<span class="number">27017</span> #端口</span><br><span class="line">dbpath=/xxx #数据库文件路径</span><br><span class="line"></span><br><span class="line">logappend=<span class="keyword">true</span> #日志追加</span><br><span class="line">fork=<span class="keyword">true</span> #是否以守护进程启动，即后台运行</span><br><span class="line">logpath=/xxx #日志文件路径</span><br><span class="line">bind_ip=<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> #任意ip可以访问</span><br><span class="line">auth=<span class="keyword">true</span> #是否授权访问</span><br></pre></td></tr></table></figure>
+
+<h1><span id="启动">启动</span></h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mongodb启动命令: mongod -f ./mongodb.conf</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost bin]# mongod -f ./mongodb.conf </span><br><span class="line">about to fork child process, waiting until server is ready for connections.</span><br><span class="line">forked process: 232000</span><br><span class="line">child process started successfully, parent exiting</span><br></pre></td></tr></table></figure>
+
+<h1><span id="系统内置角色请参考">系统内置角色请参考</span></h1><p><a href="https://www.cnblogs.com/dbabd/p/10811523.html" target="_blank" rel="noopener">MongoDB 4.X 用户和角色权限管理总结</a></p>
+]]></content>
+      <categories>
+        <category>MongoDB</category>
+      </categories>
+      <tags>
+        <tag>MongoDB</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Rpm基础与原理的学习</title>
     <url>/2020/05/30/Rpm%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%8E%9F%E7%90%86%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p><a href="https://www.jianshu.com/p/d021380f6d02" target="_blank" rel="noopener">Linux软件安装管理之——RPM与YUM详解</a></p>
