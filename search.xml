@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Rpm基础与原理的学习</title>
+    <url>/2020/05/30/Rpm%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%8E%9F%E7%90%86%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://www.jianshu.com/p/d021380f6d02" target="_blank" rel="noopener">Linux软件安装管理之——RPM与YUM详解</a></p>
+<a id="more"></a>
+
+<h1><span id="简介">简介</span></h1><p>RPM 命名：”RedHat Package Manager”，简称为 <code>RPM</code>。这个机制最早由Red Hat这家公司开发出来的，后来实在很好用，因此很多distributons就使用这个机制来作为软件安装的管理方式，包括Fedora，CentOS，SuSE等知名的开发商都是用它。</p>
+<p>RPM 最大的特点就是需要安装的软件已经编译过，并已经打包成 RPM 机制的安装包,通过里头默认的数据库记录这个软件安装时需要的依赖软件。当安装在你的Linux主机时，RPM会先依照软件里头的数据查询Linux主机的依赖属性软件是否满足，若满足则予以安装，若不满足则不予安装。</p>
+<h1><span id="优缺点">优缺点</span></h1><p>优点：</p>
+<blockquote>
+<p>1）软件已经编译打包，所以传输和安装方便，让用户免除编译</p>
+<p>2）在安装之前，会先检查系统的磁盘、操作系统版本等，避免错误安装</p>
+<p>3）软件的信息都已经记录在linux主机的数据库上，方便查询、升级和卸载</p>
+</blockquote>
+<p>缺点：</p>
+<blockquote>
+<p>1）软件包安装的环境必须与打包时的环境一致或相当</p>
+<p>2）必须安装了软件的依赖软件</p>
+<p>3）卸载时，最底层的软件不能先移除，否则可能造成整个系统不能用</p>
+</blockquote>
+<h1><span id="命名的含义">命名的含义</span></h1><p>RPM包的命名格式：</p>
+<blockquote>
+<p>软件名称-版本号-发布次数.适合linux系统.硬件平台.rpm</p>
+</blockquote>
+<p>例如：ftp-0.17-74.fc27.i686.rpm</p>
+<p><em>注意：</em></p>
+<p>包全名：rpm操作没有安装的软件包，软件包使用的是包全名</p>
+<p>包   名：rpm操作的已经安装的软件，软件包使用的是包名</p>
+<p>例如上面的例子，包全名为ftp-0.17-74.fc27.i686.rpm，包名为ftp。</p>
+<h1><span id="安装软件的默认路径">安装软件的默认路径</span></h1><blockquote>
+<p>/etc 配置文件放置目录</p>
+<p>/usr/bin 一些可执行文件</p>
+<p>/usr/lib 一些程序使用的动态链接库</p>
+<p>/usr/share/doc 一些基本的软件使用手册与说明文件</p>
+<p>/usr/share/man 一些man page档案</p>
+</blockquote>
+<h1><span id="安装原理">安装原理</span></h1><p><img src="https://img-blog.csdnimg.cn/20200601085127629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="234"></p>
+<h1><span id="命令">命令</span></h1><p><strong>1.软件安装（install）</strong></p>
+<p>​    如你需要安装一个emac编辑器，首先要到网上下载一个emac的rpm包，如emacs-25.3-1.fc28.aarch64.rpm。最简单的安装命令如下：</p>
+<blockquote>
+<p>rpm -i emacs-25.3-1.fc28.aarch64.rpm</p>
+</blockquote>
+<p>不过，这样的参数其实无法显示安装的进度，所以通常我们执行的命令是这样：</p>
+<p>rpm -ivh package-name</p>
+<p>参数说明（后面括号内为英文说明）：</p>
+<p>-i：install的意思，安装</p>
+<p>-v：查看更详细的安装信息画面（provide more detailed output）</p>
+<p>-h：以安装信息栏显示安装进度</p>
+<blockquote>
+<p>rpm -ivh emacs-25.3-1.fc28.aarch64.rpm</p>
+</blockquote>
+<p>如果想安装多个用空格间隔然后接上要安装的rpm包即可，同时也支持通过网址的资源来安装。</p>
+<p><strong>2、软件升级</strong></p>
+<p>参数说明（后面括号内为英文说明）：</p>
+<p>-U：upgrade的意思，更新软件，若系统中没有该软件则进行安装（upgrade package(s)）</p>
+<p>-F：freshen的意思，更新系统已安装的某个软件（upgrade package(s) if already instaalled）</p>
+<blockquote>
+<p>rpm –Uvh foo-2.0-1.i386.rpm</p>
+</blockquote>
+<p><strong>3、查询模式</strong></p>
+<p>​    RPM在查询的时候，其实查询的地方是/var/lib/rpm/这个目录下的数据库文件。另外，RPM也可以查询未安装的RPM文件内的信息。</p>
+<p>​    RPM的查询语法为：</p>
+<blockquote>
+<p>rpm {-q|–query} [select-options] [query-options]</p>
+</blockquote>
+<p>常用参数说明（后面括号内为英文说明）：</p>
+<p>-a：all，列出已经安装在本机的所有软件（Query all instaled packages.）</p>
+<p>-p：package，查询一个RPM文件的信息（Query an (uninstalled) package. ）</p>
+<p>-f：file，由后面接的文件名称找出该文件属于哪狐假虎威已安装的软件（Query package owning file.）</p>
+<p>-i：information，列出该软件的详细信息，包含开发商、版本与说明等（Display package information, including name, version, and description.）</p>
+<p>-l：list，列出该软件所有的文件与目录所在完整文件名（List file in package）</p>
+<p>-c：configuration，列出该软件的所有设置文件(找出在/etc/下面的文件名而已)（List only configuration files）</p>
+<p>-d：documentation，列出该软件所有的帮助文档（List only documentation files）</p>
+<p>-R：required，列出与该软件有关的依赖软件所含的文件（List capabilities on which this depends.）</p>
+<p>注意：在查询的部分，所有的参数之前都要加上-q才是所谓的查询。</p>
+<p>使用案例：</p>
+<blockquote>
+<p>1）查询你的Linux是否有安装某个软件</p>
+<p>rpm -q yum</p>
+<p>2）查询属于该软件所提供的所有目录与文件</p>
+<p>rpm -ql yum</p>
+<p>rpm -qc yum  #仅列出该软件的所有设置文件</p>
+<p>rpm -qd yum  #仅列出该软件的所有帮助文档</p>
+<p>3）列出gcc这个软件的相关数据说明</p>
+<p>rpm -qi gcc</p>
+<p>4）找出/bin/sh是由哪个软件提供的</p>
+<p>rpm -qf /bin/sh</p>
+<p>5）假设我有下载一个RPM文件,包名为wget-1.19.1-3.fc27.aarc64.rpm，想要知道该文件的需求文件，该如何办？</p>
+<p>rpm -qpR wget-1.19.1-3.fc27.aarc64.rpm</p>
+</blockquote>
+<p><strong>4、卸载软件</strong></p>
+<p>​    使用rpm的卸载过程一定要由最上层往下卸载，以rp-pppoe为例，这个软件主要是依据ppp这个软件来安装的，所以当你要卸载ppp的时候，就必须先卸载rp-pppoe才行！</p>
+<p>​     删除的命令非常简单，通过-e参数就可以完成。不过，很常发生软件属性依赖导致无法山洼某些软件的问题。</p>
+<p>例子：</p>
+<blockquote>
+<p>rpm -e gcc</p>
+</blockquote>
+<p>​    欲了解rpm的更多使用方法，可以自行去查阅rpm的man手册，这里只是列出了一些常用的操作。</p>
+]]></content>
+      <categories>
+        <category>Linux命令</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Rpm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Elasticsearch之rpm包安装</title>
     <url>/2020/05/29/Elasticsearch%E4%B9%8Brpm%E5%8C%85%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/running-elasticsearch.html" target="_blank" rel="noopener">elastic 官网</a></p>
