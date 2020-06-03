@@ -1,6 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java8之Base64学习</title>
+    <url>/2020/06/03/Java8%E4%B9%8BBase64%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://www.runoob.com/java/java8-base64.html" target="_blank" rel="noopener">Java8 Base64</a></p>
+<p><a href="https://baike.baidu.com/item/base64/8545775?fr=aladdin" target="_blank" rel="noopener">百度百科</a></p>
+<blockquote>
+<p>今天要处理老项目的迁移，由于当时没有搭建文件系统,所以只好将人脸的数据存储到通过Base64转码存储到数据库中。现在需要将这些用 Base64 编码的照片解码以后转为 byte[] 再存储到文件系统上。</p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>Base64是网络上最常见的用于传输8Bit<a href="https://baike.baidu.com/item/字节码/9953683" target="_blank" rel="noopener">字节码</a>的编码方式之一，Base64就是一种基于64个可打印字符来表示<a href="https://baike.baidu.com/item/二进制/361457" target="_blank" rel="noopener">二进制</a>数据的方法。</p>
+</blockquote>
+<h1><span id="编码">编码</span></h1><p><strong>Base64 编码是从二进制到字符的过程</strong>。</p>
+<p>Base64要求把每三个8Bit的字节转换为四个6Bit的字节（3*8 = 4*6 = 24），然后把6Bit再添两位高位0，组成四个8Bit的字节，也就是说，转换后的字符串理论上将要比原来的长1/3。</p>
+<ul>
+<li>关于这个编码的规则：</li>
+</ul>
+<p>①.把3个字节变成4个字节。</p>
+<p>②每76个字符加一个换行符。</p>
+<p>③.最后的结束符也要处理。</p>
+<p>转换表</p>
+<table>
+<thead>
+<tr>
+<th><strong>索引</strong></th>
+<th><strong>对应字符</strong></th>
+<th><strong>索引</strong></th>
+<th><strong>对应字符</strong></th>
+<th><strong>索引</strong></th>
+<th><strong>对应字符</strong></th>
+<th><strong>索引</strong></th>
+<th><strong>对应字符</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><strong>A</strong></td>
+<td>17</td>
+<td><strong>R</strong></td>
+<td>34</td>
+<td><strong>i</strong></td>
+<td>51</td>
+<td><strong>z</strong></td>
+</tr>
+<tr>
+<td>1</td>
+<td><strong>B</strong></td>
+<td>18</td>
+<td><strong>S</strong></td>
+<td>35</td>
+<td><strong>j</strong></td>
+<td>52</td>
+<td><strong>0</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>C</strong></td>
+<td>19</td>
+<td><strong>T</strong></td>
+<td>36</td>
+<td><strong>k</strong></td>
+<td>53</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>D</strong></td>
+<td>20</td>
+<td><strong>U</strong></td>
+<td>37</td>
+<td><strong>l</strong></td>
+<td>54</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>E</strong></td>
+<td>21</td>
+<td><strong>V</strong></td>
+<td>38</td>
+<td><strong>m</strong></td>
+<td>55</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>F</strong></td>
+<td>22</td>
+<td><strong>W</strong></td>
+<td>39</td>
+<td><strong>n</strong></td>
+<td>56</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>G</strong></td>
+<td>23</td>
+<td><strong>X</strong></td>
+<td>40</td>
+<td><strong>o</strong></td>
+<td>57</td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>H</strong></td>
+<td>24</td>
+<td><strong>Y</strong></td>
+<td>41</td>
+<td><strong>p</strong></td>
+<td>58</td>
+<td><strong>6</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>I</strong></td>
+<td>25</td>
+<td><strong>Z</strong></td>
+<td>42</td>
+<td><strong>q</strong></td>
+<td>59</td>
+<td><strong>7</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>J</strong></td>
+<td>26</td>
+<td><strong>a</strong></td>
+<td>43</td>
+<td><strong>r</strong></td>
+<td>60</td>
+<td><strong>8</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>K</strong></td>
+<td>27</td>
+<td><strong>b</strong></td>
+<td>44</td>
+<td><strong>s</strong></td>
+<td>61</td>
+<td><strong>9</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>L</strong></td>
+<td>28</td>
+<td><strong>c</strong></td>
+<td>45</td>
+<td><strong>t</strong></td>
+<td>62</td>
+<td><strong>+</strong></td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>M</strong></td>
+<td>29</td>
+<td><strong>d</strong></td>
+<td>46</td>
+<td><strong>u</strong></td>
+<td>63</td>
+<td><strong>/</strong></td>
+</tr>
+<tr>
+<td>13</td>
+<td><strong>N</strong></td>
+<td>30</td>
+<td><strong>e</strong></td>
+<td>47</td>
+<td><strong>v</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>O</strong></td>
+<td>31</td>
+<td><strong>f</strong></td>
+<td>48</td>
+<td><strong>w</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td><strong>P</strong></td>
+<td>32</td>
+<td><strong>g</strong></td>
+<td>49</td>
+<td><strong>x</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td><strong>Q</strong></td>
+<td>33</td>
+<td><strong>h</strong></td>
+<td>50</td>
+<td><strong>y</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>例子:</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">转换前 <span class="number">11111111</span>, <span class="number">11111111</span>, <span class="number">11111111</span> （二进制）</span><br><span class="line">转换后 <span class="number">00111111</span>, <span class="number">00111111</span>, <span class="number">00111111</span>, <span class="number">00111111</span> （二进制）</span><br><span class="line">上面的三个字节是原文，下面的四个字节是转换后的Base64编码，其前两位均为<span class="number">0</span>。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">转换前 <span class="number">10101101</span>,<span class="number">10111010</span>,<span class="number">01110110</span></span><br><span class="line">转换后 <span class="number">00101011</span>, <span class="number">00011011</span> ,<span class="number">00101001</span> ,<span class="number">00110110</span></span><br><span class="line">十进制 <span class="number">43</span> <span class="number">27</span> <span class="number">41</span> <span class="number">54</span></span><br><span class="line">对应码表中的值 r b p <span class="number">2</span></span><br><span class="line">所以上面的<span class="number">24</span>位编码，编码后的Base64值为 rbp2</span><br><span class="line">解码同理，把 rbq2 的二进制位连接上再重组得到三个<span class="number">8</span>位值，得出原码。</span><br></pre></td></tr></table></figure>
+
+<h1><span id="解码">解码</span></h1><p>其实就是编码的逆序操作，待完善…</p>
+<h1><span id="工具类和方法">工具类和方法</span></h1><p>Java 8 内置了 Base64 编码的编码器和解码器。</p>
+<p>Base64工具类提供了一套静态方法获取下面三种BASE64编解码器：</p>
+<ul>
+<li><strong>基本：</strong>输出被映射到一组字符A-Za-z0-9+/，编码不添加任何行标，输出的解码仅支持A-Za-z0-9+/。</li>
+<li><strong>URL：</strong>输出映射到一组字符A-Za-z0-9+_，输出是URL和文件。</li>
+<li><strong>MIME：</strong>输出隐射到MIME友好格式。输出每行不超过76字符，并且使用’\r’并跟随’\n’作为分割。编码输出最后没有行分割。</li>
+</ul>
+<h2><span id="内嵌类">内嵌类</span></h2><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">内嵌类 &amp; 描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>static class Base64.Decoder</strong>该类实现一个解码器用于，使用 Base64 编码来解码字节数据。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>static class Base64.Encoder</strong>该类实现一个编码器，使用 Base64 编码来编码字节数据。</td>
+</tr>
+</tbody></table>
+<h2><span id="方法">方法</span></h2><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">方法名 &amp; 描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>static Base64.Decoder getDecoder()</strong>返回一个 Base64.Decoder ，解码使用基本型 base64 编码方案。</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>static Base64.Encoder getEncoder()</strong>返回一个 Base64.Encoder ，编码使用基本型 base64 编码方案。</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>static Base64.Decoder getMimeDecoder()</strong>返回一个 Base64.Decoder ，解码使用 MIME 型 base64 编码方案。</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>static Base64.Encoder getMimeEncoder()</strong>返回一个 Base64.Encoder ，编码使用 MIME 型 base64 编码方案。</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>static Base64.Encoder getMimeEncoder(int lineLength, byte[] lineSeparator)</strong>返回一个 Base64.Encoder ，编码使用 MIME 型 base64 编码方案，可以通过参数指定每行的长度及行的分隔符。</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>static Base64.Decoder getUrlDecoder()</strong>返回一个 Base64.Decoder ，解码使用 URL 和文件名安全型 base64 编码方案。</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><strong>static Base64.Encoder getUrlEncoder()</strong>返回一个 Base64.Encoder ，编码使用 URL 和文件名安全型 base64 编码方案。</td>
+</tr>
+</tbody></table>
+<h2><span id="实例">实例</span></h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Base64;</span><br><span class="line"><span class="keyword">import</span> java.util.UUID;</span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Java8Tester</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        </span><br><span class="line">         <span class="comment">// 使用基本编码</span></span><br><span class="line">         String base64encodedString = Base64.getEncoder().encodeToString(<span class="string">"runoob?java8"</span>.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">         System.out.println(<span class="string">"Base64 编码字符串 (基本) :"</span> + base64encodedString);</span><br><span class="line">        </span><br><span class="line">         <span class="comment">// 解码</span></span><br><span class="line">         <span class="keyword">byte</span>[] base64decodedBytes = Base64.getDecoder().decode(base64encodedString);</span><br><span class="line">        </span><br><span class="line">         System.out.println(<span class="string">"原始字符串: "</span> + <span class="keyword">new</span> String(base64decodedBytes, <span class="string">"utf-8"</span>));</span><br><span class="line">         base64encodedString = Base64.getUrlEncoder().encodeToString(<span class="string">"runoob?java8"</span>.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">         System.out.println(<span class="string">"Base64 编码字符串 (URL) :"</span> + base64encodedString);</span><br><span class="line">        </span><br><span class="line">         StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        </span><br><span class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i) &#123;</span><br><span class="line">            stringBuilder.append(UUID.randomUUID().toString());</span><br><span class="line">         &#125;</span><br><span class="line">        </span><br><span class="line">         <span class="keyword">byte</span>[] mimeBytes = stringBuilder.toString().getBytes(<span class="string">"utf-8"</span>);</span><br><span class="line">         String mimeEncodedString = Base64.getMimeEncoder().encodeToString(mimeBytes);</span><br><span class="line">         System.out.println(<span class="string">"Base64 编码字符串 (MIME) :"</span> + mimeEncodedString);</span><br><span class="line">         </span><br><span class="line">      &#125;<span class="keyword">catch</span>(UnsupportedEncodingException e)&#123;</span><br><span class="line">         System.out.println(<span class="string">"Error :"</span> + e.getMessage());</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行以上脚本，输出以下：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">原始字符串: runoob?java8</span><br><span class="line">Base64 编码字符串 (URL) :VHV0b3JpYWxzUG9pbnQ_amF2YTg=</span><br><span class="line">Base64 编码字符串 (MIME) :M2Q4YmUxMTEtYWRkZi00NzBlLTgyZDgtN2MwNjgzOGY2NGFlOTQ3NDYyMWEtZDM4ZS00YWVhLTkz</span><br><span class="line">OTYtY2ZjMzZiMzFhNmZmOGJmOGI2OTYtMzkxZi00OTJiLWEyMTQtMjgwN2RjOGI0MTBmZWUwMGNk</span><br><span class="line">NTktY2ZiZS00MTMxLTgzODctNDRjMjFkYmZmNGM4Njg1NDc3OGItNzNlMC00ZWM4LTgxNzAtNjY3</span><br><span class="line">NTgyMGY3YzVhZWQyMmNiZGItOTIwZi00NGUzLTlkMjAtOTkzZTI1MjUwMDU5ZjdkYjg2M2UtZTJm</span><br><span class="line">YS00Y2Y2LWIwNDYtNWQ2MGRiOWQyZjFiMzJhMzYxOWQtNDE0ZS00MmRiLTk3NDgtNmM4NTczYjMx</span><br><span class="line">ZDIzNGRhOWU4NDAtNTBiMi00ZmE2LWE0M2ItZjU3MWFiNTI2NmQ2NTlmMTFmZjctYjg1NC00NmE1</span><br><span class="line">LWEzMWItYjk3MmEwZTYyNTdk</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Base64</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring-data-mongoDB之分页实现</title>
     <url>/2020/06/02/Spring-data-mongoDB%E4%B9%8B%E5%88%86%E9%A1%B5%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<p><a href="https://www.jianshu.com/p/24a44c4c7651" target="_blank" rel="noopener">spring data mongodb Query 及分页</a></p>
