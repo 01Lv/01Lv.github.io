@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200601123431568.png#pic_center">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200601123446548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
 <meta property="article:published_time" content="2020-06-01T02:21:14.000Z">
-<meta property="article:modified_time" content="2020-06-01T04:37:08.046Z">
+<meta property="article:modified_time" content="2020-06-02T08:46:22.516Z">
 <meta property="article:author" content="mikelv">
 <meta property="article:tag" content="MongoDB">
 <meta name="twitter:card" content="summary">
@@ -218,10 +218,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-06-01 10:21:14 / 修改时间：12:37:08" itemprop="dateCreated datePublished" datetime="2020-06-01T10:21:14+08:00">2020-06-01</time>
+              <time title="创建时间：2020-06-01 10:21:14" itemprop="dateCreated datePublished" datetime="2020-06-01T10:21:14+08:00">2020-06-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-02 16:46:22" itemprop="dateModified" datetime="2020-06-02T16:46:22+08:00">2020-06-02</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -252,7 +258,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>830</span>
+              <span>845</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -295,7 +301,7 @@
 
 <p>我把配置文件 <code>mongodb.conf</code> 放在了 <code>/bin</code> 目录下</p>
 <p>mongodb.conf</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">port=<span class="number">27017</span> #端口</span><br><span class="line">dbpath=/xxx #数据库文件路径</span><br><span class="line"></span><br><span class="line">logappend=<span class="keyword">true</span> #日志追加</span><br><span class="line">fork=<span class="keyword">true</span> #是否以守护进程启动，即后台运行</span><br><span class="line">logpath=/xxx #日志文件路径</span><br><span class="line">bind_ip=<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> #任意ip可以访问</span><br><span class="line">auth=<span class="keyword">true</span> #是否授权访问</span><br></pre></td></tr></table></figure>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">port=<span class="number">27017</span> #端口</span><br><span class="line">dbpath=/xxx/db #数据库文件路径</span><br><span class="line"></span><br><span class="line">logappend=<span class="keyword">true</span> #日志追加</span><br><span class="line">fork=<span class="keyword">true</span> #是否以守护进程启动，即后台运行</span><br><span class="line">logpath=/xxx/mongodb.log #日志文件路径</span><br><span class="line">bind_ip=<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> #任意ip可以访问</span><br><span class="line">auth=<span class="keyword">true</span> #是否授权访问</span><br></pre></td></tr></table></figure>
 
 <h1><span id="启动">启动</span></h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongodb启动命令: mongod -f ./mongodb.conf</span><br></pre></td></tr></table></figure>
 
