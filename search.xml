@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Maven项目整合Slf4j</title>
+    <url>/2020/06/06/Maven%E9%A1%B9%E7%9B%AE%E6%95%B4%E5%90%88Slf4j/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/chw0629/article/details/80567936" target="_blank" rel="noopener">log4j:WARN No appenders could be found for logger 解决办法</a></p>
+<blockquote>
+<p>最近在使用 Maven 项目的时候(没有加入 Spring 的依赖)，所以日志系统需要手动配置继承到 Maven 项目当中去。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1><span id="依赖">依赖</span></h1><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- slf4j-api --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.25<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- slf4j-log4j12 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-log4j12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.25<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h1><span id="logproperties配置">log.properties配置</span></h1><p>将 <code>log.properties</code> 文件放到 <code>resouces</code> 下</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Global logging configuration 开发时候建议使用 INFO,因为 debug 打印的日志太多，不好排查</span></span><br><span class="line"><span class="meta">log4j.rootLogger</span>=<span class="string">INFO, stdout</span></span><br><span class="line"><span class="comment"># Console output...</span></span><br><span class="line"><span class="meta">log4j.appender.stdout</span>=<span class="string">org.apache.log4j.ConsoleAppender</span></span><br><span class="line"><span class="meta">log4j.appender.stdout.layout</span>=<span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.stdout.layout.ConversionPattern</span>= <span class="string">%d - %c -%-4r [%t] %-5p %c %x - %m%n</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在代码中就可以使用 <code>Slf4j</code> 组件了。</p>
+]]></content>
+      <categories>
+        <category>Maven</category>
+      </categories>
+      <tags>
+        <tag>Maven</tag>
+        <tag>Slf4j</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java之Hutools工具类的使用</title>
     <url>/2020/06/05/Java%E4%B9%8BHutools%E5%B7%A5%E5%85%B7%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p><a href="https://www.hutool.cn/" target="_blank" rel="noopener">hutool官网</a></p>
