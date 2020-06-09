@@ -23,14 +23,14 @@
   <meta name="description" content="放弃不难，但坚持一定很酷">
 <meta property="og:type" content="website">
 <meta property="og:title" content="追风的少年">
-<meta property="og:url" content="https://01lv.github.io/tags/ElasticSearch/index.html">
+<meta property="og:url" content="https://01lv.github.io/tags/Elasticsearch/index.html">
 <meta property="og:site_name" content="追风的少年">
 <meta property="og:description" content="放弃不难，但坚持一定很酷">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="mikelv">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://01lv.github.io/tags/ElasticSearch/">
+<link rel="canonical" href="https://01lv.github.io/tags/Elasticsearch/">
 
 
 <script id="page-configurations">
@@ -42,7 +42,7 @@
   };
 </script>
 
-  <title>标签: ElasticSearch | 追风的少年</title>
+  <title>标签: Elasticsearch | 追风的少年</title>
   
 
 
@@ -191,7 +191,7 @@
   <div class="post-block">
     <div class="posts-collapse">
       <div class="collection-title">
-        <h1 class="collection-header">ElasticSearch
+        <h1 class="collection-header">Elasticsearch
           <small>标签</small>
         </h1>
       </div>
@@ -206,35 +206,15 @@
 
       <div class="post-meta">
         <time itemprop="dateCreated"
-              datetime="2020-06-03T23:11:12+08:00"
-              content="2020-06-03">
-          06-03
+              datetime="2020-05-29T12:44:09+08:00"
+              content="2020-05-29">
+          05-29
         </time>
       </div>
 
       <h2 class="post-title">
-          <a class="post-title-link" href="/2020/06/03/SpringBoot%E6%95%B4%E5%90%88ElasticSearch/" itemprop="url">
-            <span itemprop="name">SpringBoot整合ElasticSearch</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-03-09T16:25:24+08:00"
-              content="2020-03-09">
-          03-09
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2020/03/09/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8EElasticSearch/" itemprop="url">
-            <span itemprop="name">搜索引擎ElasticSearch</span>
+          <a class="post-title-link" href="/2020/05/29/Elasticsearch%E4%B9%8Brpm%E5%8C%85%E5%AE%89%E8%A3%85/" itemprop="url">
+            <span itemprop="name">Elasticsearch之rpm包安装</span>
           </a>
       </h2>
 
@@ -314,7 +294,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">124</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -467,6 +447,30 @@ NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
     var guest = 'nick,mail,link';
     guest = guest.split(',').filter(item => {
       return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'vUOBlgy4bWczaSuWqPWA4Orb-gzGzoHsz',
+      appKey     : 'c6DxvrOXBybBJ2w0DCsMGKeM',
+      placeholder: "皮一下也很开心哦!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
+m);
     });
     new Valine({
       el         : '#valine-comments',

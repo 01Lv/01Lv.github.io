@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hutool工具类关于FileReader文件读取的见解</title>
+    <url>/2020/06/09/Hutool%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%85%B3%E4%BA%8EFileReader%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E7%9A%84%E8%A7%81%E8%A7%A3/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Java之HttpServletResponse学习</title>
     <url>/2020/06/09/Java%E4%B9%8BHttpServletResponse%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p><a href="http://tomcat.apache.org/tomcat-7.0-doc/api/javax/servlet/http/HttpServletResponse.html" target="_blank" rel="noopener">HttpServletResponse官网</a></p>
