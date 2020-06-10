@@ -1,9 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Nginx原理学习</title>
+    <url>/2020/06/09/Nginx%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s/v3Jeh9k4epuYKXNTsYzQRw" target="_blank" rel="noopener">Nginx 为什么快到根本停不下来？</a></p>
+<a id="more"></a>
+
+<h1><span id="nginx-进程模型">Nginx 进程模型</span></h1><p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C244.png" alt="244"></p>
+<p>Nginx 服务器，正常运行过程：</p>
+<ul>
+<li><code>多进程</code>: 一个 Master 进程，多个 Worker 进程</li>
+<li><code>Master 进程</code>： 管理 Worker 进程。对外接口：接收外部的操作（信号）；对内转发：根据外部的操作的不同，通过信号管理 Worker；<strong>监控：</strong> 监控 Worker 进程的运行状态，Worker 进程异常终止后，自动重启 Worker 进程。</li>
+<li><code>Worker 进程</code>: 所有 Worker 进程都是平等的。实际处理：网络请求，由 Worker 进程处理。Worker 进程数量：在 nginx.conf 中配置，一般设置为核心数，充分利用 CPU 资源，同时，避免进程数量过多，避免进程竞争 CPU 资源，增加上下文切换的损耗。</li>
+</ul>
+<p><strong>思考：</strong></p>
+<ul>
+<li>请求是连接到 Nginx，Master 进程负责处理和转发？</li>
+<li>如何选定哪个 Worker 进程处理请求？请求的处理结果，是否还要经过 Master 进程？</li>
+</ul>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C245.png" alt="245"></p>
+<h1><span id="http-连接建立和请求处理过程">HTTP 连接建立和请求处理过程</span></h1><ul>
+<li>Nginx 进程启动时，Master 进程加载配置文件</li>
+<li>Master进程，初始化监听的 Socket</li>
+<li>Master进程，Fork出多个 Worker 进程</li>
+<li>Worker进程，竞争新的连接，获胜方通过三次握手，建立 Socket 连接，并处理请求。</li>
+</ul>
+<h1><span id="nginx-为什么拥有高性能并且能够支撑高并发">Nginx 为什么拥有高性能并且能够支撑高并发？</span></h1><ul>
+<li>Nginx 采用多进程+异步非阻塞方式（IO 多路复用 Epoll）。</li>
+<li>请求的完整过程：建立连接→读取请求→解析请求→处理请求→响应请求。</li>
+<li>请求的完整过程对应到底层就是：读写 Socket 事件。</li>
+</ul>
+<h1><span id="拓展epoll">拓展：epoll</span></h1><p><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="noopener">Linux IO模式及 select、poll、epoll详解</a></p>
+<p>epoll 是在2.6内核中提出的，是之前的select和poll的增强版本。相对于select和poll来说，epoll更加灵活，没有描述符限制。<strong>epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次</strong>。</p>
+<h2><span id="epoll-操作过程">epoll 操作过程</span></h2><p>epoll操作过程需要三个接口，分别如下：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int</span> epoll_create(<span class="built_in">int</span> size)；<span class="comment">//创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大</span></span><br><span class="line"><span class="built_in">int</span> epoll_ctl(<span class="built_in">int</span> epfd, <span class="built_in">int</span> op, <span class="built_in">int</span> fd, struct epoll_event *event)；</span><br><span class="line"><span class="built_in">int</span> epoll_wait(<span class="built_in">int</span> epfd, struct epoll_event * events, <span class="built_in">int</span> maxevents, <span class="built_in">int</span> timeout);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>int epoll_create(int size);</strong></li>
+</ul>
+<p>创建一个epoll的句柄，size用来告诉内核这个监听的数目一共有多大，这个参数不同于select()中的第一个参数，给出最大监听的fd+1的值，<code>参数size并不是限制了epoll所能监听的描述符最大个数，只是对内核初始分配内部数据结构的一个建议</code>。<br>当创建好epoll句柄后，它就会占用一个fd值，在linux下如果查看/proc/进程id/fd/，是能够看到这个fd的，所以在使用完epoll后，必须调用close()关闭，否则可能导致fd被耗尽。</p>
+<ul>
+<li><strong>int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；</strong></li>
+</ul>
+<p>函数是对指定描述符fd执行op操作。<br>- <strong>epfd</strong>：是epoll_create()的返回值。<br>- <strong>op</strong>：表示op操作，用三个宏来表示：添加EPOLL_CTL_ADD，删除EPOLL_CTL_DEL，修改EPOLL_CTL_MOD。分别添加、删除和修改对fd的监听事件。<br>- <strong>fd</strong>：是需要监听的fd（文件描述符）<br>- <strong>epoll_event</strong>：是告诉内核需要监听什么事，struct epoll_event结构如下：</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">struct epoll_event &#123;</span><br><span class="line">  __uint32_t events;  <span class="comment">/* Epoll events */</span></span><br><span class="line">  epoll_data_t data;  <span class="comment">/* User data variable */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//events可以是以下几个宏的集合：</span></span><br><span class="line">EPOLLIN ：表示对应的文件描述符可以读（包括对端SOCKET正常关闭）；</span><br><span class="line">EPOLLOUT：表示对应的文件描述符可以写；</span><br><span class="line">EPOLLPRI：表示对应的文件描述符有紧急的数据可读（这里应该表示有带外数据到来）；</span><br><span class="line">EPOLLERR：表示对应的文件描述符发生错误；</span><br><span class="line">EPOLLHUP：表示对应的文件描述符被挂断；</span><br><span class="line">EPOLLET： 将EPOLL设为边缘触发(Edge Triggered)模式，这是相对于水平触发(Level Triggered)来说的。</span><br><span class="line">EPOLLONESHOT：只监听一次事件，当监听完这次事件之后，如果还需要继续监听这个socket的话，需要再次把这个socket加入到EPOLL队列里</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);</strong></li>
+</ul>
+<p>等待epfd上的io事件，最多返回maxevents个事件。<br>参数events用来从内核得到事件的集合，maxevents告之内核这个events有多大，这个maxevents的值不能大于创建epoll_create()时的size，参数timeout是超时时间（毫秒，0会立即返回，-1将不确定，也有说法说是永久阻塞）。该函数返回需要处理的事件数目，如返回0表示已超时。</p>
+]]></content>
+      <categories>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java之Servlet学习</title>
+    <url>/2020/06/09/Java%E4%B9%8BServlet%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://www.zhihu.com/question/21416727" target="_blank" rel="noopener">servlet的本质是什么，它是如何工作的？</a></p>
+<p><a href="https://www.runoob.com/servlet/servlet-intro.html" target="_blank" rel="noopener">菜鸟教程-servlet</a></p>
+<p><a href="https://blog.csdn.net/zhanglf02/article/details/89791797" target="_blank" rel="noopener">servlet容器，web容器，spring容器，springmvc容器的区别</a></p>
+<blockquote>
+<p>tomcat 容器是 Servlet 容器</p>
+</blockquote>
+<a id="more"></a>
+
+<p>Java Servlet 是运行在 <code>Web服务器</code> 或 <code>应用服务器</code> 上的程序。它是作为来自 Web 浏览器或其他 HTTP 客户端的请求和 HTTP 服务器上的数据库或应用程序之间的 <code>中间层</code>。</p>
+<p>使用 Servlet，您可以收集来自网页表单的用户输入，呈现来自数据库或者其他源的记录，还可以动态创建网页。</p>
+<p>Java Servlet 通常情况下与使用 CGI（Common Gateway Interface，公共网关接口）实现的程序可以达到异曲同工的效果。但是相比于 CGI，Servlet 有以下几点优势：</p>
+<ul>
+<li>性能明显更好。</li>
+<li>Servlet 在 Web 服务器的地址空间内执行。这样它就没有必要再创建一个单独的进程来处理每个客户端请求。</li>
+<li>Servlet 是独立于平台的，因为它们是用 Java 编写的。</li>
+<li>服务器上的 Java 安全管理器执行了一系列限制，以保护服务器计算机上的资源。因此，Servlet 是可信的。</li>
+<li>Java 类库的全部功能对 Servlet 来说都是可用的。它可以通过 sockets 和 RMI 机制与 applets、数据库或其他软件进行交互。</li>
+</ul>
+<h1><span id="架构">架构</span></h1><p><img src="https://img-blog.csdnimg.cn/20200609193052139.png#pic_center" alt="242"></p>
+<h1><span id="任务">任务</span></h1><ul>
+<li>读取客户端（浏览器）发送的显式的数据。这包括网页上的 HTML 表单，或者也可以是来自 applet 或自定义的 HTTP 客户端程序的表单。</li>
+<li>读取客户端（浏览器）发送的隐式的 HTTP 请求数据。这包括 cookies、媒体类型和浏览器能理解的压缩格式等等。</li>
+<li>处理数据并生成结果。这个过程可能需要访问数据库，执行 RMI 或 CORBA 调用，调用 Web 服务，或者直接计算得出对应的响应。</li>
+<li>发送显式的数据（即文档）到客户端（浏览器）。该文档的格式可以是多种多样的，包括文本文件（HTML 或 XML）、二进制文件（GIF 图像）、Excel 等。</li>
+<li>发送隐式的 HTTP 响应到客户端（浏览器）。这包括告诉浏览器或其他客户端被返回的文档类型（例如 HTML），设置 cookies 和缓存参数，以及其他类似的任务。</li>
+</ul>
+<h1><span id="servlet容器web容器spring容器springmvc容器的区别">servlet容器，web容器，spring容器，springmvc容器的区别</span></h1><p><img src="https://img-blog.csdnimg.cn/20200609193107502.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="243"></p>
+<p>就是以下这张图激起我的兴趣，感觉底层是不是 Servlet 在控制呢？</p>
+<p><img src="https://img-blog.csdnimg.cn/20200609193034533.png#pic_center" alt="241"></p>
+<p>未完待续……</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Servlet</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hutool工具类关于FileReader文件读取的见解</title>
     <url>/2020/06/09/Hutool%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%85%B3%E4%BA%8EFileReader%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E7%9A%84%E8%A7%81%E8%A7%A3/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p><a href="https://www.hutool.cn/docs/#/core/IO/文件/文件读取-FileReader?id=文件读取-filereader" target="_blank" rel="noopener">文件读取-FileReader</a></p>
+<blockquote>
+<p>有需求是读取 json 文件并导出excel，由于用到了 FileReader, 体会到其强大的读取文件的能力。所以深入源码理解其原理。</p>
+</blockquote>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FileReader fileReader = <span class="keyword">new</span> FileReader(filename);</span><br><span class="line">String fileContent = fileReader.readString();</span><br></pre></td></tr></table></figure>
+
+<p>简单的两行代码就能实现读取文件并转换为 <code>String</code>, 何其强大。</p>
+<p>先来看看 <code>FileReader</code> 的构造函数</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FileReader</span><span class="params">(String filePath)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(filePath, DEFAULT_CHARSET);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FileReader</span><span class="params">(String filePath, Charset charset)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//这里其实调用的是 java.io.File</span></span><br><span class="line">    <span class="keyword">this</span>(FileUtil.file(filePath), charset);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">FileReader</span><span class="params">(File file, Charset charset)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(file, charset);</span><br><span class="line">    <span class="comment">//检查是否为 文件</span></span><br><span class="line">    <span class="keyword">this</span>.checkFile();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过源码可以发现都是调用 <code>java.io</code> 的方法</p>
+<p>查看 <code>readString</code> 会发现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">readString</span><span class="params">()</span> <span class="keyword">throws</span> IORuntimeException </span>&#123;</span><br><span class="line">    <span class="comment">//这个 String 是调用 java.lang.String</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String(<span class="keyword">this</span>.readBytes(), <span class="keyword">this</span>.charset);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>java.lang.String</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(<span class="keyword">byte</span> bytes[], Charset charset)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(bytes, <span class="number">0</span>, bytes.length, charset);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">(<span class="keyword">byte</span> bytes[], <span class="keyword">int</span> offset, <span class="keyword">int</span> length, Charset charset)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (charset == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"charset"</span>);</span><br><span class="line">    checkBounds(bytes, offset, length);</span><br><span class="line">    <span class="keyword">this</span>.value =  StringCoding.decode(charset, bytes, offset, length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>未完待续…</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Hutool</tag>
+        <tag>FileReader</tag>
+      </tags>
   </entry>
   <entry>
     <title>Java之HttpServletResponse学习</title>
