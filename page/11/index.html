@@ -190,6 +190,576 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/" class="post-title-link" itemprop="url">JVM知识点集合</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-21 10:50:54" itemprop="dateCreated datePublished" datetime="2020-03-21T10:50:54+08:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-30 14:07:28" itemprop="dateModified" datetime="2020-03-30T14:07:28+08:00">2020-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>27k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>24 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><p>JVM 内存可简单分为三个区：</p>
+<ol>
+<li><strong>堆区(heap)</strong>: 用于存放所有对象，是线程共享的</li>
+<li><strong>栈区(stack)</strong>: 用于存放基本数据类型的数据和对象的引用，是线程私有的(分为：虚拟机栈和本地方法栈)</li>
+<li><strong>方法区(method):</strong> 用于存放类信息，常量，静态变量，编译后的字节码等，是线程共享的(也被称为非堆，即None-Heap)</li>
+</ol>
+<p><strong>Java 的垃圾回收器(GC) 主要针对堆区</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式之单例模式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-20 19:58:07 / 修改时间：20:49:46" itemprop="dateCreated datePublished" datetime="2020-03-20T19:58:07+08:00">2020-03-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：</p>
+<p><a href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319214514210" target="_blank" rel="noopener">单例</a></p>
+<p><a href="https://blog.csdn.net/itachi85/article/details/50510124" target="_blank" rel="noopener">设计模式（二）单例模式的七种写法</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/33102022" target="_blank" rel="noopener">漫画：什么是单例模式？(推荐)</a></p>
+<blockquote>
+<p>保证一个类仅有一个实例，并提供一个访问它的全局访问点</p>
+</blockquote>
+<p>单例模式( Singleton ) 的目的是为了保证在一个进程中，某个类有且仅有一个实例。属于 <strong><em>创建型模式</em></strong></p>
+<p>因为这个类只有一个实例，因此，自然不能让调用方法 <code>new Xyz()</code> 来创建实例了。所以单例的构造方法必须是 <code>private</code> ，这样就防止了调用自己创建实例，但是类的内部，是可以用一个静态字段来引用唯一创建的实例的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 静态字段引用唯一实例:</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// private构造方法保证外部无法实例化:</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/19/Spring%E4%B9%8B%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/19/Spring%E4%B9%8B%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">Spring之事务隔离级别以及传播机制</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-19 10:08:29" itemprop="dateCreated datePublished" datetime="2020-03-19T10:08:29+08:00">2020-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-20 17:13:52" itemprop="dateModified" datetime="2020-03-20T17:13:52+08:00">2020-03-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%8B%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">事务</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/19/Spring%E4%B9%8B%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/19/Spring%E4%B9%8B%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：</p>
+<p><a href="https://cloud.tencent.com/developer/article/1078760" target="_blank" rel="noopener">Java提升篇－事务隔离级别和传播机制</a></p>
+<p><a href="https://www.cnblogs.com/zhishan/" target="_blank" rel="noopener">在探索中前行</a></p>
+<p><a href="https://blog.csdn.net/vbirdbest/article/details/82313903" target="_blank" rel="noopener">Spring Boot入门教程(四十五): 事务@Transactional</a></p>
+<p><a href="https://juejin.im/post/5b00c52ef265da0b95276091" target="_blank" rel="noopener">可能是最漂亮的Spring事务管理详解</a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><blockquote>
+<p>事务是一个由有限操作集合组成的逻辑单元。事务操作包含两个目的，数据一致性以及操作隔离</p>
+</blockquote>
+<p><strong>数据一致</strong> 是指事务提交时保证事务内的所有操作都成功完成，并且永久生效；事务回滚时，保证能够恢复到事务执行之前的状态。</p>
+<p><strong>操作隔离</strong> 则是指多个同时执行的事务之间应该相互独立，互不影响。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/19/Spring%E4%B9%8B%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%BB%A5%E5%8F%8A%E4%BC%A0%E6%92%AD%E6%9C%BA%E5%88%B6/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/18/Java%E4%B9%8BThreadLocal%E7%9A%84%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/18/Java%E4%B9%8BThreadLocal%E7%9A%84%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">Java之ThreadLocal的理解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-18 15:48:33" itemprop="dateCreated datePublished" datetime="2020-03-18T15:48:33+08:00">2020-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-30 13:30:28" itemprop="dateModified" datetime="2020-03-30T13:30:28+08:00">2020-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/18/Java%E4%B9%8BThreadLocal%E7%9A%84%E7%90%86%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/18/Java%E4%B9%8BThreadLocal%E7%9A%84%E7%90%86%E8%A7%A3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>转载自：</p>
+<p><a href="https://droidyue.com/blog/2016/03/13/learning-threadlocal-in-java/" target="_blank" rel="noopener">理解Java中的ThreadLocal</a></p>
+<p><a href="https://www.cnblogs.com/dolphin0520/p/3920407.html" target="_blank" rel="noopener">Java并发编程：深入剖析ThreadLocal</a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>ThreadLocal 是一个关于创建线程局部变量的类</p>
+<p>通常情况下，我们创建的变量是可以被任何一个线程访问并修改的，而使用 ThreadLocal 创建的变量只能被当前线程访问，其它线程则无法访问和修改。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/18/Java%E4%B9%8BThreadLocal%E7%9A%84%E7%90%86%E8%A7%A3/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/" class="post-title-link" itemprop="url">TCP/IP协议,OSI七层协议</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-17 20:13:01" itemprop="dateCreated datePublished" datetime="2020-03-17T20:13:01+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-30 16:23:25" itemprop="dateModified" datetime="2020-03-30T16:23:25+08:00">2020-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">计算机网络</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：</p>
+<p><a href="https://blog.csdn.net/yaopeng_2005/article/details/7064869" target="_blank" rel="noopener">OSI七层模型详解</a></p>
+<p><a href="https://juejin.im/post/5a069b6d51882509e5432656" target="_blank" rel="noopener">一篇文章带你熟悉 TCP/IP 协议（网络协议篇二）</a></p>
+<p><a href="https://blog.csdn.net/zhshulin/article/details/62888061" target="_blank" rel="noopener">一张图了解TCP/IP五层网络模型</a></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -737,569 +1307,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="追风的少年">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/" class="post-title-link" itemprop="url">NexT7.7.x版本添加访问量和访客数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-15 22:11:43" itemprop="dateCreated datePublished" datetime="2020-03-15T22:11:43+08:00">2020-03-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-16 14:35:53" itemprop="dateModified" datetime="2020-03-16T14:35:53+08:00">2020-03-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近看多了别人的个人博客网站弄得挺精致的，居然有<strong>访客数</strong>和<strong>访问量</strong>，不行我也不能落后，所以自己也准备升级下自己简陋的博客网站哈哈。</p>
-<p>由于我的 Hexo 的版本(7.7.2) 在目前来说是最新的，所以通过百度和google查询到的资料不多，所以耗费了好几个小时在搜查相关的资料，终于功夫不负有心人，最终升级成功。</p>
-<p>据<a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">官网</a>说, 他们在第三方服务中提供了 <strong>不蒜子统计</strong> 的功能，看来多看看官网还是有好处的哈哈。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/15/NexT7.7.x%E7%89%88%E6%9C%AC%E6%B7%BB%E5%8A%A0%E8%AE%BF%E9%97%AE%E9%87%8F%E5%92%8C%E8%AE%BF%E5%AE%A2%E6%95%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="追风的少年">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/" class="post-title-link" itemprop="url">Java中基本类型存储方式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-15 15:53:22" itemprop="dateCreated datePublished" datetime="2020-03-15T15:53:22+08:00">2020-03-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-16 15:23:12" itemprop="dateModified" datetime="2020-03-16T15:23:12+08:00">2020-03-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>507</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>java 把内存分为两种：</p>
-<p>一种是 <strong>栈内存</strong>，另一种是 <strong>堆内存</strong></p>
-<ol>
-<li>在函数中定义的基本类型变量(即基本类型的局部变量) 和 对象的引用变量(即对象的变量名) 都在函数的栈内存中分配</li>
-<li>堆内存用来存放由 new 创建的对象和数组以及对象的实例变量(即全局变量)</li>
-</ol>
-<p>方法区中主要存储所有对象数据共享区域，存储静态变量和普通方法、静态方法、常量、字符串常量（严格说存放在常量池，堆和栈都有）等类信息，、说白了就是保存类的模板</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/15/Java%E4%B8%AD%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="追风的少年">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/" class="post-title-link" itemprop="url">Google Protobuf协议缓冲区</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-15 14:10:54" itemprop="dateCreated datePublished" datetime="2020-03-15T14:10:54+08:00">2020-03-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-16 14:36:28" itemprop="dateModified" datetime="2020-03-16T14:36:28+08:00">2020-03-16</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Google/" itemprop="url" rel="index"><span itemprop="name">Google</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>93</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://developers.google.cn/protocol-buffers/" target="_blank" rel="noopener">官网</a></p>
-<p><a href="https://juejin.im/post/5938f1785c497d006b613b0d" target="_blank" rel="noopener">更小、更快、更简单Google ProtoBuf 跨语言通信协议</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1146352" target="_blank" rel="noopener">通讯协议序列化解读（一） Protobuf详解教程</a></p>
-<blockquote>
-<p>协议缓冲区是一种与语言无关，与平台无关的可扩展机制，用于序列化结构化数据。</p>
-</blockquote>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/15/Google-Protobuf%E5%8D%8F%E8%AE%AE%E7%BC%93%E5%86%B2%E5%8C%BA/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="追风的少年">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式之装饰器模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-13 16:44:04 / 修改时间：16:48:24" itemprop="dateCreated datePublished" datetime="2020-03-13T16:44:04+08:00">2020-03-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考：</p>
-<p><a href="https://www.runoob.com/design-pattern/decorator-pattern.html" target="_blank" rel="noopener">装饰器模式</a></p>
-<p><a href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319302594594" target="_blank" rel="noopener">装饰器</a></p>
-<blockquote>
-<p>动态地给一个对象添加一些额外的职责。就增加功能来讲，相比生成子类更为灵活</p>
-</blockquote>
-<p>装饰器模式允许向一个现有的对象添加新的功能，同时又不改变其结构。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="追风的少年">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式之建造者模式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-13 16:26:36 / 修改时间：16:48:30" itemprop="dateCreated datePublished" datetime="2020-03-13T16:26:36+08:00">2020-03-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>12k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>11 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>参考：</p>
-<p><a href="https://juejin.im/post/5a23bdd36fb9a045272568a6" target="_blank" rel="noopener">人人都会设计模式—建造者模式–Builder</a></p>
-<p><a href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319155793953#0" target="_blank" rel="noopener">生成器</a></p>
-<blockquote>
-<p>将一个复杂对象的构建过程与它的表示分离，从而使得同样的构建过程可以创建不同的表示。</p>
-</blockquote>
-<p>建造者模式将一个复杂对象的创建过程分成了一步步简单的步骤，用户只需要了解复杂对象的类型和内容，而无须关注复杂对象的具体构造过程，帮助用户屏蔽掉了复杂对象内部的具体构建细节。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1367,7 +1379,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">133</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1380,7 +1392,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">146</span>
+        <span class="site-state-item-count">150</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1425,12 +1437,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">478k</span>
+    <span title="站点总字数">492k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7:15</span>
+    <span title="站点阅读时长">7:27</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">
