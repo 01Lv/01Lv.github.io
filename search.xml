@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL之数据类型DECIMAL示例用法</title>
+    <url>/2020/06/16/MySQL%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8BDECIMAL%E7%A4%BA%E4%BE%8B%E7%94%A8%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://www.cnblogs.com/owenma/p/7097602.html" target="_blank" rel="noopener">MySQL数据类型DECIMAL用法</a></p>
+<a id="more"></a>
+
+<p><code>decimal</code> 数据类型用于在数据库中存储精确的数值。</p>
+<p>语法如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">column_name DECIMAL(P,D)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>P 表示有效数字精度。范围为 1-65</li>
+<li>D 表示小数点后的位数。范围是 0-30。<strong>MySQL 要求 D 小于或等于(&lt;=) P</strong></li>
+</ul>
+<p>举例：</p>
+<p>定义一个 amount 列</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">amount decimal(6,3)</span><br></pre></td></tr></table></figure>
+
+<p>表示 amount 最多存储6位数字，小数位占了3位，所以整数位只有3位可以用。</p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+        <tag>Decimal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大数据之Flink学习</title>
+    <url>/2020/06/16/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8BFlink%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://flink.apache.org/" target="_blank" rel="noopener">官网</a></p>
+<a id="more"></a>
+
+<p><code>Flink</code> 是一个框架和分布式处理引擎，用于对无界和有界数据流进行状态计算。</p>
+<h1><span id="为什么选择-flink">为什么选择 Flink</span></h1><ul>
+<li>流数据更真实地反映了我们生活：例如交易，汽车导航实时性很强地产品</li>
+<li>传统的数据架构是基于有限数据集</li>
+</ul>
+<h1><span id="哪些行业需要处理流数据">哪些行业需要处理流数据</span></h1><ul>
+<li><p>电商和市场营销</p>
+<p>数据报表，广告投放，业务流程需要</p>
+</li>
+<li><p>物联网(IOT)</p>
+<p>传感器实时数据采集和显示，实时报警，交通业</p>
+</li>
+<li><p>电信业</p>
+<p>基站流量调配</p>
+</li>
+<li><p>银行和金融业</p>
+<p>实时结算和通知推送，实时检测异常行为</p>
+</li>
+</ul>
+<h1><span id="基于流">基于流</span></h1><p>在 <code>Flink</code> 世界观中，一切都是由流组成的，离线数据是有界的流；实时数据是一个没有界限的流；这就是所谓有界流和无界流</p>
+<h1><span id="flink-和-spark-streaming-的区别">Flink 和 Spark Streaming 的区别</span></h1><p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C263.png" alt="263"></p>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C264.png" alt="264"></p>
+]]></content>
+      <categories>
+        <category>BigData</category>
+      </categories>
+      <tags>
+        <tag>BigData</tag>
+        <tag>Flink</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SpringCloud整合Skywalking实现链路追踪</title>
     <url>/2020/06/13/SpringCloud%E6%95%B4%E5%90%88Skywalking%E5%AE%9E%E7%8E%B0%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</url>
     <content><![CDATA[<p><a href="https://skywalking.apache.org/zh/blog/2020-04-19-skywalking-quick-start.html" target="_blank" rel="noopener">Skywalking单机搭建</a></p>
