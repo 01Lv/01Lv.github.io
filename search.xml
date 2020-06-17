@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java8之Stream流的学习</title>
+    <url>/2020/06/17/Java8%E4%B9%8BStream%E6%B5%81%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247485861&idx=3&sn=9f4a83c8c75b43ead7b4ec187fe031ca&chksm=ebd748a4dca0c1b2d8a1b16656ada30c92bcb6e099c54e6b5b6eebbb29dc8914e1244e77c1e4&token=2052427710&lang=zh_CN#rd" target="_blank" rel="noopener">手把手带你体验Stream流</a></p>
+<blockquote>
+<p>最近在项目上用的挺多 Stream API 的，只是觉得用的很爽！可是不太了解它的原理。今天偶然在收集 gateway 的技术方案的时候看到了 3y 的文章，不错学习下！</p>
+</blockquote>
+<a id="more"></a>
+
+<p>3y 理解的Stream流编程就是：<strong>某些场景会经常用到操作(求和/去重/过滤….等等)，已经封装好API给你了，你自己别写了，调我给你提供的API就好了</strong>。</p>
+<h1><span id="1支持并发">1.支持并发</span></h1><p>回到我们最原始的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] nums = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i : nums) &#123;</span><br><span class="line">        sum += i;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(<span class="string">"结果为："</span> + sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们想要<code>for</code>循环的内部支持并发的话，显然不太好去写。但使用Stream流的方式，<strong>调用一个方法就可以支持并发</strong>(parallel)：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] nums = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line">    <span class="keyword">int</span> sum2 = IntStream.of(nums).parallel().sum();</span><br><span class="line">    System.out.println(<span class="string">"结果为："</span> + sum2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1><span id="原理">原理</span></h1><p><img src="https://img-blog.csdnimg.cn/2020061723141217.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="267"></p>
+<p>使用Stream流分为三步：</p>
+<ol>
+<li>创建Stream流</li>
+<li>通过Stream流对象执行中间操作</li>
+<li>执行最终操作，得到结果</li>
+</ol>
+<h2><span id="创建流">创建流</span></h2><p>创建流我们最常用的就是<strong>从集合中</strong>创建出流</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回的都是流对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">// 从集合创建</span></span><br><span class="line">    Stream&lt;String&gt; stream = list.stream();</span><br><span class="line">    Stream&lt;String&gt; stream1 = list.parallelStream();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从数组创建</span></span><br><span class="line">    IntStream stream2 = Arrays.stream(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>&#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建数字流</span></span><br><span class="line">    IntStream intStream = IntStream.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用random创建</span></span><br><span class="line">    IntStream limit = <span class="keyword">new</span> Random().ints().limit(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="执行中间操作">执行中间操作</span></h2><p>怎么理解中间操作？意思是这样的：在上面我们已经能创建出Stream了，我们是对<strong>Stream</strong>进行操作，对Stream操作返回完返回的还是Stream，那么我们称这个操作为中间操作。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200617231554633.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="268"></p>
+<p>因为中间操作(filter,map,foreach)返回的都是<strong>流对象</strong>，所以我们可以<strong>链式调用</strong>。</p>
+<p>注意：Stream上的操作并不会立即执行，只有等到用户真正需要结果的时候才会执行（<strong>惰性求值</strong>）。</p>
+<h2><span id="执行最终操作">执行最终操作</span></h2><p>最终操作返回的不再是Stream对象，<strong>调用了最终操作的方法，Stream才会执行</strong>。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200617232142340.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="269"></p>
+<p>具体看 <code>java.util.stream</code> 源码</p>
+<h1><span id="总结">总结</span></h1><p>使用Stream的原因我认为有两个：</p>
+<ol>
+<li>JDK库提供现有的API，代码写起来简洁优化</li>
+<li>方便并发。大家可以记住一个结论：在<strong>多核</strong>情况下，可以使用<strong>并行</strong>Stream API来发挥多核优势。在单核的情况下，我们自己写的<code>for</code>性能不比Stream API 差多少</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>Stream流</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringCloud之网关获取注册中心的服务实例</title>
+    <url>/2020/06/17/SpringCloud%E4%B9%8B%E7%BD%91%E5%85%B3%E8%8E%B7%E5%8F%96%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%AE%9E%E4%BE%8B/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/weixin_34233421/article/details/86360775" target="_blank" rel="noopener">Spring Cloud 获取注册中心所有服务以及服务下的所有实例</a></p>
+<blockquote>
+<p>待用</p>
+</blockquote>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * import org.springframework.cloud.client.ServiceInstance;</span></span><br><span class="line"><span class="comment"> * import org.springframework.cloud.client.discovery.DiscoveryClient;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 获取每一个服务下面实例</span></span><br><span class="line"><span class="comment"> * 测试时，可以使用多个端口启动服务实例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//感觉 DiscoveryClient 挺关键的保存了服务实例的详细信息</span></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> DiscoveryClient discoveryClient;</span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/serviceurl"</span>)</span><br><span class="line"><span class="keyword">public</span> Map&lt;String, List&lt;ServiceInstance&gt;&gt; serviceUrl() &#123;</span><br><span class="line">    Map&lt;String, List&lt;ServiceInstance&gt;&gt; msl = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    List&lt;String&gt; services = discoveryClient.getServices();</span><br><span class="line">    <span class="keyword">for</span> (String service : services) &#123;</span><br><span class="line">        List&lt;ServiceInstance&gt; sis = discoveryClient.getInstances(service);</span><br><span class="line">        msl.put(service, sis);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> msl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1><span id="研究">研究</span></h1><p>DiscoveryClient.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.cloud.client.discovery;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> org.springframework.cloud.client.ServiceInstance;</span><br><span class="line"><span class="keyword">import</span> org.springframework.core.Ordered;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DiscoveryClient</span> <span class="keyword">extends</span> <span class="title">Ordered</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> DEFAULT_ORDER = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">description</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取服务的详细信息</span></span><br><span class="line">    <span class="function">List&lt;ServiceInstance&gt; <span class="title">getInstances</span><span class="params">(String serviceId)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取服务的名称,即 serviceId</span></span><br><span class="line">    <span class="function">List&lt;String&gt; <span class="title">getServices</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过继承关系图发现有 <code>NacosDiscoveryClient</code>, 表明对 Nacos 注册中心有支持</p>
+<p><img src="https://img-blog.csdnimg.cn/20200617173444557.png#pic_center" alt="266"></p>
+<p>ServiceInstance.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ServiceInstance</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">getInstanceId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getServiceId</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">String <span class="title">getHost</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getPort</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isSecure</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">URI <span class="title">getUri</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Map&lt;String, String&gt; <span class="title">getMetadata</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">getScheme</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1><span id="结果">结果</span></h1><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"code"</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">"count"</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">"data"</span>: &#123;</span><br><span class="line">        <span class="attr">"platform-sso"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"host"</span>: <span class="string">"x.x.x.x"</span>,</span><br><span class="line">                <span class="attr">"instanceId"</span>: <span class="literal">null</span>,</span><br><span class="line">                <span class="comment">//注册中心的信息</span></span><br><span class="line">                <span class="attr">"metadata"</span>: &#123;</span><br><span class="line">                    <span class="attr">"nacos.instanceId"</span>: <span class="string">"10.x.x.144#8777#DEFAULT#DEFAULT_GROUP@@platform-sso"</span>,</span><br><span class="line">                    <span class="attr">"nacos.weight"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">                    <span class="attr">"nacos.cluster"</span>: <span class="string">"DEFAULT"</span>,</span><br><span class="line">                    <span class="attr">"nacos.healthy"</span>: <span class="string">"true"</span>,</span><br><span class="line">                    <span class="attr">"preserved.register.source"</span>: <span class="string">"SPRING_CLOUD"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">"port"</span>: <span class="number">8777</span>,</span><br><span class="line">                <span class="attr">"scheme"</span>: <span class="literal">null</span>,</span><br><span class="line">                <span class="attr">"secure"</span>: <span class="literal">false</span>,</span><br><span class="line">                <span class="attr">"serviceId"</span>: <span class="string">"platform-sso"</span>,</span><br><span class="line">                <span class="attr">"uri"</span>: <span class="string">"http://10.x.x.144:8777"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"platform-gateway"</span>: [],</span><br><span class="line">        <span class="attr">"platform-apihub"</span>: []</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"操作成功"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+        <tag>动态获取服务实例</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java之BigDecimal学习使用</title>
+    <url>/2020/06/17/Java%E4%B9%8BBigDecimal%E5%AD%A6%E4%B9%A0%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/xiangwang2016/article/details/89642159" target="_blank" rel="noopener">Java BigDecimal的使用</a></p>
+<blockquote>
+<p>最近项目由于要使用到 AGV 定位，所以需要 X,Y以及方向三个字段。且这三个字段的要求保留小数点后6位。之前用 Float 来保存数据发现丢失精度了(保存三位小数的时候还好，6位就丢失了)。后面使用 BigDecimal 解决问题!</p>
+</blockquote>
+<a id="more"></a>
+
+<p>Java在java.math包中提供的API类BigDecimal，用来对超过16位有效位的数进行精确的运算。双精度浮点型变量double可以处理16位有效数，但在实际应用中，可能需要对更大或者更小的数进行运算和处理。一般情况下，对于那些不需要准确计算精度的数字，我们可以直接使用Float和Double处理，但是Double.valueOf(String) 和Float.valueOf(String)会丢失精度。所以开发中，如果我们需要精确计算的结果，则必须使用BigDecimal类来操作啦！</p>
+<h1><span id="常用的构造方法">常用的构造方法</span></h1><p>BigDecimal(int)：将int表示形式转换为BigDecimal对象<br>BigDecimal(String) ：将字符串表示形式转换为BigDecimal对象<br>BigDecimal(double)：将double表示形式转换为BigDecimal对象</p>
+<h1><span id="常用方法">常用方法</span></h1><p><strong>divide(BigDecimal)</strong>：BigDecimal对象中的值相除，返回BigDecimal对象</p>
+<p>……</p>
+<p>我自己最常用的就是除法了，因为涉及到精度计算。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 提供精确的乘法运算</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v1 被乘数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> v2 乘数</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BigDecimal <span class="title">mul</span><span class="params">(String v1, String v2)</span> </span>&#123;</span><br><span class="line">    BigDecimal b1 = <span class="keyword">new</span> BigDecimal(v1);</span><br><span class="line">    BigDecimal b2 = <span class="keyword">new</span> BigDecimal(v2);</span><br><span class="line">    <span class="keyword">return</span> b1.multiply(b2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>BigDecimal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Zuul之ZuulRoute学习</title>
+    <url>/2020/06/16/Zuul%E4%B9%8BZuulRoute%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://www.jianshu.com/p/9c104186572d" target="_blank" rel="noopener">zuul学习一：spring cloud zuul的快速入门</a></p>
+<blockquote>
+<p>ZuulRoute 是 ZuulProperties 的一个内部类</p>
+</blockquote>
+<a id="more"></a>
+
+<p><img src="https://img-blog.csdnimg.cn/2020061619451941.png#pic_center" alt="265"></p>
+<p>前提：通过这段代码来实现动态路由刷新</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (RespRouteDto respRouteDto : respRouteDtos) &#123;</span><br><span class="line">    routes.put(respRouteDto.getId(), <span class="keyword">new</span> ZuulProperties.ZuulRoute(respRouteDto.getPath(), respRouteDto.getLocation()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进入 <code>ZuulRoute</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ZuulRoute</span><span class="params">(String path, String location)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.id = <span class="keyword">this</span>.extractId(path);</span><br><span class="line">    <span class="keyword">this</span>.path = path;</span><br><span class="line">    <span class="keyword">this</span>.setLocation(location);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>setLocation()</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocation</span><span class="params">(String location)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (location == <span class="keyword">null</span> || !location.startsWith(<span class="string">"http:"</span>) &amp;&amp; !location.startsWith(<span class="string">"https:"</span>)) &#123;</span><br><span class="line">        <span class="keyword">this</span>.serviceId = location;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.url = location;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现上面的代码 <code>serviceId</code> 的值为<code>location</code> </p>
+<p>总结: 其实上面的代码是通过编码的形式配置 <strong>路径</strong> 和 <strong>服务实例名</strong> 的映射关系</p>
+<p>ext：通过配置文件的方式配置映射关系</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">zuul:</span></span><br><span class="line">  <span class="attr">routes:</span></span><br><span class="line">    <span class="attr">user-service:</span></span><br><span class="line">      <span class="attr">path:</span> <span class="string">/users/**</span></span><br><span class="line">      <span class="attr">serviceId:</span> <span class="string">user-service</span></span><br></pre></td></tr></table></figure>
+
+<p>当访问路径 <code>/user/**</code> 时，即访问 <code>user-service</code> 的服务接口</p>
+]]></content>
+      <categories>
+        <category>Zuul</category>
+      </categories>
+      <tags>
+        <tag>Zuul</tag>
+        <tag>ZuulRoute</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL之数据类型DECIMAL示例用法</title>
     <url>/2020/06/16/MySQL%E4%B9%8B%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8BDECIMAL%E7%A4%BA%E4%BE%8B%E7%94%A8%E6%B3%95/</url>
     <content><![CDATA[<p><a href="https://www.cnblogs.com/owenma/p/7097602.html" target="_blank" rel="noopener">MySQL数据类型DECIMAL用法</a></p>
