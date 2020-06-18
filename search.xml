@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringCloud之Gateway组件学习</title>
+    <url>/2020/06/17/SpringCloud%E4%B9%8BGateway%E7%BB%84%E4%BB%B6%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Spring5之WebFlux入门学习</title>
+    <url>/2020/06/17/Spring5%E4%B9%8BWebFlux%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Java8之Stream流的学习</title>
     <url>/2020/06/17/Java8%E4%B9%8BStream%E6%B5%81%E7%9A%84%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247485861&idx=3&sn=9f4a83c8c75b43ead7b4ec187fe031ca&chksm=ebd748a4dca0c1b2d8a1b16656ada30c92bcb6e099c54e6b5b6eebbb29dc8914e1244e77c1e4&token=2052427710&lang=zh_CN#rd" target="_blank" rel="noopener">手把手带你体验Stream流</a></p>
