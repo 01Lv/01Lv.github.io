@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>SpringBoot整合Nacos使用注解实现配置监听器</title>
+    <url>/2020/06/29/SpringBoot%E6%95%B4%E5%90%88Nacos%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0%E9%85%8D%E7%BD%AE%E7%9B%91%E5%90%AC%E5%99%A8/</url>
+    <content><![CDATA[<blockquote>
+<p>其实可以通过代码实现对配置文件的监听，只不过用注解的话可以减少代码量并且提高复用性。</p>
+</blockquote>
+<a id="more"></a>
+
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入nacos服务发现、配置中心--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--nacos-discovery-spring-boot-starter--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>nacos-config-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.2.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在配置文件中 <code>xxx.yml</code> 加入以下配置</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#nacos注解使用</span></span><br><span class="line"><span class="attr">nacos:</span></span><br><span class="line">  <span class="attr">config:</span></span><br><span class="line">    <span class="attr">server-addr:</span> <span class="string">localhost</span></span><br><span class="line">    <span class="attr">namespace:</span> <span class="string">ybs_local</span></span><br></pre></td></tr></table></figure>
+
+<p>模板代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Nacos路由监听器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomNacosConfigListener</span> <span class="keyword">implements</span> <span class="title">RouteDefinitionRepository</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DATA_ID = <span class="string">"gateway-router"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@NacosInjected</span></span><br><span class="line">    <span class="keyword">private</span> ConfigService configService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ApplicationEventPublisher publisher;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomNacosConfigListener</span><span class="params">(ApplicationEventPublisher publisher)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.publisher = publisher;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"configService=&#123;&#125;"</span>,configService);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//关键，监听器，发布消息</span></span><br><span class="line">    <span class="meta">@NacosConfigListener</span>(dataId = DATA_ID,type = ConfigType.JSON)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onChange</span><span class="params">(String configContent)</span></span>&#123;</span><br><span class="line">        log.info(<span class="string">"路由信息更新=&#123;&#125;"</span>,configContent);</span><br><span class="line">        publisher.publishEvent(<span class="keyword">new</span> RefreshRoutesEvent(<span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//初始化路由信息</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Flux&lt;RouteDefinition&gt; <span class="title">getRouteDefinitions</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String config = configService.getConfig(DATA_ID, <span class="keyword">null</span>, <span class="number">5000</span>);</span><br><span class="line">            List&lt;RouteDefinition&gt; routeDefinitionList = getListByStr(config);</span><br><span class="line">            <span class="keyword">return</span> Flux.fromIterable(routeDefinitionList);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NacosException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">save</span><span class="params">(Mono&lt;RouteDefinition&gt; route)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">delete</span><span class="params">(Mono&lt;String&gt; routeId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解析配置文件中路由,String -&gt; RouteDefinition</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;RouteDefinition&gt; <span class="title">getListByStr</span><span class="params">(String content)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(StringUtils.isNotEmpty(content))&#123;</span><br><span class="line">            <span class="keyword">return</span> JsonUtils.toJavaObjectList(content,RouteDefinition<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>SpringBoot</category>
+      </categories>
+      <tags>
+        <tag>Nacos</tag>
+        <tag>SpringBoot</tag>
+        <tag>注解</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebFlux整合SpringSecurity相关总结</title>
+    <url>/2020/06/27/WebFlux%E6%95%B4%E5%90%88SpringSecurity%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/lz710117239/article/details/80661322" target="_blank" rel="noopener">Spring-security在SpringMvc中的使用</a></p>
+<p><a href="https://blog.csdn.net/youxijishu/article/details/103351754/" target="_blank" rel="noopener">Spring gateway配置Spring Security实现统一权限验证与授权</a></p>
+<p><a href="https://www.jianshu.com/p/e013ca21d91d?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="noopener">Spring WebFlux +Security+Jwt （适用于微信开发）</a></p>
+<blockquote>
+<p>如果将 SpringSecurity 集成进 Gateway 服务的话，不能完全按照以前 SpringMVC 整合 SpringSecurity 那套方法。因为 Gateway 是基于 WebFlux 非阻塞式的框架构建的，底层是 Netty 的框架，许多过滤器，xxxManager 都用不上了。而 SpringMVC 是基于 Servlet 容器的，基于阻塞式的。</p>
+</blockquote>
+<a id="more"></a>
+
+<p><a href="https://gitee.com/mikeLv01/gateway-sso-demo" target="_blank" rel="noopener">代码地址</a></p>
+]]></content>
+      <categories>
+        <category>SpringCloud</category>
+      </categories>
+      <tags>
+        <tag>WebFlux</tag>
+        <tag>SpringSecurity</tag>
+        <tag>Gateway</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring5之Mono学习使用</title>
+    <url>/2020/06/21/Spring5%E4%B9%8BMono%E5%AD%A6%E4%B9%A0%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p><a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html" target="_blank" rel="noopener">官网</a></p>
+<p><a href="https://docs.spring.io/spring-framework/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html" target="_blank" rel="noopener">WebFlux框架</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-cn-with-reactor-response-encode/index.html" target="_blank" rel="noopener">使用 Reactor 进行反应式编程</a></p>
+<blockquote>
+<p>最近在使用 SpringCloud Gateway 在进行网关服务的改造，接触到了 Mono ，所以想深入研究一下。</p>
+</blockquote>
+<a id="more"></a>]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring5</tag>
+        <tag>Reactor</tag>
+        <tag>Mono</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Spring5之WebFlux入门学习</title>
     <url>/2020/06/17/Spring5%E4%B9%8BWebFlux%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p><a href="https://www.jianshu.com/p/1f610b90d40c" target="_blank" rel="noopener">快速上手WebFlux</a></p>
@@ -5255,7 +5323,7 @@
 <h1><span id="自定义过滤器">自定义过滤器</span></h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLogGatewayFilter</span> <span class="keyword">implements</span> <span class="title">GlobalFilter</span>, <span class="title">Ordered</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Mono&lt;Void&gt; <span class="title">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        log.info(<span class="string">"***********************come in MyLogGatewayFilter："</span> + <span class="keyword">new</span> Date());</span><br><span class="line">        String uname = exchange.getRequest().getQueryParams().getFirst(<span class="string">"uname"</span>);</span><br><span class="line">        <span class="keyword">if</span>(uname == <span class="keyword">null</span>)&#123;</span><br><span class="line">            log.info(<span class="string">"*********用户名为 null，非法用户"</span>);</span><br><span class="line">            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);</span><br><span class="line">            <span class="keyword">return</span> exchange.getResponse().setComplete();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//过滤器数值越低, 优先级越高</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>当 <strong><em>url</em></strong> 后面携带的参数不是 uname 格式，或者格式不正确 ，就会返回 <code>401 UNAUTHORIZED</code> 未授权的错误</p>
-<h1><span id="整合-springsecurity">整合 SpringSecurity</span></h1><p>todo：整合 SpringSecurity</p>
+<h1><span id="整合-springsecuritywebflux">整合 SpringSecurity(WebFlux)</span></h1><p><a href="https://www.jianshu.com/p/e013ca21d91d" target="_blank" rel="noopener">Spring WebFlux +Security+Jwt （适用于微信开发）</a></p>
 ]]></content>
       <categories>
         <category>SpringCloud</category>
