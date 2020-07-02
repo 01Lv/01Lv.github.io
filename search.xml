@@ -9,25 +9,6 @@
 <blockquote>
 <p>最近在改造整合别人的代码。。,对，你没看错，是在重构别人的代码。由于项目总体规定使用 JPA 作为持久化层的框架。JPA 并并没有 MyBatis 那么灵活，尤其是在多表查询方面。由于我接手这个服务涉及到多表查询所以需要查询 JPA 多表查询的相关资料！</p>
 </blockquote>
-<a id="more"></a>]]></content>
-      <categories>
-        <category>Spring</category>
-      </categories>
-      <tags>
-        <tag>JPA</tag>
-        <tag>HQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JPA结合JPQL实现多表查询</title>
-    <url>/2020/07/01/JPA%E7%BB%93%E5%90%88HQL%E5%AE%9E%E7%8E%B0%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/</url>
-    <content><![CDATA[<p><a href="https://www.baeldung.com/spring-data-jpa-query" target="_blank" rel="noopener">Spring Data JPA @Query</a></p>
-<p><a href="http://www.spring4all.com/article/464" target="_blank" rel="noopener">Spring Data JPA系列：使用@Query注解（Using @Query）</a></p>
-<p><a href="https://blog.csdn.net/yingxiake/article/details/51016234" target="_blank" rel="noopener">spring data jpa 利用@Query进行查询</a></p>
-<p><a href="https://www.jianshu.com/p/7f2569db8884" target="_blank" rel="noopener">Spring Data JPA入门-JPQL和命名查询</a></p>
-<blockquote>
-<p>最近在改造整合别人的代码。。,对，你没看错，是在重构别人的代码。由于项目总体规定使用 JPA 作为持久化层的框架。JPA 并并没有 MyBatis 那么灵活，尤其是在多表查询方面。由于我接手这个服务涉及到多表查询所以需要查询 JPA 多表查询的相关资料！</p>
-</blockquote>
 <a id="more"></a>
 
 <p><strong>JPQL 简介</strong></p>
@@ -39,9 +20,19 @@
 <p>总结：<strong>JPQL是一种面向对象的SQL语法结构</strong></p>
 <p>talk is cheap，show you the code</p>
 <p>xxxRepository.java</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">xxxRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">xxxEntity</span>,<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(value = <span class="string">"select new com.xxx.platform.xxx.dto.response.xxxRespDTO("</span></span><br><span class="line">                    + <span class="string">"p.id,"</span></span><br><span class="line">                    + <span class="string">"p.featureData,"</span></span><br><span class="line">                    + <span class="string">"b.status,"</span></span><br><span class="line">                    + <span class="string">"b.id,"</span></span><br><span class="line">                    + <span class="string">"b.customerId,"</span></span><br><span class="line">                    + <span class="string">"b.name,"</span></span><br><span class="line">                    + <span class="string">"b.telephone,"</span></span><br><span class="line">                    + <span class="string">"b.gender,"</span></span><br><span class="line">                    + <span class="string">"b.deviceId,"</span></span><br><span class="line">                    + <span class="string">"b.dateCreated,"</span></span><br><span class="line">                    + <span class="string">"b.dateLastUpdated"</span></span><br><span class="line">                    + <span class="string">")"</span></span><br><span class="line">            + <span class="string">" FROM xxxEntity as p "</span> <span class="comment">//对象A</span></span><br><span class="line">            + <span class="string">" LEFT JOIN xxxEntity as b ON p.id = b.faceId "</span> <span class="comment">//对象B</span></span><br><span class="line">            + <span class="string">" WHERE p.status = 1 "</span></span><br><span class="line">    )</span><br><span class="line">    <span class="function">List&lt;xxxRespDTO&gt; <span class="title">fetchCompareData</span><span class="params">()</span> </span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>todo 未完成</p>
+<p>xxxEntity.java(对象A)</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"t_表名"</span>,schema = <span class="string">"xxx_platform_face"</span>)</span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Proxy</span>(lazy = <span class="keyword">false</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxxEntity</span> <span class="keyword">extends</span> <span class="title">IdEntity</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//数据库字段</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对象B</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"t_表名"</span>, schema = <span class="string">"xxx_platform_face"</span>)</span><br><span class="line"><span class="meta">@Proxy</span>(lazy = <span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">xxxEntity</span> <span class="keyword">extends</span> <span class="title">IdEntity</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//数据库字段</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>xxxService.java</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;xxxRespDTO&gt; objects = xxxRepository.fetchCompareData();</span><br></pre></td></tr></table></figure>
+
+<p>*<em>结果: *</em></p>
+<p><img src="https://img-blog.csdnimg.cn/20200702085406789.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="276"></p>
 ]]></content>
       <categories>
         <category>Spring</category>
