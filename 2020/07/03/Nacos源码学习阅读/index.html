@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="raft协议详解 Spring Cloud Alibaba Nacos（源码篇） Nacos源码解析之配置中心原理 微服务系列（二）(5) Nacos源码分析 一文搞懂Raft算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nacos源码学习阅读">
+<meta property="og:url" content="https://01lv.github.io/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:site_name" content="追风的少年">
+<meta property="og:description" content="raft协议详解 Spring Cloud Alibaba Nacos（源码篇） Nacos源码解析之配置中心原理 微服务系列（二）(5) Nacos源码分析 一文搞懂Raft算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="d:%5Ctypora%5Cimg%5C1.png">
+<meta property="og:image" content="c:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C280.png">
+<meta property="article:published_time" content="2020-07-03T12:29:28.057Z">
+<meta property="article:modified_time" content="2020-07-03T12:34:58.043Z">
+<meta property="article:author" content="mikelv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:%5Ctypora%5Cimg%5C1.png">
+
+<link rel="canonical" href="https://01lv.github.io/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Nacos源码学习阅读 | 追风的少年</title>
+  
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">追风的少年</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">just have a little faith</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="追风的少年">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nacos源码学习阅读
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-03 20:29:28 / 修改时间：20:34:58" itemprop="dateCreated datePublished" datetime="2020-07-03T20:29:28+08:00">2020-07-03</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://www.jianshu.com/p/3c6a4fd6a7cc" target="_blank" rel="noopener">raft协议详解</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/70478036" target="_blank" rel="noopener">Spring Cloud Alibaba Nacos（源码篇）</a></p>
+<p><a href="http://www.spring4all.com/article/6819" target="_blank" rel="noopener">Nacos源码解析之配置中心原理</a></p>
+<p><a href="https://blog.csdn.net/xc1158840657/article/details/90712631" target="_blank" rel="noopener">微服务系列（二）(5) Nacos源码分析</a></p>
+<p><a href="https://www.cnblogs.com/xybaby/p/10124083.html" target="_blank" rel="noopener">一文搞懂Raft算法</a></p>
+<a id="more"></a>
+
+<p>从 github 上 clone 下来的 nacos 源码目录结构如下所示：</p>
+<p>根据网上的技术文章发现核心内容集中在 <code>nacos-console</code> , <code>nacos-naming</code> , <code>nacos-config</code> (待考证)</p>
+<p><strong>重点</strong>：在 <code>nacos-example</code> 里面有主要业务的调用入口</p>
+<h1><span id="配置服务">配置服务</span></h1><p>先从一个工厂类说起：<code>com.alibaba.nacos.api.NacosFactory</code></p>
+<p>里面的静态方法用于创建 <code>ConfigService</code> 和 <code>NamingService</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ConfigService <span class="title">createConfigService</span><span class="params">(Properties properties)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class&lt;?&gt; driverImplClass = Class.forName(<span class="string">"com.alibaba.nacos.client.config.NacosConfigService"</span>);</span><br><span class="line">        Constructor constructor = driverImplClass.getConstructor(Properties<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        ConfigService vendorImpl = (ConfigService)constructor.newInstance(properties);</span><br><span class="line">        <span class="keyword">return</span> vendorImpl;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable var4) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NacosException(-<span class="number">400</span>, var4);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>没有什么复杂的逻辑，使用的是基本的反射原理。构造参数传入了properties，这些属性可以通过bootstrap.yml中指定，对应的是NacosConfigProperties。</p>
+<p>NacosConfigService.class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NacosConfigService</span> <span class="keyword">implements</span> <span class="title">ConfigService</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LogUtils.logger(NacosConfigService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> POST_TIMEOUT = <span class="number">3000L</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String EMPTY = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">private</span> HttpAgent agent;</span><br><span class="line">    <span class="keyword">private</span> ClientWorker worker;</span><br><span class="line">    <span class="keyword">private</span> String namespace;</span><br><span class="line">    <span class="keyword">private</span> String encode;</span><br><span class="line">    <span class="keyword">private</span> ConfigFilterChainManager configFilterChainManager = <span class="keyword">new</span> ConfigFilterChainManager();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NacosConfigService</span><span class="params">(Properties properties)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        String encodeTmp = properties.getProperty(<span class="string">"encode"</span>);</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(encodeTmp)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.encode = <span class="string">"UTF-8"</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.encode = encodeTmp.trim();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.initNamespace(properties);</span><br><span class="line">        <span class="keyword">this</span>.agent = <span class="keyword">new</span> MetricsHttpAgent(<span class="keyword">new</span> ServerHttpAgent(properties));</span><br><span class="line">        <span class="keyword">this</span>.agent.start();</span><br><span class="line">        <span class="keyword">this</span>.worker = <span class="keyword">new</span> ClientWorker(<span class="keyword">this</span>.agent, <span class="keyword">this</span>.configFilterChainManager, properties);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initNamespace</span><span class="params">(Properties properties)</span> </span>&#123;</span><br><span class="line">        String namespaceTmp = <span class="keyword">null</span>;</span><br><span class="line">        String isUseCloudNamespaceParsing = properties.getProperty(<span class="string">"isUseCloudNamespaceParsing"</span>, System.getProperty(<span class="string">"nacos.use.cloud.namespace.parsing"</span>, String.valueOf(<span class="keyword">true</span>)));</span><br><span class="line">        <span class="keyword">if</span> (Boolean.valueOf(isUseCloudNamespaceParsing)) &#123;</span><br><span class="line">            namespaceTmp = TemplateUtils.stringBlankAndThenExecute(namespaceTmp, <span class="keyword">new</span> Callable&lt;String&gt;() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> TenantUtil.getUserTenantForAcm();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            namespaceTmp = TemplateUtils.stringBlankAndThenExecute(namespaceTmp, <span class="keyword">new</span> Callable&lt;String&gt;() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    String namespace = System.getenv(<span class="string">"ALIBABA_ALIWARE_NAMESPACE"</span>);</span><br><span class="line">                    <span class="keyword">return</span> StringUtils.isNotBlank(namespace) ? namespace : <span class="string">""</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isBlank(namespaceTmp)) &#123;</span><br><span class="line">            namespaceTmp = properties.getProperty(<span class="string">"namespace"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.namespace = StringUtils.isNotBlank(namespaceTmp) ? namespaceTmp.trim() : <span class="string">""</span>;</span><br><span class="line">        properties.put(<span class="string">"namespace"</span>, <span class="keyword">this</span>.namespace);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getConfig</span><span class="params">(String dataId, String group, <span class="keyword">long</span> timeoutMs)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.getConfigInner(<span class="keyword">this</span>.namespace, dataId, group, timeoutMs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getConfigAndSignListener</span><span class="params">(String dataId, String group, <span class="keyword">long</span> timeoutMs, Listener listener)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        String content = <span class="keyword">this</span>.getConfig(dataId, group, timeoutMs);</span><br><span class="line">        <span class="keyword">this</span>.worker.addTenantListenersWithContent(dataId, group, content, Arrays.asList(listener));</span><br><span class="line">        <span class="keyword">return</span> content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addListener</span><span class="params">(String dataId, String group, Listener listener)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.worker.addTenantListeners(dataId, group, Arrays.asList(listener));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">publishConfig</span><span class="params">(String dataId, String group, String content)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.publishConfigInner(<span class="keyword">this</span>.namespace, dataId, group, (String)<span class="keyword">null</span>, (String)<span class="keyword">null</span>, (String)<span class="keyword">null</span>, content);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeConfig</span><span class="params">(String dataId, String group)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.removeConfigInner(<span class="keyword">this</span>.namespace, dataId, group, (String)<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeListener</span><span class="params">(String dataId, String group, Listener listener)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.worker.removeTenantListener(dataId, group, listener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">getConfigInner</span><span class="params">(String tenant, String dataId, String group, <span class="keyword">long</span> timeoutMs)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        group = <span class="keyword">this</span>.null2defaultGroup(group);</span><br><span class="line">        ParamUtils.checkKeyParam(dataId, group);</span><br><span class="line">        ConfigResponse cr = <span class="keyword">new</span> ConfigResponse();</span><br><span class="line">        cr.setDataId(dataId);</span><br><span class="line">        cr.setTenant(tenant);</span><br><span class="line">        cr.setGroup(group);</span><br><span class="line">        String content = LocalConfigInfoProcessor.getFailover(<span class="keyword">this</span>.agent.getName(), dataId, group, tenant);</span><br><span class="line">        <span class="keyword">if</span> (content != <span class="keyword">null</span>) &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [get-config] get failover ok, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, config=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, ContentUtils.truncateContent(content)&#125;);</span><br><span class="line">            cr.setContent(content);</span><br><span class="line">            <span class="keyword">this</span>.configFilterChainManager.doFilter((IConfigRequest)<span class="keyword">null</span>, cr);</span><br><span class="line">            content = cr.getContent();</span><br><span class="line">            <span class="keyword">return</span> content;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                content = <span class="keyword">this</span>.worker.getServerConfig(dataId, group, tenant, timeoutMs);</span><br><span class="line">                cr.setContent(content);</span><br><span class="line">                <span class="keyword">this</span>.configFilterChainManager.doFilter((IConfigRequest)<span class="keyword">null</span>, cr);</span><br><span class="line">                content = cr.getContent();</span><br><span class="line">                <span class="keyword">return</span> content;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NacosException var9) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="number">403</span> == var9.getErrCode()) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> var9;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    LOGGER.warn(<span class="string">"[&#123;&#125;] [get-config] get from server error, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, var9.toString()&#125;);</span><br><span class="line">                    LOGGER.warn(<span class="string">"[&#123;&#125;] [get-config] get snapshot ok, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, config=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, ContentUtils.truncateContent(content)&#125;);</span><br><span class="line">                    content = LocalConfigInfoProcessor.getSnapshot(<span class="keyword">this</span>.agent.getName(), dataId, group, tenant);</span><br><span class="line">                    cr.setContent(content);</span><br><span class="line">                    <span class="keyword">this</span>.configFilterChainManager.doFilter((IConfigRequest)<span class="keyword">null</span>, cr);</span><br><span class="line">                    content = cr.getContent();</span><br><span class="line">                    <span class="keyword">return</span> content;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">null2defaultGroup</span><span class="params">(String group)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span> == group ? <span class="string">"DEFAULT_GROUP"</span> : group.trim();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">removeConfigInner</span><span class="params">(String tenant, String dataId, String group, String tag)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        group = <span class="keyword">this</span>.null2defaultGroup(group);</span><br><span class="line">        ParamUtils.checkKeyParam(dataId, group);</span><br><span class="line">        String url = <span class="string">"/v1/cs/configs"</span>;</span><br><span class="line">        List&lt;String&gt; params = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        params.add(<span class="string">"dataId"</span>);</span><br><span class="line">        params.add(dataId);</span><br><span class="line">        params.add(<span class="string">"group"</span>);</span><br><span class="line">        params.add(group);</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(tenant)) &#123;</span><br><span class="line">            params.add(<span class="string">"tenant"</span>);</span><br><span class="line">            params.add(tenant);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(tag)) &#123;</span><br><span class="line">            params.add(<span class="string">"tag"</span>);</span><br><span class="line">            params.add(tag);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        HttpResult result = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            result = <span class="keyword">this</span>.agent.httpDelete(url, (List)<span class="keyword">null</span>, params, <span class="keyword">this</span>.encode, <span class="number">3000L</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException var9) &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[remove] error, "</span> + dataId + <span class="string">", "</span> + group + <span class="string">", "</span> + tenant + <span class="string">", msg: "</span> + var9.toString());</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">200</span> == result.code) &#123;</span><br><span class="line">            LOGGER.info(<span class="string">"[&#123;&#125;] [remove] ok, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">403</span> == result.code) &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [remove] error, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, code=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, result.code, result.content&#125;);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NacosException(result.code, result.content);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [remove] error, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, code=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, result.code, result.content&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">publishConfigInner</span><span class="params">(String tenant, String dataId, String group, String tag, String appName, String betaIps, String content)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">        group = <span class="keyword">this</span>.null2defaultGroup(group);</span><br><span class="line">        ParamUtils.checkParam(dataId, group, content);</span><br><span class="line">        ConfigRequest cr = <span class="keyword">new</span> ConfigRequest();</span><br><span class="line">        cr.setDataId(dataId);</span><br><span class="line">        cr.setTenant(tenant);</span><br><span class="line">        cr.setGroup(group);</span><br><span class="line">        cr.setContent(content);</span><br><span class="line">        <span class="keyword">this</span>.configFilterChainManager.doFilter(cr, (IConfigResponse)<span class="keyword">null</span>);</span><br><span class="line">        content = cr.getContent();</span><br><span class="line">        String url = <span class="string">"/v1/cs/configs"</span>;</span><br><span class="line">        List&lt;String&gt; params = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        params.add(<span class="string">"dataId"</span>);</span><br><span class="line">        params.add(dataId);</span><br><span class="line">        params.add(<span class="string">"group"</span>);</span><br><span class="line">        params.add(group);</span><br><span class="line">        params.add(<span class="string">"content"</span>);</span><br><span class="line">        params.add(content);</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(tenant)) &#123;</span><br><span class="line">            params.add(<span class="string">"tenant"</span>);</span><br><span class="line">            params.add(tenant);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(appName)) &#123;</span><br><span class="line">            params.add(<span class="string">"appName"</span>);</span><br><span class="line">            params.add(appName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(tag)) &#123;</span><br><span class="line">            params.add(<span class="string">"tag"</span>);</span><br><span class="line">            params.add(tag);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; headers = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotEmpty(betaIps)) &#123;</span><br><span class="line">            headers.add(<span class="string">"betaIps"</span>);</span><br><span class="line">            headers.add(betaIps);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        HttpResult result = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            result = <span class="keyword">this</span>.agent.httpPost(url, headers, params, <span class="keyword">this</span>.encode, <span class="number">3000L</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException var14) &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [publish-single] exception, dataId=&#123;&#125;, group=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, var14.toString()&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="number">200</span> == result.code) &#123;</span><br><span class="line">            LOGGER.info(<span class="string">"[&#123;&#125;] [publish-single] ok, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, config=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, ContentUtils.truncateContent(content)&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">403</span> == result.code) &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [publish-single] error, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, code=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, result.code, result.content&#125;);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NacosException(result.code, result.content);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            LOGGER.warn(<span class="string">"[&#123;&#125;] [publish-single] error, dataId=&#123;&#125;, group=&#123;&#125;, tenant=&#123;&#125;, code=&#123;&#125;, msg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.agent.getName(), dataId, group, tenant, result.code, result.content&#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getServerStatus</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.worker.isHealthServer() ? <span class="string">"UP"</span> : <span class="string">"DOWN"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我之前的文章有监听nacos上配置文件内容，有变化就做相应的处理。现在来看下 Nacos 是如何实现这个功能。</p>
+<p>有这样一段代码实现了监听nacos的配置文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configService.addListener(String dataId, String group, Listener listener)</span><br></pre></td></tr></table></figure>
+
+<p>这段代码最终会调用 <code>com.alibaba.nacos.client.config.ClientWorker</code> 中的 <code>addTenantListeners(String dataId, String group, List&lt;? extends Listener&gt; listeners)</code></p>
+<p>ClientWorker.class#addListener</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTenantListeners</span><span class="params">(String dataId, String group, List&lt;? extends Listener&gt; listeners)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">    <span class="comment">//group 默认使用 DEFAULT_GROUP</span></span><br><span class="line">    group = <span class="keyword">this</span>.null2defaultGroup(group);</span><br><span class="line">    <span class="comment">//获取租户</span></span><br><span class="line">    String tenant = <span class="keyword">this</span>.agent.getTenant();</span><br><span class="line">    CacheData cache = <span class="keyword">this</span>.addCacheDataIfAbsent(dataId, group, tenant);</span><br><span class="line">    Iterator var6 = listeners.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(var6.hasNext()) &#123;</span><br><span class="line">        Listener listener = (Listener)var6.next();</span><br><span class="line">        cache.addListener(listener);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法分为两个部分，首先根据 dataId，group 和当前的场景获取一个 CacheData 对象，然后将当前要添加的 listener 对象添加到 CacheData 中去。</p>
+<p><img src="D:%5Ctypora%5Cimg%5C1.png" alt="1"></p>
+<p>也就是说 listener 最终是被这里的 CacheData 所持有了，那 listener 的回调方法 receiveConfigInfo 就应该是在 CacheData 中触发的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheData</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LogUtils.logger(CacheData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConfigFilterChainManager configFilterChainManager;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String dataId;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String group;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String tenant;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CopyOnWriteArrayList&lt;ManagerListenerWrap&gt; listeners;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String md5;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isUseLocalConfig = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> localConfigLastModified;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String content;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> taskId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isInitializing = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到除了 dataId，group，content，taskId 这些跟配置相关的属性，还有两个比较重要的属性：listeners、md5。</p>
+<p>listeners 是该 CacheData 所关联的所有 listener，不过不是保存的原始的 Listener 对象，而是包装后的 ManagerListenerWrap 对象，该对象除了持有 Listener 对象，还持有了一个 lastCallMd5 属性。</p>
+<p>另外一个属性 md5 就是根据当前对象的 content 计算出来的 md5 值。</p>
+<p>那什么时候触发回调方法 receiveConfigInfo 呢？</p>
+<p>在 ClientWorker 中的定时任务，启动一个长轮询的任务：<strong>LongPollingRunnable</strong>，该任务多次执行了 <code>cacheData.checkListenerMd5()</code> 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">checkListenerMd5</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Iterator var1 = <span class="keyword">this</span>.listeners.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(var1.hasNext()) &#123;</span><br><span class="line">        ManagerListenerWrap wrap = (ManagerListenerWrap)var1.next();</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.md5.equals(wrap.lastCallMd5)) &#123;</span><br><span class="line">            <span class="keyword">this</span>.safeNotifyListener(<span class="keyword">this</span>.dataId, <span class="keyword">this</span>.group, <span class="keyword">this</span>.content, <span class="keyword">this</span>.md5, wrap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该方法会检查 <code>CacheData</code> 当前的 md5 与 CacheData 持有的所有 listener 中保存的 md5 的值是否一致。如果不一致就执行一个安全监听器的通知方法：<code>safeNotifyListener</code> 。</p>
+<p>通知什么呢？我们可以大胆的猜一下，应该是通知 Listener 的使用者(即 listener 的调用方)，该 Listener 所关注的配置信息已经发生改变了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">safeNotifyListener</span><span class="params">(<span class="keyword">final</span> String dataId, <span class="keyword">final</span> String group, <span class="keyword">final</span> String content, <span class="keyword">final</span> String md5, <span class="keyword">final</span> ManagerListenerWrap listenerWrap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Listener listener = listenerWrap.listener;</span><br><span class="line">    Runnable job = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            ClassLoader myClassLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">            ClassLoader appClassLoader = listener.getClass().getClassLoader();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (listener <span class="keyword">instanceof</span> AbstractSharedListener) &#123;</span><br><span class="line">                    AbstractSharedListener adapter = (AbstractSharedListener)listener;</span><br><span class="line">                    adapter.fillContext(dataId, group);</span><br><span class="line">                    CacheData.LOGGER.info(<span class="string">"[&#123;&#125;] [notify-context] dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;CacheData.<span class="keyword">this</span>.name, dataId, group, md5&#125;);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                Thread.currentThread().setContextClassLoader(appClassLoader);</span><br><span class="line">                ConfigResponse cr = <span class="keyword">new</span> ConfigResponse();</span><br><span class="line">                cr.setDataId(dataId);</span><br><span class="line">                cr.setGroup(group);</span><br><span class="line">                cr.setContent(content);</span><br><span class="line">                CacheData.<span class="keyword">this</span>.configFilterChainManager.doFilter((IConfigRequest)<span class="keyword">null</span>, cr);</span><br><span class="line">                <span class="comment">//获取nacos上的最新配置内容</span></span><br><span class="line">                <span class="comment">//=== 重点关注start ===</span></span><br><span class="line">                String contentTmp = cr.getContent();</span><br><span class="line">                listener.receiveConfigInfo(contentTmp);</span><br><span class="line">                listenerWrap.lastCallMd5 = md5;</span><br><span class="line">                <span class="comment">//=== 重点关注end ===</span></span><br><span class="line">                CacheData.LOGGER.info(<span class="string">"[&#123;&#125;] [notify-ok] dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;, listener=&#123;&#125; "</span>, <span class="keyword">new</span> Object[]&#123;CacheData.<span class="keyword">this</span>.name, dataId, group, md5, listener&#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (NacosException var9) &#123;</span><br><span class="line">                CacheData.LOGGER.error(<span class="string">"[&#123;&#125;] [notify-error] dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;, listener=&#123;&#125; errCode=&#123;&#125; errMsg=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;CacheData.<span class="keyword">this</span>.name, dataId, group, md5, listener, var9.getErrCode(), var9.getErrMsg()&#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable var10) &#123;</span><br><span class="line">                CacheData.LOGGER.error(<span class="string">"[&#123;&#125;] [notify-error] dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;, listener=&#123;&#125; tx=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;CacheData.<span class="keyword">this</span>.name, dataId, group, md5, listener, var10.getCause()&#125;);</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                Thread.currentThread().setContextClassLoader(myClassLoader);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">long</span> startNotify = System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> != listener.getExecutor()) &#123;</span><br><span class="line">            listener.getExecutor().execute(job);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            job.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable var12) &#123;</span><br><span class="line">        LOGGER.error(<span class="string">"[&#123;&#125;] [notify-error] dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;, listener=&#123;&#125; throwable=&#123;&#125;"</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.name, dataId, group, md5, listener, var12.getCause()&#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> finishNotify = System.currentTimeMillis();</span><br><span class="line">    LOGGER.info(<span class="string">"[&#123;&#125;] [notify-listener] time cost=&#123;&#125;ms in ClientWorker, dataId=&#123;&#125;, group=&#123;&#125;, md5=&#123;&#125;, listener=&#123;&#125; "</span>, <span class="keyword">new</span> Object[]&#123;<span class="keyword">this</span>.name, finishNotify - startNotify, dataId, group, md5, listener&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重点关注以上代码中注释的三行：</p>
+<ol>
+<li>获取最新的配置信息</li>
+<li>调用 Listener 的回调方法</li>
+<li>将最新的配置信息作为参数传入</li>
+</ol>
+<p>这样 Listener 的使用者就能接收到变更后的配置信息了，最后更新 ListenerWrap 的 md5 值。</p>
+<p>todo MD5 何时变更</p>
+<h1><span id="扩展">扩展</span></h1><p>程序启动打印的日志可以看到 <code>cacheData</code> 和 <code>ClientWorker</code></p>
+<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C280.png" alt="280"></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2020/07/03/Nacos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E9%98%85%E8%AF%BB/" title="Nacos源码学习阅读">https://01lv.github.io/2020/07/03/Nacos源码学习阅读/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/01/JPA%E7%BB%93%E5%90%88JPQL%E5%AE%9E%E7%8E%B0%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/" rel="prev" title="JPA结合JPQL实现多表查询">
+      <i class="fa fa-chevron-left"></i> JPA结合JPQL实现多表查询
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/03/%E7%BA%BF%E4%B8%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7Arthas%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="next" title="线上诊断工具Arthas的使用">
+      线上诊断工具Arthas的使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">配置服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">扩展</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mikelv"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mikelv</p>
+  <div class="site-description" itemprop="description">放弃不难，但坚持一定很酷</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">162</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/01Lv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;01Lv" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yisheng.mikelv@foxmail.com" title="E-Mail → mailto:yisheng.mikelv@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mikelv</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">537k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:08</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'vUOBlgy4bWczaSuWqPWA4Orb-gzGzoHsz',
+      appKey     : 'c6DxvrOXBybBJ2w0DCsMGKeM',
+      placeholder: "皮一下也很开心哦!",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
