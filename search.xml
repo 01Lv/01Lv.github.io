@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Sentinel简单入门</title>
+    <url>/2020/07/08/Sentinel%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<p><a href="http://blog.didispace.com/tags/Sentinel/" target="_blank" rel="noopener">sentinel基础教程</a></p>
+<p><a href="http://www.iocoder.cn/Spring-Boot/Sentinel/" target="_blank" rel="noopener">芋道 Spring Boot 服务容错 Sentinel 入门</a></p>
+<blockquote>
+<p>发现 sentinel 可以很好的协助 gateway 实现防止恶意访问接口的问题</p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>Sentinel 是面向分布式服务架构的高可用流量防护组件，主要以流量为切入点，从限流、流量整形、熔断降级、系统负载保护、热点防护等多个维度来帮助开发者保障微服务的稳定性。</p>
+<p>Hystrix 已经不再维护了。</p>
+</blockquote>
+<h1><span id="实例">实例</span></h1><p>本例子是基于 SpringCloud 实现的</p>
+<p>&gt;&gt; <strong>依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--整合spring cloud--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-cloud.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--引入spring cloud alibaba--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-alibaba-dependencies<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.2.0.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">type</span>&gt;</span>pom<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>import<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>&gt;&gt; <strong>实现</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/demo"</span>)</span><br><span class="line"><span class="meta">@SentinelResource</span>(value = <span class="string">"demo"</span>,blockHandler = <span class="string">"exceptionHandler"</span>,fallback = <span class="string">"fallbackHandler"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">demo</span><span class="params">(String str)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    Thread.sleep(<span class="number">2000000L</span>);</span><br><span class="line">    <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//BlockHandler 处理函数，参数最后多一个 BlockException，其余与原函数一致</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">exceptionHandler</span><span class="params">(String str,BlockException ex)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"访问过于频繁"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//fallback 处理函数，参数最后多一个 BlockException，其余与原函数一致</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">fallbackHandler</span><span class="params">(String str,BlockException ex)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"请求长时间无法响应"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解释说明:</p>
+<p><code>@SentinelResouce</code> 用于定义资源，并提供可选的异常处理和 fallback 配置项。<code>@SentinelResouce</code> 常用注解包含以下属性：</p>
+<ul>
+<li><strong>value</strong>: 资源名称，必填</li>
+<li><strong>blockHandler</strong> ，<strong>blockHandlerClass</strong> :<ul>
+<li><code>blockHandler</code>对应处理 <code>BlockException</code> 的函数名称，可选项。</li>
+<li>blockHandler 函数访问范围需要是 <code>public</code></li>
+<li>返回类型需要与原方法相匹配，参数类型需要和原方法相匹配并且最后加一个额外的参数，类型为 <code>BlockException</code>。</li>
+<li>blockHandler 函数默认需要和原方法在同一个类中。若希望使用其他类的函数，则可以指定 <code>blockHandlerClass</code> 为对应的类的 <code>Class</code> 对象，注意对应的函数必需为 static 函数，否则无法解析。</li>
+</ul>
+</li>
+<li><strong>fallback</strong> ：fallback 函数名称，可选项，用于在抛出异常的时候提供 fallback 处理逻辑。</li>
+</ul>
+<p>&gt;&gt; <strong>配置</strong></p>
+<p>簇点链路</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C281.png" alt="281"></p>
+<p>流控规则</p>
+<p>在这里设置了 qps = 1，即每秒中只允许 1 个请求</p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C282.png" alt="282"></p>
+<p>&gt;&gt; <strong>结果</strong></p>
+<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C283.png" alt="283"></p>
+<p>todo ：fallback 实现</p>
+]]></content>
+      <categories>
+        <category>Sentinel</category>
+      </categories>
+      <tags>
+        <tag>Sentinel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>线上诊断工具Arthas的使用</title>
     <url>/2020/07/03/%E7%BA%BF%E4%B8%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7Arthas%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p><a href="https://alibaba.github.io/arthas/index.html" target="_blank" rel="noopener">arthas官网</a></p>
