@@ -19,6 +19,7 @@
 <p>&gt;&gt; <strong>下载vagrantbox</strong></p>
 <p>vagrantbox 官网：<a href="https://app.vagrantup.com/boxes/search" target="_blank" rel="noopener">https://app.vagrantup.com/boxes/search</a></p>
 <p>第三方：<a href="http://www.vagrantbox.es/" target="_blank" rel="noopener">http://www.vagrantbox.es/</a></p>
+<p>查了下百度，这个地址下 vagrant box 比较快：<a href="https://c4ys.com/archives/1230" target="_blank" rel="noopener">https://c4ys.com/archives/1230</a></p>
 <p>我是用自己阿里云对象存储的 vagrantbox</p>
 <p>&gt;&gt; <strong>部署</strong></p>
 <ol>
