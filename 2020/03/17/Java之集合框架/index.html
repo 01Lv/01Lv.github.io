@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="转载自： 参考： Java - 集合框架完全解析 详解Java集合框架，让你全面掌握！ 在工作中常用到的集合有哪些？ 在 Java2 之前，Java 是没有完整的集合框架。它只有一些简单的可以自扩展的容器类，比如 Vector，Stack，Hashtable 等。但由于效率的原因遭受诟病，于是不得不进行改革。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java之集合框架">
+<meta property="og:url" content="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="EasonLv&#39;s Zone">
+<meta property="og:description" content="转载自： 参考： Java - 集合框架完全解析 详解Java集合框架，让你全面掌握！ 在工作中常用到的集合有哪些？ 在 Java2 之前，Java 是没有完整的集合框架。它只有一些简单的可以自扩展的容器类，比如 Vector，Stack，Hashtable 等。但由于效率的原因遭受诟病，于是不得不进行改革。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/25.png">
+<meta property="og:image" content="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/26.png">
+<meta property="article:published_time" content="2020-03-17T05:09:41.000Z">
+<meta property="article:modified_time" content="2020-03-30T05:34:14.863Z">
+<meta property="article:author" content="mikelv">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="集合">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/25.png">
+
+<link rel="canonical" href="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Java之集合框架 | EasonLv's Zone</title>
+  
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">EasonLv's Zone</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">just have a little faith</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EasonLv's Zone">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java之集合框架
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-17 13:09:41" itemprop="dateCreated datePublished" datetime="2020-03-17T13:09:41+08:00">2020-03-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-30 13:34:14" itemprop="dateModified" datetime="2020-03-30T13:34:14+08:00">2020-03-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>转载自：</p>
+<p>参考：</p>
+<p><a href="https://www.jianshu.com/p/63e76826e852" target="_blank" rel="noopener">Java - 集合框架完全解析</a></p>
+<p><a href="https://juejin.im/post/5da41417f265da5ba532b21c" target="_blank" rel="noopener">详解Java集合框架，让你全面掌握！</a></p>
+<p><a href="https://mp.weixin.qq.com/s/IwwQvK5O9KMvEXNcmy8PFw" target="_blank" rel="noopener">在工作中常用到的集合有哪些？</a></p>
+<p>在 Java2 之前，Java 是没有完整的集合框架。它只有一些简单的可以自扩展的容器类，比如 Vector，Stack，Hashtable 等。但由于效率的原因遭受诟病，于是不得不进行改革。</p>
+<a id="more"></a>
+<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/25.png" alt="25.png"></p>
+<p><img src="https://hexo-images-mikelv.oss-cn-shenzhen.aliyuncs.com/26.png" alt="26.png"></p>
+<p>从上面的集合框架可以看到，</p>
+<p>Java集合框架主要包括两种类型的容器，一种是集合(Collection)，存储一个元素集合，</p>
+<p>另一种是图(Map)，存储 key/value 映射。</p>
+<p>Collection接口：</p>
+<ul>
+<li>List</li>
+<li>Set</li>
+<li>Queue</li>
+</ul>
+<p><em><strong>List</strong></em> 代表了 <strong>有序</strong>, <strong>可重复</strong> 集合，可直接根据元素的索引来访问；</p>
+<p><em><strong>Set</strong></em> 代表了 <strong>无序</strong>, <strong>不可重复</strong> 集合，只能根据元素本身来访问；</p>
+<p><em><strong>Queue</strong></em> 是队列集合</p>
+<p><em><strong>Map</strong></em> 代表的是 <strong>存储key/value</strong> 的集合，可根据元素的 key 来访问 value。</p>
+<h1><span id="set-集合">Set 集合</span></h1>
+<blockquote>
+<p>如果需要保证集合的元素是唯一的，就应该用到 Set 集合</p>
+</blockquote>
+<p>Set集合与Collection的方法相同，由于Set集合不允许存储相同的元素，所以如果把两个相同元素添加到同一个Set集合，则添加操作失败，新元素不会被加入，add()方法返回false。</p>
+<p>比如说：现在要发送一批消息给用户，我们为了减少「一次发送重复的内容给用户」这样的错误，我们就用Set集合来保存用户的<code>userId/phone</code></p>
+<h2><span id="1hashset">1.<strong>HashSet</strong></span></h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Set&lt;String&gt; set=<span class="keyword">new</span> HashSet();</span><br><span class="line">   set.add(<span class="string">"hello world"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   set.add(<span class="string">"hello 冰湖一角"</span>);</span><br><span class="line">   System.out.println(<span class="string">"集合中元素个数："</span></span><br><span class="line">        +set.size());</span><br><span class="line">   System.out.println(<span class="string">"集合中元素为："</span></span><br><span class="line">       +set.toString());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由源码可知 <em><strong>HashSet</strong></em> 的底层是通过 <em><strong>HashMap</strong></em> 实现的</p>
+<p>查看 <strong>add()</strong> 的源码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//调用 HashMap 的 put()</span></span><br><span class="line">    <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>put()</strong> 的源码主要是通过 <u>hash值</u> 以及 <u>equals()</u> 方法来避免重复的添加</p>
+<h2><span id="2linkedhashset">2.<strong>LinkedHashSet</strong></span></h2>
+<h2><span id="3treeset">3.<strong>TreeSet</strong></span></h2>
+<p>TreeSet 是可以排序的 Set，一般我们需要有序，从数据库拉出来的数据就是有序的，可能往往写<code>order by id desc</code>比较多。</p>
+<h2><span id="4enumset">4.<strong>EnumSet</strong></span></h2>
+<h1><span id="queue集合">Queue集合</span></h1>
+<p>在 <u>生产者和消费者模式</u> 中, 最简单的方式就是用 <em><strong>阻塞队列</strong></em> 去写</p>
+<h2><span id="示例">示例</span></h2>
+<h3><span id="生产者">生产者</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="keyword">import</span> java.util.Vector;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.atomic.AtomicInteger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Producer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// true---&gt;生产者一直执行，false---&gt;停掉生产者</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isRunning = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 公共资源</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Vector sharedQueue;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 公共资源的最大数量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> SIZE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生产数据</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AtomicInteger count = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Producer</span><span class="params">(Vector sharedQueue, <span class="keyword">int</span> SIZE)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sharedQueue = sharedQueue;</span><br><span class="line">        <span class="keyword">this</span>.SIZE = SIZE;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> data;</span><br><span class="line">        Random r = <span class="keyword">new</span> Random();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"start producer id = "</span> + Thread.currentThread().getId());</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (isRunning) &#123;</span><br><span class="line">                <span class="comment">// 模拟延迟</span></span><br><span class="line">                Thread.sleep(r.nextInt(<span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 当队列满时阻塞等待</span></span><br><span class="line">                <span class="keyword">while</span> (sharedQueue.size() == SIZE) &#123;</span><br><span class="line">                    <span class="keyword">synchronized</span> (sharedQueue) &#123;</span><br><span class="line">                        System.out.println(<span class="string">"Queue is full, producer "</span> + Thread.currentThread().getId()</span><br><span class="line">                                + <span class="string">" is waiting, size："</span> + sharedQueue.size());</span><br><span class="line">                        sharedQueue.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 队列不满时持续创造新元素</span></span><br><span class="line">                <span class="keyword">synchronized</span> (sharedQueue) &#123;</span><br><span class="line">                    <span class="comment">// 生产数据</span></span><br><span class="line">                    data = count.incrementAndGet();</span><br><span class="line">                    sharedQueue.add(data);</span><br><span class="line"></span><br><span class="line">                    System.out.println(<span class="string">"producer create data:"</span> + data + <span class="string">", size："</span> + sharedQueue.size());</span><br><span class="line">                    sharedQueue.notifyAll();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            Thread.currentThread().interrupted();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        isRunning = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="消费者">消费者</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"><span class="keyword">import</span> java.util.Vector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Consumer</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 公共资源</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Vector sharedQueue;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Consumer</span><span class="params">(Vector sharedQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sharedQueue = sharedQueue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Random r = <span class="keyword">new</span> Random();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"start consumer id = "</span> + Thread.currentThread().getId());</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                <span class="comment">// 模拟延迟</span></span><br><span class="line">                Thread.sleep(r.nextInt(<span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 当队列空时阻塞等待</span></span><br><span class="line">                <span class="keyword">while</span> (sharedQueue.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">synchronized</span> (sharedQueue) &#123;</span><br><span class="line">                        System.out.println(<span class="string">"Queue is empty, consumer "</span> + Thread.currentThread().getId()</span><br><span class="line">                                + <span class="string">" is waiting, size："</span> + sharedQueue.size());</span><br><span class="line">                        sharedQueue.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 队列不空时持续消费元素</span></span><br><span class="line">                <span class="keyword">synchronized</span> (sharedQueue) &#123;</span><br><span class="line">                    System.out.println(<span class="string">"consumer consume data："</span> + sharedQueue.remove(<span class="number">0</span>) + <span class="string">", size："</span> + sharedQueue.size());</span><br><span class="line">                    sharedQueue.notifyAll();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="测试">测试</span></h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Vector;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1.构建内存缓冲区</span></span><br><span class="line">        Vector sharedQueue = <span class="keyword">new</span> Vector();</span><br><span class="line">        <span class="keyword">int</span> size = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2.建立线程池和线程</span></span><br><span class="line">        ExecutorService service = Executors.newCachedThreadPool();</span><br><span class="line">        Producer prodThread1 = <span class="keyword">new</span> Producer(sharedQueue, size);</span><br><span class="line">        Producer prodThread2 = <span class="keyword">new</span> Producer(sharedQueue, size);</span><br><span class="line">        Producer prodThread3 = <span class="keyword">new</span> Producer(sharedQueue, size);</span><br><span class="line">        Consumer consThread1 = <span class="keyword">new</span> Consumer(sharedQueue);</span><br><span class="line">        Consumer consThread2 = <span class="keyword">new</span> Consumer(sharedQueue);</span><br><span class="line">        Consumer consThread3 = <span class="keyword">new</span> Consumer(sharedQueue);</span><br><span class="line">        service.execute(prodThread1);</span><br><span class="line">        service.execute(prodThread2);</span><br><span class="line">        service.execute(prodThread3);</span><br><span class="line">        service.execute(consThread1);</span><br><span class="line">        service.execute(consThread2);</span><br><span class="line">        service.execute(consThread3);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.睡一会儿然后尝试停止生产者(结束循环)</span></span><br><span class="line">        Thread.sleep(<span class="number">10</span> * <span class="number">1000</span>);</span><br><span class="line">        prodThread1.stop();</span><br><span class="line">        prodThread2.stop();</span><br><span class="line">        prodThread3.stop();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4.再睡一会儿关闭线程池</span></span><br><span class="line">        Thread.sleep(<span class="number">3000</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5.shutdown()等待任务执行完才中断线程(因为消费者一直在运行的，所以会发现程序无法结束)</span></span><br><span class="line">        service.shutdown();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>真实场景例子：</p>
+<ul>
+<li>运营要发一条推送消息，首先需要去用户画像系统圈选一个人群，填写对应的人群ID和发送时间。</li>
+<li>我通过时间调度，通过RPC拿到人群的信息。遍历HDFS得到这个人群的每个userId</li>
+<li>将遍历的userId放到一个阻塞队列里边去，用多个线程while(true)取阻塞队列的数据</li>
+</ul>
+<p>好处是什么？我在取userId的时候，会有个限制：<strong>要么超出了指定的时间，要么达到BatchSize的值</strong>。这样我就可以<strong>将相同内容的不同userId组成一个Task</strong>。</p>
+<p>本来100个userId是100个Task，现在我将100个userId放在一个Task里边（因为发送的内容是相同的，所以我可以这么干）。这样再往下游传的时候，并发量就降低了很多。</p>
+<h1><span id="list-集合">List 集合</span></h1>
+<blockquote>
+<p>List集合代表一个有序、可重复集合，集合中每个元素都有其对应的顺序索引。List集合默认按照元素的添加顺序设置元素的索引，可以通过索引（类似数组的下标）来访问指定位置的集合元素。</p>
+</blockquote>
+<h2><span id="1arraylist">1.ArrayList</span></h2>
+<p>ArrayList 底层是动态数组，数组遍历速度快。</p>
+<p>在工作中，<strong>遍历的需求比增删多</strong>，即便是增加元素往往也只是从尾部插入元素，而 ArrayList 在尾部插入元素也是 <strong>O(1)</strong>。</p>
+<p>ArrayList 增删没有想象中慢，ArrayList 的增删底层调用的 copyOf() 被优化过，加上现代 CPU 对内存可以块操作，普通大小的 ArrayList 增删比 LinkedList 更快</p>
+<p>如果考虑到线程安全问题，可以参考 CopyOnWriteArrayList，它的思想在 Linux 文件系统有用到。</p>
+<h2><span id="源码">源码</span></h2>
+<p>通过查看源码可以发现 ArrayList 的默认初始容量为 10</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Default initial capacity.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<h2><span id="2linkedlist">2.<strong>LinkedList</strong></span></h2>
+<p>LinkedList 底层是链表，链表增删元素快。</p>
+<p>LinkedList 本身就实现了 Queue 接口。</p>
+<h2><span id="3vector">3.<strong>Vector</strong></span></h2>
+<h2><span id="4stack">4.<strong>Stack</strong></span></h2>
+<h2><span id="5iterator接口和listiterator接口">5.<strong>Iterator接口和ListIterator接口</strong></span></h2>
+<h1><span id="map-集合">Map 集合</span></h1>
+<h2><span id="1hashmap与hashtable">1.<strong>HashMap与Hashtable</strong></span></h2>
+<h2><span id="2linkedhashmap">2.<strong>LinkedHashMap</strong></span></h2>
+<h2><span id="3properties">3.<strong>Properties</strong></span></h2>
+<h2><span id="4treemap">4.<strong>TreeMap</strong></span></h2>
+<h2><span id="5concurrenthashmap">5.ConcurrentHashMap</span></h2>
+<p>ConcurrentHashMap 很多时候用于本地缓存，不想每次都网络请求数据，在本地做缓存。监听数据的变化，如果数据有变动了，就把ConcurrentHashMap对应的值给更新了。</p>
+<h1><span id="线程安全">线程安全</span></h1>
+<p>什么时候考虑线程安全的集合类，那当然是线程不安全的时候咯。那什么时候线程不安全？最常见的是：<strong>操作的对象是有状态的</strong></p>
+<p>因为我们的操作的对象往往是<strong>无状态</strong>的。<strong>没有共享变量被多个线程访问，自然就没有线程安全问题了</strong>。</p>
+<p>SpringMVC是单例的，但SpringMVC都是在方法内操作数据的，每个线程进入方法都会生成栈帧，每个栈帧的数据都是线程独有的，如果不设定共享变量，不会有线程安全问题。</p>
+<p>一句话总结：<strong>只要涉及到多个线程操作一个共享变量的时候，就要考虑是不是要用线程安全的集合类</strong>。</p>
+<p>未完待续…</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2020/03/17/Java%E4%B9%8B%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/" title="Java之集合框架">https://01lv.github.io/2020/03/17/Java之集合框架/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E9%9B%86%E5%90%88/" rel="tag"># 集合</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/17/Java%E4%B9%8Bequals%E7%90%86%E8%A7%A3/" rel="prev" title="Java之equals理解">
+      <i class="fa fa-chevron-left"></i> Java之equals理解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/17/TCP-IP%E5%8D%8F%E8%AE%AE,OSI%E4%B8%83%E5%B1%82%E5%8D%8F%E8%AE%AE/" rel="next" title="TCP/IP协议,OSI七层协议">
+      TCP/IP协议,OSI七层协议 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Set 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">1.HashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">2.LinkedHashSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">3.TreeSet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">4.EnumSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Queue集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">List 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">1.ArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">2.LinkedList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">3.Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">4.Stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">5.Iterator接口和ListIterator接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">Map 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">1.HashMap与Hashtable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">2.LinkedHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">3.Properties</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">4.TreeMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">5.ConcurrentHashMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">线程安全</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mikelv"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mikelv</p>
+  <div class="site-description" itemprop="description">放弃不难，但坚持一定很酷</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/01Lv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;01Lv" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yisheng.mikelv@foxmail.com" title="E-Mail → mailto:yisheng.mikelv@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mikelv</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">542k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:13</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.2
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
