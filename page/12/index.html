@@ -193,6 +193,98 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/23/Docker%E7%BD%91%E7%BB%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EasonLv's Zone">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/23/Docker%E7%BD%91%E7%BB%9C/" class="post-title-link" itemprop="url">Docker网络</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-23 19:42:32 / 修改时间：21:45:14" itemprop="dateCreated datePublished" datetime="2020-03-23T19:42:32+08:00">2020-03-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>参考：</p>
+<p><a href="https://www.cnblogs.com/zuxing/articles/8780661.html" target="_blank" rel="noopener">Docker：网络模式详解</a></p>
+<p>最近在使用 docker 部署 mall 商城的项目，可是在部署的时候碰到了错误，<code>docker: Error response from daemon: Cannot link to /mysql, as it does not belong to the default network</code>，后来发现 mysql 容器运行的网络空间确实不是默认的网络空间。看了网上的资料，发现可通过添加 <code>--net xxx_network_space</code> 来解决问题。可这是治标不治本的方法。因为修改了默认访问空间后，<code>mall-admin</code> 就无法注册到 <code>mall-registry</code> 上了(因为不在同一个网段下了)，最后通过重新运行一个新的 mysql 容器解决问题。</p>
+<p>可是好奇心还是驱使我去了解下它的原理！</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/23/Docker%E7%BD%91%E7%BB%9C/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/23/Java8%E6%8E%A5%E5%8F%A3%E6%96%B0%E7%89%B9%E6%80%A7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1070,108 +1162,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="mikelv">
-      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EasonLv's Zone">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/" class="post-title-link" itemprop="url">JVM知识点集合</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-21 10:50:54" itemprop="dateCreated datePublished" datetime="2020-03-21T10:50:54+08:00">2020-03-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-30 14:07:28" itemprop="dateModified" datetime="2020-03-30T14:07:28+08:00">2020-03-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>27k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>24 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1"><a class="header-anchor" href="#1">¶</a>1</h2>
-<p>JVM 内存可简单分为三个区：</p>
-<ol>
-<li><strong>堆区(heap)</strong>: 用于存放所有对象，是线程共享的</li>
-<li><strong>栈区(stack)</strong>: 用于存放基本数据类型的数据和对象的引用，是线程私有的(分为：虚拟机栈和本地方法栈)</li>
-<li><strong>方法区(method):</strong> 用于存放类信息，常量，静态变量，编译后的字节码等，是线程共享的(也被称为非堆，即None-Heap)</li>
-</ol>
-<p><strong>Java 的垃圾回收器(GC) 主要针对堆区</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/21/JVM%E7%9F%A5%E8%AF%86%E7%82%B9%E9%9B%86%E5%90%88/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1243,20 +1233,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">152</span>
+          <span class="site-state-item-count">153</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">168</span>
+        <span class="site-state-item-count">169</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1303,12 +1293,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">568k</span>
+    <span title="站点总字数">569k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">8:36</span>
+    <span title="站点阅读时长">8:37</span>
 
   <span class="post-meta-divider">|</span>
   <span id="busuanzi_container_site_pv">

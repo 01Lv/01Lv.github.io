@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>图像基础之灰度图像以及二值化图像学习</title>
+    <url>/2021/01/12/%E5%9B%BE%E5%83%8F%E5%9F%BA%E7%A1%80%E4%B9%8B%E7%81%B0%E5%BA%A6%E5%9B%BE%E5%83%8F%E4%BB%A5%E5%8F%8A%E4%BA%8C%E5%80%BC%E5%8C%96%E5%9B%BE%E5%83%8F%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p><a href="https://www.cnblogs.com/-wenli/p/11486877.html" target="_blank" rel="noopener">【数字图像处理】灰度图像二值化</a></p>
+<a id="more"></a>
+<h1><span id="灰度图像">灰度图像</span></h1>
+<p>每副图像的每个像素对应二维空间中一个特定位置，并且有一个或者多个与那个点相关的采样值组成数值。</p>
+<p>灰度图像，也称为灰阶图像，图像中每个像素可以由 0(黑) 到 255(白) 的亮度值(Intensity) 表示。0-255 之间表示不同的灰度级。</p>
+<p>灰度数字图像是每个像素只有一个采样颜色的图像。这类图像通常显示为从最暗黑色到最亮的白色的灰度，尽管理论上这个采样可以任何颜色的不同深浅，甚至可以是不同亮度上的不同颜色。灰度图像与黑白图像不同，在计算机图像领域中黑白图像只有黑白两种颜色，灰度图像在黑色与白色之间还有许多级的颜色深度。<a href="https://baike.baidu.com/item/%E7%81%B0%E5%BA%A6%E5%9B%BE%E5%83%8F/1962298?fr=aladdin" target="_blank" rel="noopener">【百度】</a></p>
+<h1><span id="图像二值化">图像二值化</span></h1>
+<p>图像二值化就是将图像上的像素点的灰度值设置为 0 或 255，也就是将整个图像呈现出明显的黑白效果的过程。</p>
+<p>在<a href="https://baike.baidu.com/item/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/5199259" target="_blank" rel="noopener">数字图像处理</a>中，二值图像占有非常重要的地位，图像的二值化使图像中数据量大为减少，从而能凸显出目标的轮廓。<a href="https://baike.baidu.com/item/%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96/1748870?fr=aladdin" target="_blank" rel="noopener">【百度】</a></p>
+<p>二值化：以一个值（阈值）为基准，大于（等于）这个值的数全部变为是1（或者0），小于等于这个数的就全部将他们变为0（或1）。</p>
+<p>二值化算法处理飞思卡尔赛道思路：设定一个阈值valve，对于图像矩阵中的每一行，从左至右比较各像素值和阈值的大小，若像素值大于或等于阈值，则判定该像素对应的是白色赛道；反之，则判定对应的是黑色的目标引导线。</p>
+<h1><span id="自适应阈值化函数adaptivethreshold">自适应阈值化函数：adaptiveThreshold()</span></h1>
+<p>分离目标区域和背景区域，仅仅是通过设定固定的阈值很难达到理想的分割效果。而自适应阈值，则是根据像素的邻域块的像素值分布来确定该像素位置上的二值化阈值。</p>
+<p>优点：</p>
+<ul>
+<li>每个像素位置的二值化阈值不是固定不变的，而是由其周围邻域像素的分布来决定的。</li>
+<li>亮度较高的图像区域的二值化阈值通常会较高，而亮度低的图像区域的二值化阈值则会相适应的变小。</li>
+<li>不同亮度、对比度、纹理的局部图像区域将会拥有相对应的局部二值化阈值。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>图像</category>
+      </categories>
+      <tags>
+        <tag>图像识别</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于Centos7搭建Minio集群</title>
     <url>/2021/01/12/%E5%9F%BA%E4%BA%8ECentos7%E6%90%AD%E5%BB%BAminio%E9%9B%86%E7%BE%A4/</url>
     <content><![CDATA[<p><a href="https://my.oschina.net/zyrs/blog/3158890" target="_blank" rel="noopener">CentOS-搭建MinIO集群</a></p>
@@ -211,7 +241,7 @@
 <p>ClientWorker.class#addListener</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTenantListeners</span><span class="params">(String dataId, String group, List&lt;? extends Listener&gt; listeners)</span> <span class="keyword">throws</span> NacosException </span>&#123;</span><br><span class="line">    <span class="comment">//group 默认使用 DEFAULT_GROUP</span></span><br><span class="line">    group = <span class="keyword">this</span>.null2defaultGroup(group);</span><br><span class="line">    <span class="comment">//获取租户</span></span><br><span class="line">    String tenant = <span class="keyword">this</span>.agent.getTenant();</span><br><span class="line">    CacheData cache = <span class="keyword">this</span>.addCacheDataIfAbsent(dataId, group, tenant);</span><br><span class="line">    Iterator var6 = listeners.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(var6.hasNext()) &#123;</span><br><span class="line">        Listener listener = (Listener)var6.next();</span><br><span class="line">        cache.addListener(listener);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>该方法分为两个部分，首先根据 dataId，group 和当前的场景获取一个 CacheData 对象，然后将当前要添加的 listener 对象添加到 CacheData 中去。</p>
-<p><img src="D:%5Ctypora%5Cimg%5C1.png" alt="1"></p>
+<p><img src="https://img-blog.csdnimg.cn/2021011216394339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="280"></p>
 <p>也就是说 listener 最终是被这里的 CacheData 所持有了，那 listener 的回调方法 receiveConfigInfo 就应该是在 CacheData 中触发的。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheData</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LogUtils.logger(CacheData<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ConfigFilterChainManager configFilterChainManager;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String dataId;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String group;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String tenant;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CopyOnWriteArrayList&lt;ManagerListenerWrap&gt; listeners;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String md5;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isUseLocalConfig = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> localConfigLastModified;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String content;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> taskId;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isInitializing = <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到除了 dataId，group，content，taskId 这些跟配置相关的属性，还有两个比较重要的属性：listeners、md5。</p>
@@ -233,7 +263,7 @@
 <p>todo MD5 何时变更</p>
 <h1><span id="扩展">扩展</span></h1>
 <p>程序启动打印的日志可以看到 <code>cacheData</code> 和 <code>ClientWorker</code></p>
-<p><img src="C:%5CUsers%5CmikeLv%5CPictures%5C%E4%B8%83%E7%89%9B%E4%BA%91%E5%9B%BE%E7%89%87%5C280.png" alt="280"></p>
+<p><img src="https://img-blog.csdnimg.cn/2021011216394339.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="280"></p>
 ]]></content>
   </entry>
   <entry>
@@ -412,12 +442,12 @@
 </ul>
 <p>&gt;&gt; <strong>配置</strong></p>
 <p>簇点链路</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C281.png" alt="281"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210112163553720.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="281"></p>
 <p>流控规则</p>
 <p>在这里设置了 qps = 1，即每秒中只允许 1 个请求</p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C282.png" alt="282"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210112163610353.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="282"></p>
 <p>&gt;&gt; <strong>结果</strong></p>
-<p><img src="D:%5Ctypora%5Cnotes%5Casset%5C283.png" alt="283"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210112163622863.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="283"></p>
 <p>todo ：fallback 实现</p>
 ]]></content>
       <categories>
