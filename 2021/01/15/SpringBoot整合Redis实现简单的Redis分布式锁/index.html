@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"01lv.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="SpringBoot 集成 redis 分布式锁 Spring Boot整合Redis实现简单的分布式锁  在 Java 开发中，对于当体应用，因为在同一个 JVM 内部，所以我们可以采用 Java 提供的各种多线程操作的技巧来实现线程同步。保证对共同资源的访问的安全性以及一致性。 而对于分布式系统来说，由于多个请求可能被分发到不同的机器上去处理，如果这多个请求都是对同一个资源进行操作，那么使用基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot整合Redis实现简单的Redis分布式锁">
+<meta property="og:url" content="https://01lv.github.io/2021/01/15/SpringBoot%E6%95%B4%E5%90%88Redis%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
+<meta property="og:site_name" content="EasonLv&#39;s Zone">
+<meta property="og:description" content="SpringBoot 集成 redis 分布式锁 Spring Boot整合Redis实现简单的分布式锁  在 Java 开发中，对于当体应用，因为在同一个 JVM 内部，所以我们可以采用 Java 提供的各种多线程操作的技巧来实现线程同步。保证对共同资源的访问的安全性以及一致性。 而对于分布式系统来说，由于多个请求可能被分发到不同的机器上去处理，如果这多个请求都是对同一个资源进行操作，那么使用基">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210118110950122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-01-15T09:09:35.000Z">
+<meta property="article:modified_time" content="2021-01-18T03:10:34.866Z">
+<meta property="article:author" content="mikelv">
+<meta property="article:tag" content="SpringBoot">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210118110950122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="https://01lv.github.io/2021/01/15/SpringBoot%E6%95%B4%E5%90%88Redis%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringBoot整合Redis实现简单的Redis分布式锁 | EasonLv's Zone</title>
+  
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">EasonLv's Zone</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">just have a little faith</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://01lv.github.io/2021/01/15/SpringBoot%E6%95%B4%E5%90%88Redis%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="mikelv">
+      <meta itemprop="description" content="放弃不难，但坚持一定很酷">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EasonLv's Zone">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringBoot整合Redis实现简单的Redis分布式锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-15 17:09:35" itemprop="dateCreated datePublished" datetime="2021-01-15T17:09:35+08:00">2021-01-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-18 11:10:34" itemprop="dateModified" datetime="2021-01-18T11:10:34+08:00">2021-01-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://juejin.cn/post/6844903961489588231" target="_blank" rel="noopener">SpringBoot 集成 redis 分布式锁</a></p>
+<p><a href="https://blog.csdn.net/zyhlwzy/article/details/90721481" target="_blank" rel="noopener">Spring Boot整合Redis实现简单的分布式锁</a></p>
+<blockquote>
+<p>在 Java 开发中，对于当体应用，因为在同一个 JVM 内部，所以我们可以采用 Java 提供的各种多线程操作的技巧来实现线程同步。保证对共同资源的访问的安全性以及一致性。</p>
+<p>而对于分布式系统来说，由于多个请求可能被分发到不同的机器上去处理，如果这多个请求都是对同一个资源进行操作，那么使用基本的Java多线程线程同步技术可能就解决不了这个问题。</p>
+</blockquote>
+<a id="more"></a>
+<h1><span id="分布式锁的实现条件">分布式锁的实现条件</span></h1>
+<ul>
+<li>互斥性，和单体应用一样，要保证任意时刻，只能有一个客户端持有锁</li>
+<li>可靠性，要保证系统的稳定性，不能产生死锁</li>
+<li>一致性，要保证锁只能由加锁人解锁，不能产生A的加锁被B用户解锁的情况</li>
+</ul>
+<h1><span id="实现逻辑">实现逻辑</span></h1>
+<ol>
+<li>SETNX key val 当且仅当 key 不存在时，set 一个 key  为 val 的字符串，返回 1；若 key 存在，则什么都不做，返回 0</li>
+<li>expire key timeout 为 key 设置一个超时时间，单位为 second ，超过这个时间锁会自动释放，避免死锁</li>
+<li>删除 key</li>
+</ol>
+<h1><span id="代码实现">代码实现</span></h1>
+<p>项目结构图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20210118110950122.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21pa2VsdjAx,size_16,color_FFFFFF,t_70#pic_center" alt="555"></p>
+<h2><span id="依赖">依赖</span></h2>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2><span id="配置文件">配置文件</span></h2>
+<p>application.yaml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8099</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">    <span class="attr">password:</span></span><br><span class="line">    <span class="attr">database:</span> <span class="number">0</span></span><br><span class="line">    <span class="attr">jedis:</span></span><br><span class="line">      <span class="attr">pool:</span></span><br><span class="line">        <span class="attr">max-active:</span> <span class="number">50</span></span><br><span class="line">        <span class="attr">max-wait:</span> <span class="string">3000ms</span></span><br><span class="line">        <span class="attr">max-idle:</span> <span class="number">20</span></span><br><span class="line">        <span class="attr">min-idle:</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h2><span id="核心代码">核心代码</span></h2>
+<p>具体代码的实现与讲解参考这位大佬的<a href="https://juejin.cn/post/6844903961489588231" target="_blank" rel="noopener">文章</a>。</p>
+<p>其实是利用了spring aop的切面的功能，在调用接口的时候获取到两个注解( <strong>CacheLock</strong> 和 <strong>CacheParam</strong>) 的字段值组成分布式锁的 key，并且设定key失效时间为 5s。当 5 秒内有重复请求的话，就会抛出异常：请勿重复请求！</p>
+<p>我这加了一段单元测试的代码，测试多线程并发请求该接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Slf4j</span></span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">LockControllerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LockController lockController;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> MockMvc mockMvc;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mockMvc = MockMvcBuilders.standaloneSetup(lockController).build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 10个线程并发请求该接口，测试redis分布式锁</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">query</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line"></span><br><span class="line">            log.info(<span class="string">"发送第&#123;&#125;个请求"</span>, i);</span><br><span class="line"></span><br><span class="line">            Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="comment">//构建请求参数</span></span><br><span class="line">                        MultiValueMap&lt;String, String&gt; params = <span class="keyword">new</span> LinkedMultiValueMap&lt;&gt;();</span><br><span class="line">                        params.set(<span class="string">"token"</span>, <span class="string">"1"</span>);</span><br><span class="line">                        log.info(<span class="string">"客户端返回的结果="</span>);</span><br><span class="line">                        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get(<span class="string">"/lock/test"</span>).params(params));</span><br><span class="line">                        MvcResult mvcResult = resultActions.andReturn();</span><br><span class="line">                        String result = mvcResult.getResponse().getContentAsString();</span><br><span class="line">                        log.info(<span class="string">"客户端返回的结果=&#123;&#125;"</span>, result);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                        log.error(<span class="string">"错误=&#123;&#125;"</span>, e.getMessage());</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;);</span><br><span class="line">            thread.start();</span><br><span class="line">            thread.join();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">12.501</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">0</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">12.556</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-137</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.379</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-137</span>] c.d.r.controller.LockControllerTest      : 接口返回的结果=success - <span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.379</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">1</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.380</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-138</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.384</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-138</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.384</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">2</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.385</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-139</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.386</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-139</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.387</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">3</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.387</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-140</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.389</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-140</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.389</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">4</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.389</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-141</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.391</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-141</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.391</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">5</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.391</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-142</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.392</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-142</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.392</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">6</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.393</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-143</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.394</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-143</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.394</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">7</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.395</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-144</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.396</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-144</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.397</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">8</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.398</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-145</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.399</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-145</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.399</span>  INFO <span class="number">8836</span> --- [           main] c.d.r.controller.LockControllerTest      : 发送第<span class="number">9</span>个请求</span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.400</span>  INFO <span class="number">8836</span> --- [     Thread<span class="number">-146</span>] c.d.r.interceptor.LockMethodInterceptor  : lockKey=test:<span class="number">1</span></span><br><span class="line"><span class="number">2021</span><span class="number">-01</span><span class="number">-17</span> <span class="number">10</span>:<span class="number">56</span>:<span class="number">13.401</span> ERROR <span class="number">8836</span> --- [     Thread<span class="number">-146</span>] c.d.r.controller.LockControllerTest      : 错误=Request processing failed; nested exception <span class="keyword">is</span> java.lang.RuntimeException: 请勿重复请求</span><br></pre></td></tr></table></figure>
+<p>发现结果与预期一致。</p>
+<h1><span id="redislockregistry">RedisLockRegistry</span></h1>
+<p><a href="https://www.cnblogs.com/LUA123/p/11899336.html" target="_blank" rel="noopener">Java ReentrantLock中tryLock与lock的区别（非公平锁与公平锁）</a></p>
+<p><a href="https://www.cnblogs.com/hujunzheng/p/11295345.html" target="_blank" rel="noopener">Redis分布式锁实战</a></p>
+<p><code>RedisLockRegistry</code> 是 <code>spring-integration-redis</code> 中提供redis 分布式锁实现类。主要是通过 redis锁+本地锁双重锁的方式实现。</p>
+<p>本地锁：<strong>RedisLock</strong></p>
+<p>RedisLock 实现了 Lock 类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">RedisLock</span> <span class="keyword">implements</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String lockKey;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock localLock;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> unlinkAvailable;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> lockedAt;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>远程锁：redis定义的锁</p>
+<h1><span id="锁的知识基础">锁的知识基础</span></h1>
+<p><a href="https://www.cnblogs.com/dolphin0520/p/3923167.html" target="_blank" rel="noopener">Java并发编程：Lock</a></p>
+<p>Lock 和 Synchronized 的区别：</p>
+<ol>
+<li>Lock 不是 Java 内置的，Synchronized 是 Java 语言的关键字。</li>
+<li>采用 Synchronized 不需要用户手动释放锁，当synchronized方法或者synchrosnized代码块执行完之后，系统会自动让线程释放对锁的占用；而Lock则必须要用户去手动释放锁，如果没有主动释放锁，就有可能导致出现死锁现象。</li>
+</ol>
+<h2><span id="lock">Lock</span></h2>
+<p>包的位置：<code>java.util.concurrent.locks</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Lock</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="lock">lock()</span></h3>
+<p>该方法是用来获取锁。如果锁已经被其他线程占用的话，则进行等待。</p>
+<p>如果采用 Lock，必须主动去释放锁，并且在发生异常时，不会自动释放锁。因此一般来说，使用 Lock 必须在 try{}catch{}块中进行，并且将释放锁的操作放在finally块中进行，以保证锁一定被释放，防止死锁发生。</p>
+<p>通常使用Lock来进行同步的话，是以下面这种形式去使用的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//处理任务</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(Exception ex)&#123;</span><br><span class="line">     </span><br><span class="line">&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">    lock.unlock();   <span class="comment">//释放锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>tryLock()</code> 方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。</p>
+<p><code>tryLock(long time, TimeUnit unit)</code> 方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。</p>
+<p>所以，一般情况下通过tryLock来获取锁时是这样使用的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = ...;</span><br><span class="line"><span class="keyword">if</span>(lock.tryLock()) &#123;</span><br><span class="line">     <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="comment">//处理任务</span></span><br><span class="line">     &#125;<span class="keyword">catch</span>(Exception ex)&#123;</span><br><span class="line">         </span><br><span class="line">     &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">         lock.unlock();   <span class="comment">//释放锁</span></span><br><span class="line">     &#125; </span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">//如果不能获取锁，则直接做其他事情</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><span id="多线程基础">多线程基础</span></h1>
+<p><a href="https://www.zhihu.com/question/44621343" target="_blank" rel="noopener">Java中Thread类的join方法到底是如何实现等待的？</a></p>
+<p>上面的方法解释 <code>join()</code> 方法比较清晰。</p>
+<p>在 A 线程中调用 B线程.join(); 代表直到 B线程 结束，A 才继续运行。</p>
+<ol>
+<li>在 A线程追踪锁 B线程实例，然后 while(B线程没死){B线程.wait()}。<strong>这不代表B线程wait，而是 A线程 从同步队列中加入等待队列。</strong></li>
+<li>线程 B 结束后，在 JVM 中调用 <code>notifyAll()</code> 将所有想要持有B线程锁的线程加入同步队列中。那么自然A也在同步队列中，因此A线程得以继续运行。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>mikelv
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://01lv.github.io/2021/01/15/SpringBoot%E6%95%B4%E5%90%88Redis%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" title="SpringBoot整合Redis实现简单的Redis分布式锁">https://01lv.github.io/2021/01/15/SpringBoot整合Redis实现简单的Redis分布式锁/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SpringBoot/" rel="tag"># SpringBoot</a>
+              <a href="/tags/Redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/15/%E5%9F%BA%E4%BA%8EOpenCV%E7%9A%84KNN%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" rel="prev" title="基于OpenCV的KNN算法实现手写数字识别">
+      <i class="fa fa-chevron-left"></i> 基于OpenCV的KNN算法实现手写数字识别
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">分布式锁的实现条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">实现逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">核心代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">RedisLockRegistry</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">锁的知识基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-text">lock()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#null"><span class="nav-text">多线程基础</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="mikelv"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">mikelv</p>
+  <div class="site-description" itemprop="description">放弃不难，但坚持一定很酷</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">172</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/01Lv" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;01Lv" rel="noopener" target="_blank"><i class="github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yisheng.mikelv@foxmail.com" title="E-Mail → mailto:yisheng.mikelv@foxmail.com" rel="noopener" target="_blank"><i class="envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mikelv</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">577k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">8:44</span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_pv">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    访问量：<span id="busuanzi_value_site_pv"></span> 次数
+  </span>
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_container_site_uv">
+    访客数：<span id="busuanzi_value_site_uv"></span> 人次
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
